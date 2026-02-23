@@ -523,14 +523,14 @@ class Solution {
 
 ## Common Mistakes & Edge Cases
 
-- **Forgetting to shrink:** In variable window, you must shrink when the constraint is violated; otherwise the window grows unbounded and the result is wrong.
-- **Off-by-one in window size:** `right - left + 1` is the window length when both are inclusive.
-- **Equality in "while" condition:** Use `while (invalid)` not `if`—sometimes you need to shrink multiple steps.
+- **Forgetting to shrink:** In variable window, you must shrink when the constraint is broken; otherwise the window grows too large and the answer is wrong.
+- **Off-by-one in window size:** `right - left + 1` is the window length when both indexes count as part of the window.
+- **Use "while" not "if":** Use `while (invalid)` so you can shrink multiple steps when needed.
 - **Empty or single-element inputs:** Handle `nums.length < k`, `s.isEmpty()`, `t.length() > s.length()`.
-- **Integer overflow:** For sum-based problems with large numbers, consider long.
-- **CharacterReplacement (#424):** You don't need to shrink when valid—`maxFreq` might be stale but the window length only increases when we have a valid window, and we only care about the longest.
+- **Integer overflow:** For sum-based problems with large numbers, consider using `long`.
+- **CharacterReplacement (#424):** You don't need to shrink when valid—`maxFreq` might be old, but the window length only grows when valid, and we only care about the longest.
 - **MinWindow (#76):** Use `equals()` for Integer comparison (map values), not `==`.
-- **SlidingWindowMax (#239):** Store indices in the deque, not values, to detect when the front is out of window.
+- **SlidingWindowMax (#239):** Store indexes in the deque, not values, so you know when the front is outside the window.
 
 ## Pattern Variations
 
@@ -543,5 +543,5 @@ class Solution {
 | Replacement budget      | Longest Repeating Char Replacement | (windowSize - maxFreq) ≤ k            |
 | Window contains all     | Min Window Substring               | Freq maps, "formed" count             |
 | Permutation / anagram   | Permutation in String              | Fixed window + freq match             |
-| Sliding max/min         | Sliding Window Maximum             | Monotonic deque                       |
+| Sliding max/min         | Sliding Window Maximum             | Deque that stays sorted by value      |
 | Multi-word concatenation| Substring with Concat All Words    | Multiple start offsets, word-sized steps |

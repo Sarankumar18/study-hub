@@ -1,43 +1,43 @@
 # Union-Find (Disjoint Set)
 
-> Group elements into disjoint sets. Union merges two sets; Find returns the representative. Nearly O(1) amortized with path compression and union by rank—the Swiss army knife for connectivity problems.
+> Put elements into separate groups. Union joins two groups; Find says which group an element belongs to. Nearly O(1) on average with path compression—go-to for "are these connected?" problems.
 
 ## What Is This Pattern?
 
-**Union-Find** (also called Disjoint Set Union, DSU) maintains a partition of elements into disjoint sets. Each set has a **representative** (root). Two operations: **Find(x)** returns the representative of x's set; **Union(x, y)** merges the sets containing x and y. The key insight: we don't care about the internal structure—only whether two elements belong to the same set.
+**Union-Find** (aka Disjoint Set Union) keeps elements in separate groups. Each group has a **representative** (root). Two ops: **Find(x)** returns x's group rep; **Union(x, y)** merges the groups of x and y. We only care: are x and y in the same group? Not the full structure.
 
-With **path compression** (Find flattens the tree by pointing nodes directly to the root) and **union by rank** (attach the smaller tree under the larger), both operations approach O(α(n)) amortized, where α is the inverse Ackermann function—effectively constant for any practical n.
+Think of friend groups. Find asks "who's your group leader?". Union says "merge these two groups". With **path compression** (Find points nodes straight to root) and **union by rank** (smaller tree under bigger), both ops are nearly O(1) on average for real-world sizes.
 
-Use Union-Find when you need to answer "are x and y connected?" or "how many connected components?" and you're **adding** edges over time (or process edges in a specific order). It excels at dynamic connectivity—unlike BFS/DFS, you don't need to rebuild from scratch when the graph changes.
+Use it when you need "are x and y connected?" or "how many groups?" and you're **adding** links over time. Unlike BFS/DFS, you don't rebuild when the graph changes.
 
 ## When to Use This Pattern
 
-- Problem asks **"are these two nodes connected?"** or **"same group?"**
-- You need **connected components** count or membership.
-- Graph is built **incrementally** (add edges one by one).
-- Problem involves **grouping** or **merging** (accounts, equivalence relations).
-- You're processing edges by **increasing weight** (e.g., Kruskal's MST, Swim in Rising Water).
-- Phrases like "redundant connection", "provinces", "accounts merge", "satisfiability", "smallest string with swaps".
+- The problem asks **"are these two nodes connected?"** or **"same group?"**
+- You need **connected components** count or who is in which group.
+- The graph is built **step by step** (add edges one by one).
+- It involves **grouping** or **merging** (e.g. accounts, things that are equivalent).
+- You process edges by **increasing weight** (e.g. Kruskal's MST, Swim in Rising Water).
+- Look for "redundant connection", "provinces", "accounts merge", "satisfiability", "smallest string with swaps".
 
 ## How to Identify This Pattern
 
 ```
-Do we have elements that can be grouped/connected?
-    NO → Consider other patterns
+Do we have elements that can be grouped or connected?
+    NO → Try other patterns
     YES ↓
 
 Do we add connections over time and query connectivity?
-    NO → BFS/DFS might suffice for static graph
+    NO → BFS/DFS might be enough for a fixed graph
     YES ↓
 
-Do we care only about "same set" / "connected" (not path)?
+Do we only care about "same group" or "connected" (not the path)?
     YES → UNION-FIND
 
-Is the graph undirected with incremental edge addition?
+Is the graph undirected and we add edges one by one?
     YES → UNION-FIND
 
-Are we processing edges by weight (e.g., increasing order)?
-    YES → UNION-FIND (e.g., Kruskal, Swim in Rising Water)
+Are we processing edges by weight (e.g. smallest first)?
+    YES → UNION-FIND (e.g. Kruskal, Swim in Rising Water)
 ```
 
 ## Core Template (Pseudocode)

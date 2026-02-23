@@ -1,33 +1,33 @@
 # Interval DP & State Machine DP
 
-> **Interval DP**: Solve problems on contiguous subarrays by splitting or merging intervals—typical for palindromes, matrix chain multiplication, and burst balloons. **State Machine DP**: Model discrete states (e.g., bought/sold, cooldown) and transitions between them—classic for stock buy/sell with constraints.
+> **Interval DP**: Work on chunks of an array (from index i to j). Split or merge those chunks to get the answer—think palindromes, burst balloons, building trees from leaves. **State Machine DP**: You're in different "modes" (e.g., holding stock vs just sold). Track the best outcome in each mode as you move step by step—classic for stock buy/sell with cooldowns or limits.
 
 ## What Is This Pattern?
 
 ### Interval DP
 
-**Interval DP** solves problems where the optimal solution depends on optimal solutions to overlapping contiguous subintervals. You define `dp[i][j]` as the answer for the subarray/substring from index `i` to `j` (inclusive). The recurrence typically either:
+**Interval DP** works on a range [i..j] of your array or string. The idea: the answer for the whole range comes from answers for smaller ranges. You often either:
 
-- **Split**: `dp[i][j] = min/max over k (dp[i][k] + dp[k+1][j] + cost)` — partition at every k.
-- **Merge**: When an operation "uses" endpoints (e.g., burst last balloon), `dp[i][j]` = cost of that operation + subproblems.
+- **Split**: Try every place k to cut the range in two. `dp[i][j]` = best of (dp[i][k] + dp[k+1][j] + some cost) over all k. Like cutting a stick into pieces.
+- **Merge**: Sometimes you "use" one element last (e.g., burst a balloon last). Then `dp[i][j]` = cost of that move + answers for the leftover ranges.
 
-Order of filling: iterate by interval length (len = 1, 2, … n), or use memoization. Base case: `dp[i][i]` for single-element intervals.
+Fill the table by increasing interval length (len = 1, 2, … n) so smaller chunks are ready first. Base: `dp[i][i]` for single elements.
 
 ### State Machine DP
 
-**State Machine DP** models a process as a finite state machine. Each state represents a "situation" (e.g., holding stock, just sold). Transitions have costs/rewards. You compute `dp[i][state]` = best outcome at day `i` in that state. Classic example: **stock buy/sell** — states like "hold", "sold" (or "cooldown"), transitions depend on buy/sell/rest rules.
+**State Machine DP** is like a flowchart. You're in one of a few states (e.g., "holding stock", "just sold", "can buy"). At each step, you move from one step to the next—maybe buy, sell, or rest. Each move has a cost or reward. You track: "What's the best I can do at day i if I'm in state X?" Classic use: stock buy/sell with rules like "can't buy the day after you sell" or "at most k trades".
 
 ## When to Use
 
 **Interval DP:**
-- Problem involves **contiguous subarrays** or **substrings**.
-- Optimal structure: combining solutions to **smaller contiguous pieces**.
-- Examples: palindromic subsequence, matrix chain multiplication, burst balloons, optimal binary search tree, minimum cost tree from leaf values.
+- The problem is about **contiguous chunks** of an array or string.
+- The best answer for [i..j] comes from best answers for **smaller chunks** inside it.
+- Examples: longest palindromic subsequence, burst balloons, minimum cost tree from leaf values, matrix chain multiplication.
 
 **State Machine DP:**
-- Problem has **discrete states** and **allowed transitions**.
-- Each step: **buy**, **sell**, **rest**, **cooldown**, etc.
-- Classic: **stock buy/sell** with transaction limits, fees, or cooldowns.
+- The problem has **clear states** (hold, sold, rest, cooldown) and rules for moving between them.
+- Each step you do one thing: **buy**, **sell**, **rest**, **cooldown**.
+- Classic: **stock buy/sell** with limits, fees, or cooldowns.
 
 ## How to Identify
 
@@ -442,22 +442,22 @@ class Solution {
 
 | Mistake | How to Avoid |
 |---------|--------------|
-| **Interval DP loop order** | Fill by increasing interval length so `dp[i][k]` and `dp[k+1][j]` are ready when computing `dp[i][j]`. |
-| **Burst Balloons boundaries** | Pad with 1s; `dp[i][j]` uses boundaries `vals[i-1]` and `vals[j+1]`. Iterate `i` from 1, `j` up to n. |
-| **State machine transition order** | When states depend on each other, compute all "new" values from "old", then assign (avoid overwriting too early). |
-| **Stock IV: k large** | If k ≥ n/2, treat as unlimited transactions to avoid TLE. |
-| **Stock III update order** | Update sell2, buy2, sell1, buy1 in that order so each uses previous values from same day. |
-| **MCT from leaf values** | Cost = max(left) × max(right) for the root, not sum. Precompute max[i][j] for O(1) lookup. |
-| **LPS base case** | `dp[i][i] = 1`. For `i+1 > j-1` (len 2 with same char), `dp[i+1][j-1]` = 0, so 2+0=2 is correct. |
+| **Interval DP loop order** | Fill by increasing interval length. When you compute `dp[i][j]`, you need `dp[i][k]` and `dp[k+1][j]`—so smaller intervals must be done first. |
+| **Burst Balloons boundaries** | Pad the array with 1s at both ends. Coins depend on neighbors; when bursting at the edge, those neighbors are your padded 1s. |
+| **State machine update order** | Don't overwrite variables too early. When moving from one step to the next, compute all "new" values from the "old" ones first. Then assign. |
+| **Stock IV: k large** | If k ≥ n/2, you can do unlimited trades. Use the simple greedy (capture every rise)—otherwise you might hit TLE. |
+| **Stock III update order** | Update in this order: sell2, buy2, sell1, buy1. Each needs the previous value from the same day. |
+| **MCT from leaf values** | The root's cost is max(left subtree) × max(right subtree), not a sum. Precompute max[i][j] so you can look it up in O(1). |
+| **LPS base case** | `dp[i][i] = 1` for single chars. For two same chars, `dp[i+1][j-1]` can be 0 (empty range)—so 2+0=2 is correct. |
 
 ## Pattern Variations
 
 | Variation | Description | Example |
 |-----------|-------------|---------|
-| **Interval split** | Combine two adjacent intervals at each split point | MCT from Leaf Values (#1130), Matrix Chain |
-| **Interval merge (last)** | "Use" a specific element last; subproblems exclude it | Burst Balloons (#312) |
-| **Palindrome interval** | Match endpoints or take max of shrink | LPS (#516) |
+| **Interval split** | Cut the range at each possible point k; combine the two pieces | MCT from Leaf Values (#1130), Matrix Chain |
+| **Interval merge (last)** | Pick one element to "use" last; solve the rest | Burst Balloons (#312) |
+| **Palindrome interval** | If endpoints match, add 2 and look inside; else shrink from one end | LPS (#516) |
 | **2-state stock** | hold / notHold | #122, #714 |
 | **3-state stock** | hold / sold / rest (cooldown) | #309 |
-| **k-transaction stock** | DP over transaction count | #123 (k=2), #188 (k general) |
-| **Monotonic stack optimization** | MCT can be optimized to O(n) with stack | #1130 (advanced) |
+| **k-transaction stock** | Track profit after 1, 2, … k trades | #123 (k=2), #188 (k general) |
+| **Monotonic stack optimization** | MCT can be optimized to O(n) with a stack | #1130 (advanced) |

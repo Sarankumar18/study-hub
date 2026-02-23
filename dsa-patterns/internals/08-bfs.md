@@ -1,41 +1,41 @@
 # BFS (Breadth-First Search)
 
-> Explore nodes level by level—guaranteeing shortest paths in unweighted graphs and structured traversal in trees.
+> Visit nodes level by level (like ripples in a pond). You get shortest paths in unweighted graphs and neat level-by-level tree traversal.
 
 ## What Is This Pattern?
 
-**Breadth-First Search (BFS)** explores a graph or tree by visiting all nodes at depth `d` before any node at depth `d+1`. It uses a **queue** (FIFO): you process the front of the queue, then enqueue its unvisited neighbors. Unlike DFS, which goes deep before broad, BFS guarantees that the first time you reach a node, you've taken a **shortest path**—making it ideal for "minimum steps" or "shortest path" in unweighted graphs.
+**Breadth-First Search (BFS)** visits all nodes at depth `d` before any at depth `d+1`. It uses a **queue** (first in, first out): you take from the front, add its unvisited neighbors to the back. Unlike DFS (which goes deep first), BFS guarantees: the first time you reach a node, you used the **shortest path**. So it's great for "minimum steps" or "shortest path" when all edges cost the same.
 
-**Visual intuition:** Imagine dropping a stone in a pond. Ripples spread outward in concentric circles. BFS is that first ripple (distance 1), then the second (distance 2), and so on. Every node touched by the k-th ripple is exactly k steps from the source. On a grid, BFS from (0,0) visits cells in increasing Manhattan-distance order; on a tree, it visits levels top-to-bottom; on a word graph (e.g., Word Ladder), it finds transformations in order of edit distance.
+**Visual intuition:** Drop a stone in a pond. Ripples spread out in circles. BFS is like that. First ripple = distance 1, second = 2, etc. Every node in ripple k is exactly k steps from the start. On a grid, BFS from (0,0) visits cells by distance. On a tree, it does level by level. On word graphs (Word Ladder), it finds transformations in order of how many letters you change.
 
-The pattern extends to **multi-source BFS** (start from multiple nodes—e.g., all rotten oranges or all 0s in a matrix) and **state-space BFS** (state = position + extra info like obstacles used). In all cases: queue + visited set + level tracking = shortest path in unweighted settings.
+You can also do **multi-source BFS**: start from many nodes (e.g. all rotten oranges, or all 0s). Or **state-space BFS**: state = position + extra info (like obstacles used). Same idea: queue + visited set + level tracking = shortest path when all moves cost 1.
 
 ## When to Use This Pattern
 
-- **Shortest path** in an unweighted graph or grid (minimum steps, minimum moves)
-- **Level-order traversal** of a tree (process all nodes at depth d before d+1)
-- **Flood fill** from a starting cell (BFS or DFS both work; BFS avoids stack overflow on huge inputs)
-- **Multi-source propagation** (e.g., rot spreading from multiple cells, distances from nearest 0)
-- **State-space search** when transitions are uniform cost (e.g., Open the Lock, Word Ladder)
-- Problems with phrases like "minimum number of steps," "shortest path," "level order," "nearest," "spread"
+- **Shortest path** in an unweighted graph or grid—all edges cost the same.
+- **Level-order traversal** of a tree—all nodes at depth d before d+1.
+- **Flood fill** from one cell—BFS or DFS work; BFS avoids stack overflow on big inputs.
+- **Multi-source propagation**—e.g. rot from many cells, distance from nearest 0.
+- **State-space search** when every move costs the same—e.g. Open the Lock, Word Ladder.
+- Phrases like "minimum steps," "shortest path," "level order," "nearest," "spread."
 
 ## How to Identify This Pattern
 
 ```
-Is the problem about shortest path / minimum steps in an unweighted setting?
-    YES → BFS (or Dijkstra if weighted)
+Is it shortest path or minimum steps, with all edges same cost?
+    YES → BFS (or Dijkstra if edges have different weights)
     NO ↓
 
-Does it ask for level-by-level traversal (e.g., tree level order)?
-    YES → BFS with level-size tracking
+Does it ask for level-by-level traversal (e.g. tree level order)?
+    YES → BFS, track level size
     NO ↓
 
-Does it involve propagation from one or more sources (flood, rot, distance from 0)?
+Does something spread from one or more start points? (flood, rot, distance from 0)
     YES → BFS (single- or multi-source)
     NO ↓
 
-Is it a state transition problem (locks, word ladder, grid with extra constraints)?
-    YES → BFS over state space (state = node + extra info)
+Is it a state-change problem? (locks, word ladder, grid with extra info)
+    YES → BFS over states (state = position + extra info)
 ```
 
 ## Core Template (Pseudocode)
@@ -711,32 +711,32 @@ class Solution {
 
 | Mistake | Fix |
 |---------|-----|
-| Forgetting to check `newColor == originalColor` in Flood Fill | Return early to avoid infinite loop when start color equals new color |
-| Not tracking level size in level-order BFS | Use `for (i < queue.size())` *before* polling—capture size at loop start |
-| Re-visiting nodes in graph BFS | Use a `visited` set; add to visited when enqueueing |
-| Wrong step count (off-by-one) | Decide: is "steps" the number of edges or nodes? For Word Ladder, return #words (= steps + 1) |
-| State-space BFS: re-expanding with worse state | In #1293, only enqueue (r,c) if we reach it with *fewer* obstacles than before |
-| Open the Lock: blocking "0000" | If "0000" is in deadends, return -1 immediately; handle target="0000" → 0 |
-| Knight moves: unbounded exploration | Limit search space (e.g., nr >= -2, nc >= -2) to avoid TLE; use symmetry |
-| Bus Routes: BFS over stops vs routes | BFS over *routes* (buses); when you take a new route, that's +1 bus |
-| Number of Islands: modifying grid | Mark visited by flipping '1' to '0' (or use separate visited array) |
+| Flood Fill: `newColor == originalColor` | Return early so you don't loop forever when start and new color match. |
+| Level-order: not tracking level size | Capture `size = queue.size()` at loop start—before polling. |
+| Re-visiting nodes in graph BFS | Use a `visited` set. Add to visited when you enqueue. |
+| Wrong step count (off-by-one) | Decide: steps = edges or nodes? Word Ladder returns #words (= edges + 1). |
+| State-space: re-expanding with worse state | In #1293, only enqueue (r,c) if we reach it with *fewer* obstacles than before. |
+| Open the Lock: "0000" in deadends | If "0000" is blocked, return -1 right away. If target is "0000", return 0. |
+| Knight moves: search never ends | Limit the grid (e.g. nr >= -2, nc >= -2). Use symmetry to cut search. |
+| Bus Routes: BFS over stops vs routes | BFS over *routes* (buses). A new route = +1 bus. |
+| Number of Islands: visited? | Mark visited by flipping '1' to '0', or use a separate visited array. |
 
 **Edge Cases:**
 - Empty grid, single cell, all same color (Flood Fill)
 - No rotten oranges but fresh exist → -1 (Rotting Oranges)
 - Target unreachable (Word Ladder, Open the Lock, Knight)
 - source == target (Bus Routes → 0)
-- k >= m+n-2 (#1293) → direct Manhattan path
+- k >= m+n-2 (#1293) → direct Manhattan path exists
 - Empty word list, endWord not in list (Word Ladder)
 
 ## Pattern Variations
 
 | Variation | Example | Key Technique |
 |-----------|---------|---------------|
-| **Level-order tree** | #102 Binary Tree Level Order | Track level size; process all nodes at level before next |
-| **Single-source grid** | #733 Flood Fill, #200 Islands | BFS/DFS from one cell; mark connected |
-| **Multi-source BFS** | #994 Rotting Oranges, #542 01 Matrix | Enqueue all sources; level = propagation step |
-| **Implicit graph** | #752 Open the Lock, #127 Word Ladder | State = node; neighbors = valid transitions |
-| **State-space BFS** | #1293 Obstacles Elimination | State = (position, extra); visited per state |
-| **Route/bus graph** | #815 Bus Routes | BFS over routes (not stops); route = bus |
-| **Infinite grid** | #1197 Knight Moves | BFS with bounded/symmetric search space |
+| **Level-order tree** | #102 Binary Tree Level Order | Track level size; finish one level before the next |
+| **Single-source grid** | #733 Flood Fill, #200 Islands | BFS/DFS from one cell; mark all connected |
+| **Multi-source BFS** | #994 Rotting Oranges, #542 01 Matrix | Put all start points in queue; each level = one step |
+| **Implicit graph** | #752 Open the Lock, #127 Word Ladder | State = node; neighbors = valid moves |
+| **State-space BFS** | #1293 Obstacles Elimination | State = (position, extra); track visited per state |
+| **Route/bus graph** | #815 Bus Routes | BFS over routes (buses), not stops |
+| **Infinite grid** | #1197 Knight Moves | BFS with a bounded or symmetric search area |

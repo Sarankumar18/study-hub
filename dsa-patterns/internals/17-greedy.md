@@ -1,25 +1,25 @@
 # Greedy Algorithms
 
-> Make locally optimal choices at each step—often yielding a globally optimal solution. When a problem has optimal substructure and the greedy choice property, a greedy strategy avoids exhaustive search.
+> At each step, pick the best choice right now. No second-guessing. When this works, you get the best overall answer without trying everything. Common in scheduling, intervals, and "minimum number of X" questions.
 
 ## What Is This Pattern?
 
-**Greedy algorithms** build a solution piece by piece by always choosing the **locally best** option at each step. Unlike dynamic programming, greedy does not reconsider past choices—once made, they stand. The pattern works when: (1) **Greedy choice property**: a locally optimal choice leads to a globally optimal solution; (2) **Optimal substructure**: an optimal solution contains optimal solutions to subproblems.
+**Greedy algorithms** build the answer step by step. At each step, you pick what looks best right now—and you never go back to change it. Unlike DP, you don't reconsider past choices. Greedy works when: (1) **Greedy choice property**: the best choice right now leads to the best final answer; (2) **Optimal substructure**: the best overall answer uses best answers for smaller pieces.
 
-Classic applications: activity selection, Huffman coding, Dijkstra's shortest path, interval scheduling. The key is identifying the right **ordering** (sort by end time, by value/weight, etc.) and the right **local criterion** (take the next compatible item, use the best current option).
+Classic uses: activity selection, Huffman coding, Dijkstra, interval scheduling. The trick is figuring out the right **order** (sort by end time? by value per weight?) and the right **rule** at each step (take the next compatible item? grab the best available?).
 
 ## When to Use This Pattern
 
-- Problem asks for **maximum** or **minimum** of something (count, length, value).
-- You can define a **local choice** that seems best at each step.
-- The problem has **intervals**, **scheduling**, **allocation**, or **selection**.
-- A **sorting** step followed by a single pass often suffices.
-- Phrases like "minimum number of", "maximize", "assign", "schedule", "cover", "non-overlapping".
+- The problem asks for **maximum** or **minimum** of something (count, length, value).
+- You can describe a rule for "what's the best move right now?"
+- The problem involves **intervals**, **scheduling**, **allocation**, or **selection**.
+- Often: sort once, then one pass through the data.
+- Buzzwords: "minimum number of", "maximize", "assign", "schedule", "cover", "non-overlapping".
 
 ## How to Identify This Pattern
 
 ```
-Can we make a local choice that doesn't invalidate the global optimum?
+Can we make a choice right now that won't mess up the final answer?
     NO → Consider DP or backtracking
     YES ↓
 
@@ -406,16 +406,16 @@ class Solution {
 
 ## Common Mistakes
 
-- **Assign Cookies:** Assign smallest sufficient cookie (satisfy greediest you can with smallest cookie).
-- **Lemonade Change:** Prefer giving $10+$5 for $20 to preserve $5 bills.
-- **Jump Game:** Check i > farthest before using nums[i]; don't assume nums[0] > 0.
-- **Gas Station:** If total gas < total cost, impossible. Restart from i+1 when tank goes negative.
-- **Task Scheduler:** Formula works when we need idle slots; cap with tasks.length when no idle needed.
-- **Partition Labels:** Extend end to include last index of all chars in current partition.
-- **Min Arrows:** Sort by end, shoot at end of first balloon in each group.
-- **Jump Game II:** Increment jump when we exhaust current level (i == curEnd).
-- **Candy:** Need both passes—left handles left neighbor, right handles right neighbor.
-- **IPO:** Sort by capital; heap by profit. Only add projects when capital increases.
+- **Assign Cookies:** Give the smallest cookie that satisfies the child. Don't waste a big cookie when a small one works.
+- **Lemonade Change:** For $20, prefer giving $10+$5 over 3×$5. Saves your $5 bills for later customers.
+- **Jump Game:** Check that you've actually reached index i (i ≤ farthest) before using nums[i]. Don't assume you can always move from the start.
+- **Gas Station:** If total gas < total cost, you can't complete the loop. When your tank goes negative, restart from the next station.
+- **Task Scheduler:** The formula works when you need idle slots. If there are enough tasks to fill everything, cap with tasks.length.
+- **Partition Labels:** As you scan, extend the partition end to include the last appearance of every char in the current part.
+- **Min Arrows:** Sort by end. Shoot at the end of the first balloon in each overlapping group.
+- **Jump Game II:** You jump when you've used up your current "level"—when i hits the end of where you could reach from the last jump.
+- **Candy:** Do both passes. Left-to-right handles "higher than left neighbor"; right-to-left handles "higher than right neighbor".
+- **IPO:** Sort projects by capital needed. Use a heap for profit. Only add projects to the heap when your capital is enough.
 
 ## Pattern Variations
 

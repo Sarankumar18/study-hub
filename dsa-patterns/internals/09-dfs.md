@@ -1,14 +1,17 @@
 # DFS (Depth-First Search)
 
-> Explore as deep as possible before backtracking—traverse trees, graphs, and grids by going down one path to completion, then unwinding. Essential for path finding, connectivity, and structural exploration.
+> Go deep down one path, finish it, then step back and try another. Think of it like walking through a maze: one corridor at a time, all the way to the end, then backtrack and explore the next.
 
 ## What Is This Pattern?
 
-**Depth-First Search (DFS)** explores a structure by going as far as possible along each branch before backtracking. Unlike BFS (breadth-first), which levels out layer by layer, DFS plunges vertically first, then retreats to try alternate branches. This "go deep, then backtrack" behavior makes it ideal for exploring paths, detecting cycles, and solving problems where the solution lies in the structure of a traversal—not its breadth.
+**DFS (Depth-First Search)** means: go as far as you can down one path, then step back and try the next path. BFS (breadth-first) goes level by level, like a wave. DFS goes straight down first, like dropping a rock in a well.
 
-**Visual intuition:** Imagine exploring a maze. DFS is like putting your hand on the right wall and walking—you go as far as you can down one corridor until you hit a dead end, then backtrack to the last fork and try the next unvisited path. You eventually visit every reachable cell, but the order depends on your exploration strategy (pre-order, in-order, post-order for trees).
+**Maze analogy:** You’re in a maze with corridors. DFS is like keeping your hand on the right wall and walking forward. You follow one corridor until you hit a dead end, then backtrack to the last junction and try the next path. You eventually reach every reachable spot—the order just depends on how you explore (pre-order, in-order, post-order for trees).
 
-The pattern has three main forms: **recursive tree DFS** (elegant, uses the call stack), **iterative DFS** (explicit stack, avoids recursion limits), and **graph DFS** (visited set to handle cycles, adjacency list or matrix). For trees, no visited set is needed (acyclic). For graphs, you must track visited nodes to avoid infinite loops.
+You’ll use three main forms:
+- **Recursive tree DFS** – simple and clean; the call stack (how recursion works) handles backtracking.
+- **Iterative DFS** – you use your own stack instead of recursion; handy when recursion depth gets too deep.
+- **Graph DFS** – you keep a *visited* set so you don’t go in circles (graphs can have cycles; trees don’t).
 
 ## When to Use This Pattern
 

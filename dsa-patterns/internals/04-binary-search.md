@@ -1,38 +1,38 @@
 # Binary Search
 
-> Halve the search space at each step—turning O(n) linear scans into O(log n) lookups when the space has structure.
+> Keep cutting the search area in half. You turn slow linear scans into fast lookups when the data has a clear structure (like sorted order).
 
 ## What Is This Pattern?
 
-Binary search is a divide-and-conquer technique that repeatedly narrows a **search space** by comparing a probe value to the target and discarding half of the remaining candidates. The critical requirement: the search space must have a **monotonic structure**—elements that let you deterministically decide whether the answer lies in the left or right half based on a simple comparison.
+Binary search keeps cutting the search area in half. You compare the **middle value** to the target and throw away the half that can't contain the answer. The big rule: your data must have a **clear order** so you can always tell which half to keep. (e.g., sorted arrays, or a condition that goes from false to true at some point.)
 
-**Visual intuition:** Imagine searching for a word in a dictionary. You don't scan page by page. You open to the middle: if your word comes before that page, you discard the right half; otherwise, you discard the left. Each step halves the remaining pages. The same logic applies to sorted arrays: comparing `arr[mid]` to `target` tells you which half to explore next.
+**Everyday analogy:** Finding a word in a dictionary. You don't flip page by page. You open to the middle. If your word is before that page, ignore the right half. Otherwise ignore the left. Each step cuts the remaining pages in half. Same idea for sorted arrays: `arr[mid]` vs `target` tells you which half to search next.
 
-The pattern extends beyond "find X in sorted array." You can binary search on **indices** (classic lookup), on **boundaries** (find leftmost/rightmost occurrence), or on the **answer itself** when the problem asks "what is the minimum X such that condition holds?"—and checking the condition is feasible in O(n) or O(1). In all cases, the key is identifying what to binary search on and what invariant to maintain.
+You can use this beyond "find X in a sorted array." You can search on **indices** (classic find), on **boundaries** (first or last occurrence), or on the **answer itself** when the problem asks "what is the smallest X that works?"—and you can check if X works quickly. The trick is knowing what to search on and what rule to keep true at each step.
 
 ## When to Use This Pattern
 
-- Input is **sorted** (or can be logically treated as sorted—e.g., rotated array, mountain).
+- Input is **sorted** (or acts like sorted—e.g., rotated array, mountain).
 - Problem asks for **"find target"**, **"first/last occurrence"**, **"insert position"**, **"minimum X such that..."**.
-- A **monotonic predicate** exists: for some value `x`, if `f(x)` is true then `f(x+1)` is true (or vice versa).
-- Linear scan would be O(n) but you need O(log n)—binary search on answer can achieve that.
+- A **yes/no condition** exists that flips once: if `f(x)` is true then `f(x+1)` is true (or the other way around). That tells you which half has the answer.
+- A linear scan would be O(n) but you want O(log n)—binary search on the answer can get you there.
 - Problem mentions **"sorted"**, **"ascending/descending"**, **"rotated"**, **"peak"**, **"minimum rate"**, **"split into k parts"**.
 
 ## How to Identify This Pattern
 
 ```
-Is the input sorted (or has monotonic structure)?
-    NO → Can we binary search on the ANSWER?
-         YES → Do we have a check function f(x) that is monotonic?
+Is the input sorted (or has a clear ordering/structure)?
+    NO → Can we binary search on the ANSWER itself?
+         YES → Do we have a check f(x) that goes from false→true (or true→false) at some point?
                YES → BINARY SEARCH ON ANSWER
-         NO  → Consider other patterns
+         NO  → Try another pattern
     YES ↓
 
-Are we finding the exact target or a boundary?
-    Exact target → CLASSIC BINARY SEARCH
-    First occurrence / left boundary → LEFT-BOUNDARY BINARY SEARCH
-    Last occurrence / right boundary → RIGHT-BOUNDARY BINARY SEARCH
-    Peak / rotated structure → ADAPT CLASSIC (different comparison logic)
+What are we looking for?
+    Exact match → CLASSIC BINARY SEARCH
+    First occurrence / leftmost → LEFT-BOUNDARY BINARY SEARCH
+    Last occurrence / rightmost → RIGHT-BOUNDARY BINARY SEARCH
+    Peak / rotated array → ADAPT CLASSIC (different comparison logic)
 ```
 
 ## Core Template (Pseudocode)
@@ -578,27 +578,27 @@ class Solution {
 
 ## Common Mistakes & Edge Cases
 
-- **`left + (right - left) / 2` vs `(left + right) / 2`:** Use the former to avoid integer overflow when left+right is large.
-- **Classic: `left <= right` vs `left < right`:** For exact match, use `<=` so the last element is checked. For boundary search, use `left < right` with right exclusive.
-- **Left boundary: `right = mid` vs `right = mid - 1`:** Use `right = mid` when you want to keep mid as a candidate (insert position / first occurrence).
-- **Right boundary: return `left - 1`** after searching for first index where element > target.
-- **Rotated array:** Check which half is sorted by comparing `nums[left]` with `nums[mid]` (or `nums[mid]` with `nums[right]`).
+- **`left + (right - left) / 2` vs `(left + right) / 2`:** Use the first one. It avoids overflow when left+right is big.
+- **Classic: `left <= right` vs `left < right`:** For exact match, use `<=` so you check the last element. For boundary search, use `left < right` with right exclusive.
+- **Left boundary: `right = mid` vs `right = mid - 1`:** Use `right = mid` when mid might be the answer (insert position or first occurrence).
+- **Right boundary:** Search for first index where element > target, then return `left - 1`.
+- **Rotated array:** Compare `nums[left]` with `nums[mid]` (or `nums[mid]` with `nums[right]`) to see which half is sorted.
 - **Empty input:** Handle `nums.length == 0`, `matrix.length == 0`.
-- **Single element:** Peak problem: single element is a valid peak.
-- **Binary search on answer:** Ensure `feasible()` handles edge values; use `low < high` with `high = mid` for minimize.
-- **Median of Two Arrays:** Ensure nums1 is the smaller array; handle partition at 0 and at length.
-- **Mountain Array:** Minimize `get()` calls—cache `arr.get(mid)` instead of calling twice.
+- **Single element:** In peak problems, a single element is a valid peak.
+- **Binary search on answer:** Make sure `feasible()` works for edge values. Use `low < high` with `high = mid` when minimizing.
+- **Median of Two Arrays:** Use nums1 as the smaller array. Be careful when the partition is at index 0 or at length.
+- **Mountain Array:** Don't call `get()` twice. Store `arr.get(mid)` in a variable and reuse it.
 
 ## Pattern Variations
 
-| Variation               | Example                           | Key Technique                                   |
-|-------------------------|-----------------------------------|-------------------------------------------------|
-| Classic exact           | Binary Search #704                | `while (left <= right)`, return mid or -1       |
-| Left boundary           | Search Insert #35                 | First index where `>= target`                   |
-| Right boundary          | Last occurrence, TimeMap #981     | Last index where `<= target`                    |
-| Rotated sorted          | #33, #153                         | Compare mid with endpoints, find sorted half    |
-| Peak finding            | #162, #1095                       | Compare mid with neighbor, climb toward peak   |
-| 2D matrix               | #74                               | Flatten index or search row then col            |
-| Binary search on answer | #875, #410                        | Feasible check, minimize/maximize threshold     |
-| Two arrays              | #4                                | Partition both, binary search on smaller        |
-| Interactive (API)       | #1095                             | Minimize API calls, cache get() results         |
+| Variation               | Example                           | Main idea                                                  |
+|-------------------------|-----------------------------------|------------------------------------------------------------|
+| Classic exact           | Binary Search #704                | `while (left <= right)`, return mid or -1                  |
+| Left boundary           | Search Insert #35                 | First index where element >= target                        |
+| Right boundary          | Last occurrence, TimeMap #981     | Last index where element <= target                        |
+| Rotated sorted          | #33, #153                         | Compare mid with ends to find the sorted half              |
+| Peak finding            | #162, #1095                       | Compare mid with neighbor, move toward the peak            |
+| 2D matrix               | #74                               | Treat as 1D flattened array, or search row then column     |
+| Binary search on answer | #875, #410                        | Ask "does X work?" then narrow the range                   |
+| Two arrays              | #4                                | Split both arrays so left ≤ right; search on smaller       |
+| Interactive (API)       | #1095                             | Reduce API calls; save `get()` results in variables        |

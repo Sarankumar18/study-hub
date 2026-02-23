@@ -1,31 +1,31 @@
 # Hashing Patterns
 
-> O(1) lookups when you need to remember what you've seen—count frequencies, group by key, or instant membership checks.
+> Use HashMap or HashSet when you need to remember what you've seen. You can count how often things appear, group by key, or check "have I seen this?" in one step.
 
 ## What Is This Pattern?
 
-Hashing patterns leverage `HashMap` and `HashSet` to achieve **constant-time lookups** by trading space for speed. Instead of scanning an array or string repeatedly, you build an index once and query it in O(1).
+Hashing patterns use `HashMap` and `HashSet` to get **O(1) lookups**—you trade some extra space for speed. Instead of going through an array or string again and again, you build an index once. Then you can ask "have I seen X?" or "how many times does Y appear?" in one step.
 
-**Visual intuition:** Think of a hash structure as a labeled filing cabinet. Each "drawer" (bucket) is keyed by a hash of your input—whether that's a character, a computed value, or a canonical form of data. When you need to know "have I seen X before?" or "how many times does Y appear?", you don't search; you go directly to the drawer.
+**Everyday analogy:** Think of a hash structure like a labeled filing cabinet. Each drawer has a label (the key). When you need to check "have I seen this before?" or "how many times does this appear?", you don't search the whole cabinet—you go straight to the right drawer.
 
-The power comes from **three core operations**: (1) **frequency counting**—track how often each element appears; (2) **grouping**—bucket elements by a derived key (e.g., sorted string for anagrams); and (3) **lookup tables**—precompute or store what you need for O(1) access during a single pass.
+Three main uses: (1) **frequency counting**—track how often each element appears; (2) **grouping**—put elements into buckets by a key (e.g. anagrams share the same sorted string); (3) **lookup tables**—store what you need so you can look it up in O(1) during a single pass.
 
 ## When to Use This Pattern
 
-- Need to check **"have I seen this before?"** (duplicates, membership)
-- Need **counts** or **frequencies** of elements
-- Need to **group** elements by some derived key
-- Need **O(1) lookup** by value (complement for Two Sum, etc.)
-- Need to **precompute** something for fast access in another pass
+- You need to check **"have I seen this before?"** (duplicates, membership)
+- You need **counts** or **frequencies** of elements
+- You need to **group** elements by some key (e.g. anagrams by sorted form)
+- You need **fast lookup** by value (e.g. Two Sum: "is target - num in the map?")
+- You need to **pre-compute** something once, then use it quickly in another pass
 
 ## How to Identify This Pattern
 
-- "Count occurrences" / "frequency" / "how many times"
-- "Group by" / "bucket" / "categorize"
-- "Find two numbers that sum to X"
+- Problem says "count occurrences" / "frequency" / "how many times"
+- Problem asks to "group by" / "bucket" / "categorize"
+- "Find two numbers that sum to X" (Two Sum style)
 - "Check if anagram" / "rearrange letters"
-- "Unique" / "duplicate" / "distinct"
-- Sliding window problems needing character frequency maps
+- Keywords: "unique" / "duplicate" / "distinct"
+- Sliding window problems where you track character counts in a map
 
 ## Core Template (Pseudocode)
 
@@ -475,29 +475,29 @@ class Solution {
 
 | Mistake | Fix |
 |--------|-----|
-| Using `map.get(key) == 0` for presence | Use `containsKey()`; 0 is a valid count |
-| Modifying map while iterating | Iterate over `new ArrayList<>(map.keySet())` or use entry set |
-| Forgetting to handle empty input | Check `nums.length == 0` or `str.isEmpty()` upfront |
-| Integer overflow in Two Sum | Usually fine; LeetCode constraints typically safe |
-| Anagrams with Unicode | Use `HashMap<Character, Integer>` instead of `int[26]` |
-| Sliding window: `satisfied` vs `count` | For "at least" (Min Window), compare per-char counts to `need`; for "at most k distinct", compare `window.size()` to k |
+| Using `map.get(key) == 0` to check if key exists | Use `containsKey()` instead; 0 is a valid count |
+| Changing the map while you loop over it | Loop over a copy: `new ArrayList<>(map.keySet())` or use entry set |
+| Forgetting empty input | Check `nums.length == 0` or `str.isEmpty()` at the start |
+| Integer overflow in Two Sum | Usually safe; LeetCode limits are small enough |
+| Anagrams with Unicode letters | Use `HashMap<Character, Integer>` instead of `int[26]` |
+| Sliding window: when to use `satisfied` vs `count` | For "at least" (Min Window), compare each char count to `need`; for "at most k distinct", compare `window.size()` to k |
 
 **Edge Cases:**
-- Empty array/string
+- Empty array or string
 - Single element
-- All elements same
-- K = 0 or K > distinct count
-- Duplicate indices in Two Sum (same index used twice—avoid by putting after check)
+- All elements the same
+- K = 0 or K > number of distinct elements
+- Two Sum: same index used twice—always put into map after you check, so you never reuse the current element
 
 ## Pattern Variations
 
 | Variation | Example |
 |-----------|---------|
-| **Frequency + bucket sort** | Top K Frequent—bucket by count |
-| **Frequency + heap** | Top K Frequent—min-heap of size k |
-| **Group by canonical form** | Group Anagrams, Group Shifted Strings |
-| **Complement lookup** | Two Sum, 3Sum (with hash or two pointers) |
-| **Membership + expansion** | Longest Consecutive—set + streak expansion |
-| **Sliding window + freq map** | Min Window, Longest Substring K Distinct |
-| **Multi-key indexing** | Valid Sudoku—row/col/box sets |
-| **Prefix/encoded key** | Encode/Decode Strings |
+| **Frequency + bucket sort** | Top K Frequent—put elements in buckets by their count |
+| **Frequency + heap** | Top K Frequent—use a min-heap of size k |
+| **Group by key** | Group Anagrams (key = sorted string), Group Shifted Strings |
+| **Complement lookup** | Two Sum: "is target - num in the map?" Same idea for 3Sum |
+| **Membership + expand** | Longest Consecutive—put all in set, then expand from each streak start |
+| **Sliding window + freq map** | Min Window, Longest Substring K Distinct—track counts in window |
+| **Multiple keys per element** | Valid Sudoku—each cell belongs to row, col, and box sets |
+| **Encoded key** | Encode/Decode Strings—store length + string for each |

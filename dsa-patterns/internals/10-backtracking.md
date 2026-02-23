@@ -1,37 +1,37 @@
 # Backtracking
 
-> Explore all possibilities by making choices, recursing, then undoing each choice—systematically building and pruning the search space until you find all valid solutions (or one).
+> Try choices step by step, go deeper, then undo and try the next option. You build and cut off bad paths until you find all (or one) valid answer.
 
 ## What Is This Pattern?
 
-Backtracking is a **systematic search** technique built on top of recursion. You build a solution incrementally by making a sequence of **choices**. At each step, you try an option; if it leads to a valid path, you recurse deeper; when you hit a dead end or finish exploring that branch, you **undo** (backtrack) the last choice and try another. The key insight: you don't copy state—you **mutate**, recurse, then **restore**.
+Backtracking is a search trick built on recursion. You build your answer step by step by making choices. Try an option. If it works, go deeper. When you hit a dead end or finish that path, undo the last choice and try another. The key: you change state, recurse, then restore it.
 
-Think of a maze: you walk forward, mark your path; when you hit a wall, you backtrack to the last junction and try the other way. Backtracking does this programmatically—the "undo" step is what distinguishes it from naive recursion. Common applications: generate all permutations, all subsets, find valid configurations (N-Queens, Sudoku), or search for paths in grids.
+Think of a maze. You walk forward and mark where you went. When you hit a wall, you go back to the last fork and try the other way. Backtracking does this in code. The "undo" step is what makes it different from simple recursion. Use it for: all permutations, all subsets, valid board setups (N-Queens, Sudoku), or paths in grids.
 
-The pattern is especially powerful when the problem asks for **all solutions** or **existence** where brute-force enumeration would be exponential. Pruning (early termination when a branch can't succeed) is what makes backtracking practical.
+It shines when you need **all solutions** or to answer "does any exist?". Normal brute force would be way too slow. Pruning (stopping early when a path can't work) makes backtracking usable.
 
 ## When to Use
 
-- Problem asks for **all** permutations, combinations, subsets, or partitions.
-- Problem asks to **find one** or **count** valid configurations (N-Queens, Sudoku).
-- Problem asks "does a path/config exist?" where you must **explore choices** and may need to backtrack.
-- You're building a solution by making a sequence of **choices** from a finite set of options.
-- Brute-force would enumerate exponentially many possibilities—backtracking prunes invalid branches.
-- Phrases like "all possible", "generate", "find all", "partition into", "place N objects".
+- The problem wants **all** permutations, combinations, subsets, or partitions.
+- It asks to **find one** or **count** valid setups (N-Queens, Sudoku).
+- It asks "does a path or config exist?" and you must try different choices.
+- You build your answer by picking options from a fixed set of choices.
+- Brute force would try way too many cases; backtracking skips bad paths.
+- Look for phrases like "all possible", "generate", "find all", "partition into", "place N objects".
 
 ## How to Identify
 
 ```
-Do we need to explore multiple choices at each step?
+Do we need to try multiple choices at each step?
     NO → Maybe greedy or DP
     YES ↓
 
-Can we prune branches that cannot lead to valid solutions?
-    YES → BACKTRACKING (or DFS with pruning)
+Can we skip paths that can't possibly work?
+    YES → BACKTRACKING (or DFS with early stop)
     NO ↓
 
-Do we need to undo choices after exploring a branch?
-    YES → BACKTRACKING (modify → recurse → restore)
+Do we need to undo choices after exploring a path?
+    YES → BACKTRACKING (change → recurse → undo)
 ```
 
 ## Core Template (Pseudocode)
@@ -572,13 +572,13 @@ class Solution {
 
 ## Common Mistakes
 
-- **Forgetting to undo:** Always restore state after recursion. If you mark a cell visited, unmark it. If you add to path, remove it.
-- **Sharing mutable state:** Pass a *copy* when adding to results (e.g., `new ArrayList<>(path)`), not the path reference itself—otherwise all entries point to the same list.
-- **Permutation vs combination:** Permutations use a `used[]` array and iterate over all indices. Combinations/subsets use a `start` index and iterate from `start` to avoid [1,2] and [2,1] as distinct.
-- **Reuse in Combination Sum:** Use `start = i` (not `i + 1`) when the same element can be used multiple times.
-- **Word Search:** Don't forget to restore the cell after DFS—otherwise other paths can't use it.
-- **N-Queens diagonals:** Use `row - col + n - 1` for one diagonal and `row + col` for the other to avoid index overflow.
-- **Word Search II:** Clear `node.word` after adding to result to prevent adding the same word from different paths.
+- **Forgetting to undo:** Always put things back after recursion. If you mark a cell visited, unmark it. If you add to path, remove it.
+- **Sharing mutable state:** Add a *copy* to results (e.g. `new ArrayList<>(path)`), not the path itself. Otherwise every result points to the same list.
+- **Permutation vs combination:** Permutations use `used[]` and try all indices. Combinations/subsets use `start` and move forward only. That avoids [1,2] and [2,1] as different.
+- **Reuse in Combination Sum:** Use `start = i` (not `i + 1`) when the same number can be picked again.
+- **Word Search:** Restore the cell after DFS. Otherwise other paths can't use it.
+- **N-Queens diagonals:** Use `row - col + n - 1` and `row + col` for the two diagonals. Avoid index overflow.
+- **Word Search II:** Set `node.word = null` after adding. Stops the same word from being found twice.
 
 ## Pattern Variations
 

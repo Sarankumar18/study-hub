@@ -1,39 +1,39 @@
 # Topological Sort
 
-> Order nodes in a directed graph so every edge points forward. Valid only for DAGs (no cycles). Use Kahn's BFS or DFS post-order—essential for dependency ordering, course scheduling, and task sequencing.
+> Arrange nodes in a directed graph so every arrow points forward. Works only on DAGs (a graph with no cycles). Use Kahn's BFS or DFS post-order—great for course prerequisites, build order, and task sequencing.
 
 ## What Is This Pattern?
 
-**Topological sort** produces a linear ordering of vertices in a directed acyclic graph (DAG) such that for every edge (u→v), u comes before v. The graph must have no cycles—a cycle means no valid ordering exists. Two standard approaches: **Kahn's algorithm** (BFS, in-degree based) and **DFS post-order** (finish times).
+**Topological sort** gives you a linear order of nodes in a directed graph such that if there's an edge from A to B, then A always comes before B in the order. Think of it like course prerequisites: if Calculus depends on Algebra, Algebra must come first. The graph must be a **DAG (a graph with no cycles)**—if there's a cycle (e.g., A needs B, B needs C, C needs A), no valid order exists.
 
-Kahn's algorithm: repeatedly remove nodes with in-degree 0, add them to the order, and decrement in-degrees of neighbors. When the queue is empty, if we've processed all nodes, we have a valid order; otherwise there's a cycle. DFS: visit nodes, and when backtracking add to a stack; the reverse of the stack is a topological order.
+Two main ways to do it: **Kahn's algorithm** (BFS: start with nodes that have no dependencies, process level by level) and **DFS post-order** (finish times: when you're done visiting a node, add it; reverse at the end).
 
-Use topological sort when you have **dependencies** (prerequisites, build order, event ordering) and need to determine a valid sequence or detect impossible constraints (cycles). The pattern extends to **multi-level** sorting (e.g., groups then items within groups) and **longest path** in a DAG (dynamic programming on topologically sorted nodes).
+Use it when you have **dependencies** (prerequisites, build order, task order) and need a valid sequence—or to detect when constraints are impossible (cycles). The pattern also extends to **multi-level** sorting (groups, then items inside groups) and **longest path** in a DAG (combine with DP on topo order).
 
 ## When to Use This Pattern
 
 - Problem involves **dependencies**, **prerequisites**, or **ordering constraints**.
-- You need a **valid sequence** respecting "A before B" rules.
-- Need to **detect cycles** in a directed graph.
+- You need a **valid sequence** where "A must come before B" is respected.
+- You need to **detect cycles** in a directed graph.
 - Problem asks for **course schedule**, **build order**, **event ordering**, or **alien dictionary**.
-- You're computing **longest path** in a DAG (topo sort + DP).
+- You're computing **longest path** in a DAG (a graph with no cycles)—use topo sort + DP.
 - Phrases like "before/after", "prerequisite", "dependency", "order of execution".
 
 ## How to Identify This Pattern
 
 ```
-Do we have directed edges representing "must come before"?
+Do we have directed edges meaning "must come before"?
     NO → Consider BFS/DFS on undirected graph
     YES ↓
 
-Do we need a linear order respecting all edges?
+Do we need a linear order that respects all those "before" rules?
     NO → Maybe simple reachability
     YES ↓
 
 Is the graph acyclic (or do we need to detect cycles)?
     YES → TOPOLOGICAL SORT
 
-Are dependencies hierarchical (e.g., courses, recipes)?
+Are dependencies hierarchical (e.g., courses, recipes, build steps)?
     YES → KAHN'S ALGORITHM or DFS POST-ORDER
 ```
 
@@ -529,24 +529,24 @@ class Solution {
 
 ## Common Mistakes
 
-- **Alien Dictionary prefix check:** If word A is prefix of word B and A is longer, invalid order—return "".
-- **Alien Dictionary inDegree init:** Use -1 for chars not present; only chars in words get inDegree 0 or more.
-- **Course Schedule direction:** prerequisites [a,b] means b before a, so edge b→a.
-- **Find All Possible Recipes:** Only count non-supply ingredients for in-degree; start queue with recipes that have in-degree 0.
-- **Minimum Height Trees:** Process leaves layer by layer; don't mix layers. Last 1-2 nodes are the answer.
+- **Alien Dictionary prefix check:** If word A is a prefix of word B and A is longer, the order is invalid—return "".
+- **Alien Dictionary inDegree init:** Use -1 for chars that never appear; only chars in the words get inDegree 0 or more.
+- **Course Schedule direction:** prerequisites [a,b] means b must be taken before a, so add edge b→a.
+- **Find All Possible Recipes:** Only count non-supply ingredients for in-degree; start the queue with recipes that have in-degree 0.
+- **Minimum Height Trees:** Process leaves layer by layer; don't mix layers. The last 1–2 nodes left are the answer.
 - **Parallel Courses:** Count semesters by processing in layers (level-order BFS).
-- **Longest Increasing Path:** DFS + memoization—no need for explicit topo sort; memo avoids recomputation.
-- **Sort Items by Groups:** Must handle both group-level and item-level dependencies; rebuild in-degrees for item graph within each group to avoid double-counting.
+- **Longest Increasing Path:** Use DFS + memoization; no explicit topo sort needed—the memo avoids recomputing.
+- **Sort Items by Groups:** Handle both group-level and item-level dependencies; be careful with in-degrees to avoid double-counting.
 
 ## Pattern Variations
 
 | Variation           | Example         | Key Technique                           |
 |---------------------|-----------------|-----------------------------------------|
-| Cycle detection     | #207            | Kahn's: order size < n means cycle      |
-| Return order        | #210            | Kahn's: append to result                |
-| Char/lexicographic  | #269            | Build graph from adjacent word compare  |
-| Leaf peeling        | #310            | Repeatedly remove leaves, center remains|
+| Cycle detection     | #207            | Kahn's: if order size &lt; n, there's a cycle |
+| Return order        | #210            | Kahn's: append each node to the result  |
+| Char/lexicographic  | #269            | Build graph by comparing adjacent words |
+| Leaf peeling        | #310            | Repeatedly remove leaves; center stays  |
 | Level counting      | #1136           | BFS by layers = semesters               |
-| DAG longest path    | #329            | DFS + memo on DAG (incr. path)          |
-| Two-level topo      | #1203           | Topo groups, then topo items per group  |
-| Supply/dependency   | #2115           | Recipe = node, ingredient = dependency   |
+| DAG longest path    | #329            | DFS + memo on DAG (a graph with no cycles); incr. path |
+| Two-level topo      | #1203           | Topo sort groups, then items per group  |
+| Supply/dependency   | #2115           | Recipe = node, ingredient = dependency  |

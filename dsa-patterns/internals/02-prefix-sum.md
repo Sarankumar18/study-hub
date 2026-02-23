@@ -1,31 +1,33 @@
 # Prefix Sum
 
-> Precompute cumulative sums so any subarray sum becomes O(1) lookup—transform repeated range queries into constant-time operations.
+> Pre-compute running totals once. Then you get any subarray sum in one step instead of adding numbers every time.
 
 ## What Is This Pattern?
 
-**Prefix sum** (also called cumulative sum or running sum) is a preprocessing technique that stores the sum of elements from the start of the array up to each index. Given `arr[0..n-1]`, we build `prefix[i] = arr[0] + arr[1] + ... + arr[i]` (often with `prefix[-1] = 0` for convenience).
+**Prefix sum** (also called cumulative sum or running sum) means we store the total from the start of the array up to each index. For example, if you have `arr = [2, 4, 1, 3]`, then `prefix` stores: 0, 2, 6, 7, 10 (each value is the sum so far). We often add `prefix[0] = 0` at the start for easier math.
 
-Once built, the sum of any subarray `arr[i..j]` is `prefix[j] - prefix[i-1]`—a single subtraction. Instead of iterating over the subarray every time, we answer in O(1). This is especially powerful when you need many range sum queries or when searching for subarrays with a target sum (by rearranging to `prefix[j] - prefix[i-1] = k` → `prefix[j] - k = prefix[i-1]`, then using a hash map to count valid pairs).
+Once built, the sum of any slice `arr[i..j]` is simply `prefix[j+1] - prefix[i]`. One subtraction. No need to go through the slice and add each number every time—you get the answer in O(1).
 
-**Visual intuition:** Imagine a bar chart where each bar's height is the cumulative total. The "height difference" between two bars equals the sum of the segment between them. Prefix sum captures those cumulative heights up-front; any "segment sum" is just the difference between two stored values.
+**Everyday analogy:** Imagine a ruler with marks. Each mark shows how far you've walked from the start. The distance between two marks = the difference of their numbers. Prefix sum is like those marks: we write them once; later we just subtract to get any segment.
+
+This pattern is extra useful when: (1) you need many "sum from left to right" questions, or (2) you want to count subarrays with a given sum. For (2), we rewrite the formula as `prefix[j] - k = prefix[i]` and use a hash map to count how many earlier prefixes match.
 
 ## When to Use This Pattern
 
-- **Repeated range sum queries** on an immutable array (e.g., "sum from left to right")
-- **Subarray sum equals K** (or divisible by K) — convert to "count pairs where prefix[j] - prefix[i] = k"
-- **Find pivot / equilibrium index** — left sum vs right sum; prefix sum gives both in O(1)
-- **Product of array except self** — prefix product (or prefix × suffix) avoids recomputation
-- **Subarray problems** where you need to check "does any subarray have property X?" and property X involves a cumulative metric
-- **Merge sort + prefix sum** for problems like "count pairs where lower ≤ sum ≤ upper" (e.g., Count of Range Sum)
+- You need to answer "sum from left to right" many times on the same array
+- Problem asks "how many subarrays have sum = K?" or "divisible by K"
+- You need to find a pivot/equilibrium index (where left side sum = right side sum)
+- Product of array except self—use prefix product (or prefix × suffix) so you don't recompute
+- Subarray problems where the property depends on a running total
+- "Count pairs where sum is between lower and upper" (often uses merge sort + prefix sum)
 
 ## How to Identify This Pattern
 
-1. Problem asks for **sum/product of a contiguous subarray** or **range query**
+1. Problem asks for **sum or product of a slice** of the array, or a **range query** ("sum from i to j")
 2. Keywords: "subarray sum", "range sum", "cumulative", "prefix", "running sum"
-3. Need to answer **many queries** on the same array without modification
-4. Looking for **count of subarrays** with a given sum, or **pivot/equilibrium** index
-5. Often pairs with **hash map** when counting "prefix[j] - k = prefix[i]" occurrences
+3. You must answer **many queries** on the same array and the array does not change
+4. You need **count of subarrays** with a given sum, or a **pivot/equilibrium** index
+5. Often combined with **hash map** when you count how many earlier prefixes satisfy "prefix - k"
 
 ## Core Template (Pseudocode)
 
@@ -394,16 +396,16 @@ class Solution {
 
 ## Common Mistakes & Edge Cases
 
-- **Off-by-one:** Prefix `prefix[i]` typically means sum of `nums[0..i-1]`, so `nums[i..j]` sum = `prefix[j+1] - prefix[i]`. Be consistent with 0- vs 1-indexing.
-- **Negative modulo (Java):** `-5 % 3 == -2`. Use `(x % k + k) % k` for non-negative remainder.
-- **Empty subarray:** For "count subarrays with sum K", initialize `map.put(0, 1)`—the empty prefix represents the subarray starting at index 0.
-- **Integer overflow:** For large arrays or large values, use `long` for prefix sums (e.g., Count of Range Sum).
-- **Mutable vs immutable:** If the array can change between queries, prefix sum must be rebuilt; consider a Fenwick tree or segment tree instead for dynamic updates.
+- **Off-by-one:** `prefix[i]` usually means sum of `nums[0..i-1]`, so the sum of `nums[i..j]` = `prefix[j+1] - prefix[i]`. Stick to one indexing style (0-based vs 1-based).
+- **Negative modulo (Java):** In Java, `-5 % 3` gives -2, not 1. Use `(x % k + k) % k` to get a non-negative remainder.
+- **Empty subarray:** For "count subarrays with sum K", start with `map.put(0, 1)`. The empty prefix (sum 0) stands for the subarray starting at index 0.
+- **Integer overflow:** With big arrays or big numbers, use `long` for prefix sums (e.g. Count of Range Sum).
+- **Array changes:** If the array can change between queries, you must rebuild the prefix array each time. For that, consider Fenwick tree or segment tree instead.
 
 ## Pattern Variations
 
-- **Prefix product:** Same idea as prefix sum but with multiplication (e.g., Product of Array Except Self).
-- **Prefix sum + hash map:** Count subarrays with given sum/remainder—"how many previous prefixes satisfy X?"
-- **Prefix sum + binary search:** When the array is sorted or when you need to find bounds (e.g., lower_bound on prefix).
-- **2D prefix sum:** For matrix range queries, build `prefix[i][j] = sum of rectangle (0,0) to (i-1,j-1)`; query `[r1,c1] to [r2,c2]` = `prefix[r2+1][c2+1] - prefix[r1][c2+1] - prefix[r2+1][c1] + prefix[r1][c1]`.
-- **Merge sort on prefix:** For "count pairs where lower ≤ diff ≤ upper" (Count of Range Sum), merge sort partitions and counts during merge.
+- **Prefix product:** Same idea as prefix sum but multiply instead of add (e.g. Product of Array Except Self).
+- **Prefix sum + hash map:** Count subarrays with a given sum or remainder. You ask: "how many earlier prefixes satisfy this condition?"
+- **Prefix sum + binary search:** Use when the array is sorted or you need to find a boundary (e.g. first index where prefix ≥ X).
+- **2D prefix sum:** For matrices, build a 2D prefix so the sum of any rectangle is a small formula. One rectangle sum = four prefix lookups.
+- **Merge sort on prefix:** For "count pairs where diff is between lower and upper" (Count of Range Sum), use merge sort and count during the merge step.

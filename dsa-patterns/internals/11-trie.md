@@ -1,6 +1,6 @@
 # Trie (Prefix Tree)
 
-> Store strings as paths in a tree—share common prefixes, then branch. Enables O(L) insert/search and efficient prefix lookups for autocomplete, spell-check, and word games.
+> Store strings as paths in a tree. Words with the same start share that path, then split. Fast insert and search, and great for "starts with" queries like autocomplete.
 
 ## What Is This Pattern?
 
@@ -12,31 +12,31 @@ Variations include: **binary Trie** for XOR problems (each node has 0/1 children
 
 ## When to Use This Pattern
 
-- Problem involves **prefix matching**, **autocomplete**, or **"starts with"** queries.
-- Need to efficiently **store and search** many strings with shared prefixes.
-- Problem asks for **suggestions** based on partial input, **replace prefixes**, or **word validation**.
-- Working with **binary representations** and need maximum XOR (binary Trie with 0/1 children).
-- Problem has **dictionary of words** and board/grid search (Trie + DFS).
-- Phrases like "search suggestions", "prefix", "word search", "maximum XOR", "replace words".
+- The problem needs **prefix matching**, **autocomplete**, or **"starts with"** queries.
+- You need to **store and search** many strings that share the same start.
+- It asks for **suggestions** from partial input, **replace prefixes**, or **word validation**.
+- You're working with **binary numbers** and need max XOR (use a binary Trie with 0/1 children).
+- There's a **dictionary** of words and a board to search (Trie + DFS).
+- Look for "search suggestions", "prefix", "word search", "maximum XOR", "replace words".
 
 ## How to Identify This Pattern
 
 ```
 Do we have a set of strings (words, keys)?
-    NO → Consider hash map or other structure
+    NO → Try hash map or something else
     YES ↓
 
-Do we need prefix-based queries or shared-prefix optimization?
-    NO → Hash set/map might suffice
+Do we need prefix queries or shared-prefix help?
+    NO → Hash set/map might be enough
     YES ↓
 
-Are we doing autocomplete, "starts with", or suggestions?
+Is it autocomplete, "starts with", or suggestions?
     YES → TRIE
 
 Do we need maximum XOR of two numbers?
     YES → BINARY TRIE (0/1 children)
 
-Do we search a grid/board for dictionary words?
+Do we search a grid for dictionary words?
     YES → TRIE + DFS/BACKTRACKING
 ```
 
@@ -577,23 +577,23 @@ class Solution {
 
 ## Common Mistakes
 
-- **Using `children[26]` with wrong index:** Use `c - 'a'` for lowercase; ensure input is lowercase or normalize.
-- **Forgetting `isWord` in search:** search must check that we reached a node with isWord, not just that the path exists.
-- **Word Search II duplicates:** Set `node.word = null` after adding to result so the same word isn't found again.
-- **Word Search II backtracking:** Restore `board[r][c]` after DFS; use `'#'` or similar to mark visited during recursion.
-- **Maximum XOR:** Process bits from MSB to LSB (i from 30 down to 0) for correct greedy choice.
-- **Palindrome Pairs edge case:** Handle empty string; word might match itself—check `i != j`.
-- **Map Sum overwrite:** When inserting same key with new value, subtract old value and add new (delta) so sum(prefix) stays correct.
+- **Wrong index for `children[26]`:** Use `c - 'a'` for lowercase letters. Make sure input is lowercase.
+- **Forgetting `isWord` in search:** Search must check that the path ends at a word, not just that the path exists.
+- **Word Search II duplicates:** Set `node.word = null` after adding. Otherwise the same word shows up more than once.
+- **Word Search II backtracking:** Restore `board[r][c]` after DFS. Use `'#'` to mark visited during recursion.
+- **Maximum XOR:** Process bits from most significant to least (i from 30 down to 0). Needed for correct greedy choice.
+- **Palindrome Pairs edge case:** Handle empty string. A word might match itself—check `i != j`.
+- **Map Sum overwrite:** Same key, new value? Subtract old value and add new (delta). Keeps sum(prefix) correct.
 
 ## Pattern Variations
 
 | Variation           | Example              | Key Technique                               |
 |---------------------|----------------------|---------------------------------------------|
 | Standard Trie       | #208, #211           | children[26], isWord                        |
-| Suggestions         | #1268                | Store top-k at each node or DFS             |
-| Wildcard search     | #211                 | DFS on '.' through all children             |
-| Replace prefix      | #648                 | Find shortest prefix that is root           |
-| Prefix sum          | #677                 | Store sum/val at node, delta on overwrite   |
-| Binary Trie (XOR)   | #421                 | 0/1 children, greedy opposite bit          |
-| Trie + DFS          | #212                 | Build Trie, DFS board, traverse Trie        |
-| Reversed Trie       | #336                 | Insert reversed, check palindromic remainder|
+| Suggestions         | #1268                | store top-k at each node or DFS             |
+| Wildcard search     | #211                 | when you hit '.', try all 26 children      |
+| Replace prefix      | #648                 | find shortest prefix that is a root         |
+| Prefix sum          | #677                 | store sum at node, use delta on overwrite   |
+| Binary Trie (XOR)   | #421                 | 0/1 children, greedily pick opposite bit   |
+| Trie + DFS          | #212                 | build Trie, DFS board, follow Trie path     |
+| Reversed Trie       | #336                 | insert reversed, check palindromic rest     |

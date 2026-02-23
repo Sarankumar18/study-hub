@@ -1,32 +1,32 @@
 # Bit Manipulation
 
-> Use bitwise operations (AND, OR, XOR, shift) to solve problems in constant space and sublinear time. Essential for low-level optimization, counting bits, and clever XOR tricks.
+> Work with individual bits (0s and 1s)—like flipping light switches. AND, OR, XOR, and shifts let you solve problems in constant space with clever tricks (e.g., XOR cancels pairs).
 
 ## What Is This Pattern?
 
-**Bit manipulation** leverages the binary representation of integers. Key operations: **XOR** (a^a=0, a^0=a)—finds the unique element; **AND** (n & n-1 clears lowest set bit)—counts 1s; **shift** (<<, >>)—multiply/divide by 2, access bits; **OR/AND**—set/clear bits. Common tricks: XOR of all elements cancels pairs; `n & (n-1)` removes rightmost 1; `n & -n` isolates rightmost 1; `1 << k` is the k-th bit mask.
+**Bit manipulation** means working with individual bits (0s and 1s) inside integers—like toggling light switches. Key ideas: **XOR** (a^a=0, a^0=a) cancels pairs and finds the unique element; **AND** with `n-1` clears the rightmost 1, so you can count 1s quickly; **shifts** (<<, >>) move bits left/right—same as multiply/divide by 2. You can set, clear, or flip a specific bit using OR, AND, and XOR with a mask.
 
-Use when the problem involves **parity**, **single number** among pairs, **bit counts**, or **no-arithmetic** constraints (e.g., add without +).
+Useful tricks: XOR all elements to cancel pairs and find the odd one out; `n & (n-1)` removes the rightmost 1; `1 << k` picks out the k-th bit. Use this pattern when the problem asks for a **single number among pairs**, **bit counts**, or **arithmetic without +** (e.g., add two numbers using only bit ops).
 
 ## When to Use This Pattern
 
-- Problem involves **single number** where others appear twice (XOR).
-- You need to **count set bits** or manipulate individual bits.
-- Problem asks for **xor**, **and**, **or** of elements.
-- Arithmetic is restricted (e.g., sum without +).
-- Phrases like "single", "appears once", "number of 1 bits", "reverse bits", "without using +".
+- Problem has a **single number** while all others appear twice (XOR cancels pairs).
+- You need to **count 1s** or flip/check individual bits.
+- Problem mentions **xor**, **and**, **or** on numbers.
+- Arithmetic is limited (e.g., "add two numbers without using +").
+- You see phrases like "single", "appears once", "number of 1 bits", "reverse bits", or "without using +".
 
 ## How to Identify This Pattern
 
 ```
-Does the problem involve canceling pairs / finding unique?
-    YES → XOR (a^a=0)
+Does the problem involve canceling pairs or finding the unique element?
+    YES → XOR (a^a=0) is your friend
     
-Does it ask to count or manipulate bits?
-    YES → AND with n-1, shift, masks
+Does it ask to count or flip individual bits?
+    YES → Use n & (n-1), shifts, and masks
     
-Is arithmetic restricted?
-    YES → Bit ops for add, etc.
+Is arithmetic restricted (e.g., no + or -)?
+    YES → Use working with individual bits for add, etc.
     
 Are we maximizing XOR between pairs?
     YES → Trie or bit-by-bit greedy
@@ -350,12 +350,12 @@ class Solution {
 
 ## Pattern Variations
 
-| Variation           | Example   | Key Technique                          |
-|---------------------|-----------|----------------------------------------|
-| XOR cancel pairs    | #136      | XOR all elements                        |
-| Count mod K         | #137      | State machine for mod 3                  |
-| Count bits          | #191, #338| n & (n-1) or DP res[i>>1]+(i&1)         |
-| Reverse             | #190      | Extract LSB, shift result                |
-| Add without +       | #371      | XOR + AND for sum and carry              |
-| Max XOR pair        | #421      | Trie, prefer opposite bit                |
-| Min flips           | #1318     | Bit-by-bit: match target, count flips    |
+| Variation           | Example   | Key Technique                                                              |
+|---------------------|-----------|-----------------------------------------------------------------------------|
+| XOR cancel pairs    | #136      | XOR all elements—pairs cancel, the unique one remains                        |
+| Count mod K         | #137      | State machine with two variables for "appears 1 or 2 times mod 3"           |
+| Count bits          | #191, #338| n & (n-1) clears rightmost 1, or DP: res[i] = res[i>>1] + (i&1)               |
+| Reverse             | #190      | Take the last bit of n, put it into result, shift both                      |
+| Add without +       | #371      | XOR gives sum without carry; AND and shift give carry—repeat until no carry  |
+| Max XOR pair        | #421      | Trie of bits; for each number, prefer the opposite bit to maximize XOR      |
+| Min flips           | #1318     | Check each bit: match target with a|b, count how many flips needed               |

@@ -4,35 +4,35 @@
 
 ## What Is This Pattern?
 
-A **monotonic stack** is a stack that maintains elements in strictly monotonic order (either strictly increasing or strictly decreasing) as you process a sequence. When you push a new element, you pop from the stack until the monotonic property is restored. The key insight: elements that get "popped" have found their **answer**—the element that caused them to pop is their next greater (or lesser) element.
+A **monotonic stack** is a stack that stays in order: either strictly increasing (small to large) or strictly decreasing (large to small). When you add a new element, you pop until the stack is sorted again. Here's the key: when you pop someone, you just found their **answer**. The new element that caused the pop is their next greater (or next smaller) element.
 
-Think of it visually: imagine processing an array left-to-right. For a *decreasing* stack, you're building a "skyline" where each new building either fits under the previous ones (push) or "blocks the view" of shorter buildings to its left—those shorter ones pop and record *this* new element as their "next greater." The stack always reads top-to-bottom as: newest → oldest, with strictly decreasing values. For an *increasing* stack, the logic flips: you find "next smaller" elements.
+Think of it like a skyline of buildings. You walk left to right. Each new building either fits under the ones before (push it). Or it's taller and "blocks the view" of shorter buildings to its left. Those shorter ones pop and say: "this taller building is my next greater." The stack is always top-to-bottom: newest → oldest, values going down. For an *increasing* stack, the logic flips—you find "next smaller" instead.
 
-The power comes from **amortized O(1)** per element: each element is pushed once and popped at most once, so total operations are O(n). This transforms "find next greater for every element" from O(n²) brute-force to O(n).
+Why is it fast? Each element is pushed once and popped at most once. So total work is O(n). That turns "find next greater for everyone" from O(n²) brute-force into O(n) in one pass.
 
 ## When to Use This Pattern
 
-- The problem asks for **next greater element**, **next smaller element**, **previous greater**, or **previous smaller** for each position.
-- You need to find the **nearest** element satisfying a comparison (>, <, ≥, ≤) in one direction.
-- The problem involves **histograms**, **rectangles**, **trapping water**, or **subarray min/max** contributions.
-- You see phrases like "next greater", "daily temperature", "stock span", "subarray minimums", "remove k digits", "asteroid collision".
-- Brute-force would scan right (or left) for each element—monotonic stack achieves O(n) in one pass.
+- The problem asks for **next greater**, **next smaller**, **previous greater**, or **previous smaller** for each element.
+- You need the **closest** element in one direction that is bigger (or smaller) than the current one.
+- The problem involves **histograms**, **rectangles**, **trapped water**, or **subarray minimums/maximums**.
+- You see phrases like "next greater", "daily temperature", "stock span", "remove k digits", "asteroid collision".
+- Brute-force would scan right (or left) for every element—monotonic stack does it in one O(n) pass.
 
 ## How to Identify This Pattern
 
 ```
-Is the input a 1D array or sequence?
-    NO → Consider other patterns (graph, tree, 2D DP)
+Is the input a 1D array or list of numbers?
+    NO → Try other patterns (graph, tree, 2D DP)
     YES ↓
 
-Does the problem ask for "next/previous greater/smaller" per element?
+Does it ask for "next/previous greater/smaller" for each position?
     YES → MONOTONIC STACK
     NO ↓
 
-Are we computing something over ranges where min/max matters?
+Are we working with ranges where min/max matters?
     (e.g., subarray min, rectangle area, trapped water)
-    YES → Often MONOTONIC STACK (with left/right boundaries)
-    NO → Consider sliding window, two pointers
+    YES → Often MONOTONIC STACK (left and right boundaries)
+    NO → Try sliding window or two pointers
 ```
 
 ## Core Template (Pseudocode) — Monotonic Decreasing and Monotonic Increasing Stack
@@ -476,24 +476,24 @@ class Solution {
 
 | Mistake | How to Avoid |
 |---------|---------------|
-| **Strict vs non-strict comparison** | For "next greater": use `<` when popping. For "next smaller": use `>`. Using `<=`/`>=` changes behavior with duplicates—pick one convention (e.g., left boundary `>=`, right `>`) to avoid double-counting in "min in range" problems. |
-| **Forgetting to handle remaining stack** | After the main loop, elements still in the stack have no next greater/smaller. Set their result to -1, n, or 0 as appropriate. |
-| **Circular arrays** | Iterate 2× or use `i % n`. Only push indices when `i < n` to avoid duplicate entries. |
-| **Index vs value** | Store indices when you need width/distance; store values when you only need the next greater value. |
-| **Leading zeros** | In Remove K Digits, don't push '0' when the stack is empty (result would be "000"). |
-| **Empty input** | Check `n == 0` before accessing `arr[0]`. Return 0 or "0" as required. |
-| **Integer overflow** | In Sum of Subarray Minimums, use `long` for the sum and mod by 10^9+7. |
-| **Asteroid collision** | Same sign asteroids never collide. Only + then - (left to right) collide. |
+| **Strict vs non-strict comparison** | For "next greater" use `<` when popping; for "next smaller" use `>`. With duplicates, `<=`/`>=` changes things—pick one rule (e.g. left `>=`, right `>`) to avoid double-counting. |
+| **Forgetting remaining stack** | After the loop, elements still in the stack have no answer. Set their result to -1, n, or 0 as needed. |
+| **Circular arrays** | Loop 2× or use `i % n`. Only push indices when `i < n` so you don't push the same index twice. |
+| **Index vs value** | Store indices when you need width or distance. Store values when you only need the next greater value. |
+| **Leading zeros** | In Remove K Digits, don't push '0' when stack is empty (else you get "000"). |
+| **Empty input** | Check `n == 0` before using `arr[0]`. Return 0 or "0" as the problem says. |
+| **Integer overflow** | In Sum of Subarray Minimums, use `long` and mod by 10^9+7. |
+| **Asteroid collision** | Same sign never collides. Only + then - (left to right) can collide. |
 
 ## Pattern Variations
 
 | Variation | Description | Example |
 |-----------|-------------|---------|
-| **Next greater/smaller (one direction)** | Standard single pass | Next Greater Element I, Daily Temperatures |
-| **Previous greater/smaller** | Process right-to-left, or use the fact that "next" from right-to-left = "previous" from left-to-right | Stock Span |
-| **Circular / 2× pass** | Iterate 2n or modulo | Next Greater Element II |
-| **Left + right boundaries** | Two stacks or two passes for prev and next smaller | Sum of Subarray Minimums, Largest Rectangle |
-| **Monotonic deque** | When you need both ends (e.g., sliding window max/min) | Often combined with sliding window |
-| **Greedy removal** | Increasing stack to keep smallest lexicographically | Remove K Digits |
-| **Simulation / collision** | Stack to model "dominance" or collision | Asteroid Collision |
-| **2D histogram** | Build heights per row and run histogram algorithm | Maximal Rectangle |
+| **Next greater/smaller (one direction)** | One pass left to right | Next Greater Element I, Daily Temperatures |
+| **Previous greater/smaller** | Go right to left, or "next" going right = "previous" going left | Stock Span |
+| **Circular / 2× pass** | Loop twice or use modulo to wrap around | Next Greater Element II |
+| **Left + right boundaries** | Two passes: find prev smaller and next smaller | Sum of Subarray Minimums, Largest Rectangle |
+| **Monotonic deque** | When you need both ends—e.g. sliding window max/min | Often used with sliding window |
+| **Greedy removal** | Increasing stack keeps smallest result (lexicographically) | Remove K Digits |
+| **Simulation / collision** | Stack models one thing "beating" another | Asteroid Collision |
+| **2D histogram** | Build bar heights per row, then run histogram algo | Maximal Rectangle |

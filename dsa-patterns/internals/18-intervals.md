@@ -1,31 +1,33 @@
 # Interval Problems
 
-> Model time ranges, meetings, or spans as [start, end] pairs. Sorting, merging, scanning, and sweep-line techniques handle overlap, coverage, and scheduling efficiently.
+> Think of your calendar: meetings, bookings, or any time spans. Each is a [start, end] pair. Sort them, merge overlaps, or scan through—like managing your schedule in one pass.
 
 ## What Is This Pattern?
 
-**Interval problems** deal with ranges over a 1D line—meetings, bookings, balloons, etc. Represent each as `[start, end]`. Key operations: **merge** overlapping intervals, **count** non-overlapping, **insert** new intervals, **find** intersections or free time. Most solutions: (1) **Sort** by start or end; (2) **Scan** with a single pass, updating state (current end, count, etc.); (3) **Sweep line** for complex cases (start/end events).
+**Interval problems** are like managing a calendar. You have ranges—meetings, bookings, balloons on a line—each written as `[start, end]`. You often need to: **merge** overlapping ones (combine 9–10 and 9:30–11 into one), **count** how many fit without overlap, **insert** a new block, or **find** free time and conflicts.
 
-Common techniques: sort by end for "max non-overlapping" (activity selection), sort by start for merging, use a min-heap for "minimum meeting rooms" (chronological ordering of start/end events).
+Typical solution flow: (1) **Sort** by start or end first. (2) **Scan** once left-to-right, updating as you go (last end, count, etc.). (3) For "how many rooms?" style problems, use a **sweep line**—track when meetings start (+1) and end (-1) along a timeline.
+
+Sort by **end** when you want "max non-overlapping" (like picking as many activities as possible). Sort by **start** when merging. For "min meeting rooms," treat starts and ends as events and sweep through them.
 
 ## When to Use This Pattern
 
-- Input is **ranges**, **intervals**, **meetings**, or **time slots**.
-- You need to **merge**, **insert**, **remove overlaps**, or **count**.
+- Input is **ranges**, **intervals**, **meetings**, or **time slots** (like `[1,5]`, `[2,7]`).
+- You need to **merge**, **insert**, **remove overlaps**, or **count** them.
 - Problem asks for **free time**, **conflicts**, **rooms needed**, or **coverage**.
-- Phrases like "overlapping", "merge intervals", "meeting rooms", "non-overlapping", "insert interval".
+- You see phrases like "overlapping", "merge intervals", "meeting rooms", "non-overlapping", or "insert interval".
 
 ## How to Identify This Pattern
 
 ```
-Is the input a set of [start, end] pairs (or equivalent)?
-    NO → Consider other patterns
+Is the input a set of [start, end] pairs (or something similar)?
+    NO → Try another pattern
     YES ↓
 
-Do we need to reason about overlap, coverage, or ordering?
+Do we need to think about overlap, coverage, or ordering?
     YES → INTERVAL PATTERN
 
-Typical tasks: merge, insert, count non-overlapping, rooms, free time
+Typical tasks: merge, insert, count non-overlapping, rooms needed, free time
 ```
 
 ## Core Template (Pseudocode)
@@ -437,16 +439,16 @@ class SummaryRanges {
 
 ---
 
-## Common Mistakes
+## Common Mistakes & Edge Cases
 
-- **Meeting Rooms:** Check overlap: intervals[i][0] < intervals[i-1][1].
-- **Merge Intervals:** Sort by start; overlap when curr.start <= last.end.
-- **Insert Interval:** Handle empty list; merge all overlapping with newInterval.
-- **Non-overlapping:** Sort by end for greedy; count kept, return n - kept.
-- **Meeting Rooms II:** Sweep: starts[s] < ends[e] means new meeting starts before one ends.
-- **Interval Intersections:** Advance the interval with smaller end.
-- **Employee Free Time:** Merge all first; sort comparator should use start.
-- **Summary Ranges:** Handle merge of three intervals when val connects left and right.
+- **Meeting Rooms:** Two intervals overlap if the next starts before the previous ends: `intervals[i][0] < intervals[i-1][1]`.
+- **Merge Intervals:** Always sort by start first. Overlap when `curr.start <= last.end`—merge by extending `last.end`.
+- **Insert Interval:** Watch for an empty list. Merge every interval that overlaps with `newInterval`.
+- **Non-overlapping:** Sort by end (not start) for the greedy rule. Count how many you keep, return `n - kept`.
+- **Meeting Rooms II:** Sweep logic: if `starts[s] < ends[e]`, a new meeting starts before one ends—you need another room.
+- **Interval Intersections:** Move forward the interval that ends first (smaller end).
+- **Employee Free Time:** Merge all intervals first. When sorting, use start time.
+- **Summary Ranges:** When adding a value, it may connect left and right intervals—merge all three into one.
 
 ## Pattern Variations
 

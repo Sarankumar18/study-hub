@@ -1,22 +1,22 @@
 # Sorting Patterns
 
-> Divide-and-conquer for O(n log n) guarantees, partition for kth element in O(n), and custom comparators when ordering depends on relationships, not just value.
+> Split, sort, and merge for fast guaranteed sorting. Use partition to find the kth element quickly. Use custom rules when order depends on relationships, not just value.
 
 ## What Is This Pattern?
 
-**Sorting patterns** cover three main techniques: (1) **Merge sort**—divide the array, recursively sort halves, merge in order; (2) **Quick select**—partition around a pivot to find the kth smallest/largest in O(n) average; (3) **Custom sort**—define a comparator so elements are ordered by a derived rule (e.g., "9" before "30" for Largest Number). Merge sort guarantees O(n log n) and is stable; quick select gives O(n) average for selection without full sorting; custom comparators let you encode complex ordering logic in a single sort call.
+**Sorting patterns** use three main ideas. **(1) Merge sort:** Split the array in half, sort each half (recursively), then merge them in order. It always finishes in O(n log n) and keeps equal elements in their original order (stable). **(2) Quick select:** Pick a "pivot" element. Put smaller ones on the left, larger on the right. If the pivot lands at position k, you're done. On average this finds the kth element in O(n) without sorting everything. **(3) Custom sort:** You define your own rule. For example, "9" before "30" when forming the largest number, because 930 > 309.
 
-**Visual intuition:** Merge sort is like sorting two stacks of cards: split into two piles, sort each pile (recursively), then merge by repeatedly taking the smaller top card. Quick select is like repeatedly partitioning: pick a pivot, put smaller elements left and larger right; if the pivot lands at position k, you're done. Custom sort is "sort by this rule" instead of "sort by natural order."
+**Think of it like this:** Merge sort is like two decks of cards. Sort each deck, then merge by always taking the smaller top card. Quick select is like repeatedly splitting: pick a pivot, shuffle smaller to the left, larger to the right. When the pivot sits at k, stop. Custom sort means "sort by my rule" instead of "smallest to largest."
 
 ## When to Use This Pattern
 
-- Need **O(n log n) guaranteed** time (merge sort) or **in-place** sorting
-- Need **kth smallest/largest** without full sort → quick select
-- Need to **sort by a custom rule** (e.g., "largest number" from digits, meeting rooms by end time)
-- Problem involves **count of inversions**, **smaller elements to the right**, or **pairs satisfying condition** → merge sort during merge
-- Need **stable sort** (relative order of equal elements preserved)
-- Problem says "sort", "order", "arrange", "kth", "median", "partition"
-- Constraints suggest sorting will help (e.g., O(n²) brute force → O(n log n) with sort)
+- You need **O(n log n) guaranteed** time or **in-place** sorting (no extra array)
+- You need **kth smallest/largest** without fully sorting → use quick select
+- You need to **sort by a custom rule** (e.g., largest number from digits, meetings by end time)
+- Problem asks for **count of inversions**, **smaller elements to the right**, or **pairs satisfying a condition** → use merge sort and count during merge
+- You need **stable sort** (when two elements are equal, keep their original order)
+- Keywords: "sort", "order", "arrange", "kth", "median", "partition"
+- Brute force is too slow (e.g., O(n²)) and sorting would speed it up to O(n log n)
 
 ## How to Identify This Pattern
 
@@ -24,8 +24,8 @@
 - "Count inversions" / "smaller numbers after self" / "reverse pairs"
 - "Merge two sorted arrays" / "merge intervals"
 - "Arrange to form largest number" / "custom order"
-- "Meeting rooms" / "minimum rooms" (sort by start/end, then sweep)
-- "Maximum gap" / "bucket sort" for linear-time under constraints
+- "Meeting rooms" / "minimum rooms" (sort by time, then scan)
+- "Maximum gap" / "bucket sort" when you need linear time under special constraints
 
 ## Core Template (Pseudocode) — merge sort, quick select (kth element), custom comparator
 
