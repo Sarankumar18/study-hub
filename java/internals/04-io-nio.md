@@ -519,20 +519,27 @@ transferTo (sendfile):
 
 ## 6. Scatter/Gather — Vectored I/O
 
+Scatter/Gather I/O allows a single syscall to read into or write from **multiple buffers**. This maps directly to the POSIX `readv()`/`writev()` system calls, which reduce per-syscall overhead when your data has a natural multi-part structure (e.g., a fixed-size header followed by a variable-length body).
+
+Without scatter/gather, you would either allocate one large buffer and manually slice it, or make multiple `read()`/`write()` calls — each of which requires a user→kernel context switch. With scatter/gather, the kernel fills or drains multiple buffers in one atomic operation, which is particularly valuable for network protocols (HTTP headers + body, database wire protocol packets) and file formats with fixed headers.
+
+`ScatteringByteChannel` (for reads) and `GatheringByteChannel` (for writes) are the relevant NIO interfaces. Both `FileChannel` and `SocketChannel` implement them.
+
 ```java
-// Read from channel into MULTIPLE buffers in one syscall:
+// Scatter read: one syscall fills header first, then body
 ByteBuffer header = ByteBuffer.allocate(128);
 ByteBuffer body = ByteBuffer.allocate(4096);
-
 channel.read(new ByteBuffer[] { header, body });
-// Fills header first, then body — one syscall, one context switch
 
-// Write MULTIPLE buffers to channel in one syscall:
+// Gather write: one syscall writes header then body
 channel.write(new ByteBuffer[] { header, body });
-// Writes header then body atomically
 ```
 
-This maps to `readv()`/`writev()` syscalls — reduces syscall overhead for protocols with headers.
+**Key Points:**
+- One syscall instead of two — reduces context-switch overhead.
+- Buffers are filled/drained in array order.
+- Particularly effective for protocols with fixed-size headers followed by variable payloads.
+- The kernel handles the scatter/gather atomically; no partial reads/writes between buffers.
 
 ---
 
@@ -589,6 +596,8 @@ In practice: Netty's NIO (epoll-based) is usually preferred over AIO on Linux
 ---
 
 ## 8. Practical I/O Performance Guidelines
+
+Choosing the right I/O model depends on your concurrency level, data access pattern, and latency requirements. The table below summarizes the decision points — note that these are guidelines, not rules; always benchmark with your actual workload.
 
 ```
 Scenario                              Best Approach

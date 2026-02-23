@@ -2,6 +2,43 @@
 
 > You don't really know Java until you know what `javap -c` shows you.
 
+Most Java developers know the syntax — they can write generics, use streams, and create records. But few understand what happens *after* the compiler runs. This phase takes you behind the curtain: you'll learn what bytecode the JVM actually executes, how type erasure rewrites your generics, how `invokedynamic` wires lambdas at runtime, and why certain patterns that look correct can fail catastrophically in production.
+
+The approach here is different from a typical tutorial. Every topic starts with the **mechanism** (what the JVM does), moves to the **implications** (what that means for your code), and ends with **verification** (how to prove it with `javap`, JMH, or a targeted test). By the end of this phase, you won't just write Java — you'll read bytecode, predict JIT behavior, and debug at a level most developers never reach.
+
+---
+
+## Table of Contents
+
+1. [Generics — Type Erasure and Parameterized Types](#1-generics--type-erasure-and-the-truth-behind-parameterized-types)
+2. [Streams — Lazy Evaluation, Pipeline Fusion, and Spliterator](#2-streams--lazy-evaluation-pipeline-fusion-and-spliterator)
+3. [Functional Interfaces and Lambdas — invokedynamic](#3-functional-interfaces-and-lambdas--invokedynamic-under-the-hood)
+4. [Records — How the JVM Stores Them](#4-records--how-the-jvm-stores-them)
+5. [Sealed Classes — Class Loading Enforcement](#5-sealed-classes--class-loading-enforcement)
+6. [Comparator — Contract Violations and TimSort](#6-comparator--contract-violations-and-timsort)
+7. [Optional — Design Intent and Misuse](#7-optional--design-intent-and-misuse)
+8. [Switch Expressions — Compilation Strategy](#8-switch-expressions--compilation-strategy)
+9. [equals, hashCode, and the Object Contract](#9-equals-hashcode-and-the-object-contract)
+10. [Collections Internals](#10-collections-internals)
+11. [String Internals — Pool, Compact Strings, Concatenation](#11-string-internals--pool-compact-strings-and-concatenation)
+12. [Autoboxing, Caching, and Primitive Type Traps](#12-autoboxing-caching-and-primitive-type-traps)
+13. [Enum Deep Dive — More Than Constants](#13-enum-deep-dive--more-than-constants)
+14. [Exception Handling Internals](#14-exception-handling-internals--bytecode-cost-and-desugaring)
+15. [Pattern Matching — The Modern Java Revolution](#15-pattern-matching--the-modern-java-revolution-java-16-21)
+16. [Inner Classes and the JVM](#16-inner-classes-and-the-jvm--synthetic-accessors-and-memory-leaks)
+17. [Annotations Internals](#17-annotations-internals--retention-processing-and-runtime-mechanics)
+18. [Reflection vs MethodHandles vs VarHandle](#18-reflection-vs-methodhandles-vs-varhandle--performance-hierarchy)
+19. [Memory Layout and Object Headers](#19-memory-layout-and-object-headers--what-objects-really-look-like)
+20. [var and Local Variable Type Inference](#20-var-and-local-variable-type-inference-java-10)
+21. [Text Blocks — String Literal Deep Dive](#21-text-blocks--string-literal-deep-dive-java-15)
+22. [Collections Internals — Advanced Data Structures](#22-collections-internals--advanced-data-structures)
+
+**Quick Reference:**
+- [Bytecode Instruction Quick Reference](#bytecode-instruction-quick-reference)
+- [The "What Does javap Show Me?" Decision Tree](#the-what-does-javap-show-me-decision-tree)
+- [Production Debugging Quick Guide](#production-debugging-quick-guide)
+- [Comprehensive Resource List](#comprehensive-resource-list--from-senior-to-god-tier)
+
 ---
 
 ## 1. Generics — Type Erasure and the Truth Behind Parameterized Types

@@ -383,10 +383,6 @@ public int compareTo(PhoneNumber pn) {
 
 ---
 
-# Effective Java 3rd Edition – Items 15–33
-
----
-
 ## Chapter 4: Classes and Interfaces
 
 ---
@@ -1114,9 +1110,6 @@ String s = f.getFavorite(String.class);  // "Java"
 - Use bounded type tokens and `asSubclass` for annotation-style APIs.
 
 ---
-# Effective Java 3rd Edition: Items 34-48
-
----
 
 ## Chapter 6: Enums and Annotations
 
@@ -1511,7 +1504,6 @@ static long pi(long n) {
 - Good sources: ArrayList, HashMap, arrays, int/long ranges; bad: Stream.iterate, limit-heavy pipelines
 - Function objects must be associative, non-interfering, stateless for parallel correctness
 - Always measure; parallelization is a performance optimization that must be validated
-# Effective Java 3rd Edition — Items 49–77
 
 ---
 

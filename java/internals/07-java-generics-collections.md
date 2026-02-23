@@ -714,12 +714,26 @@ if (o instanceof List<?>) {
 
 ### 6.3 Exception Handling
 
-`catch` clauses and exception types must be reifiable. You cannot create parameterized subclasses of `Throwable`.
+Exception types interact with reification in two important ways. First, `catch` clauses rely on runtime type checks (`instanceof`), so the caught type must be reifiable. You cannot write `catch (ParametricException<Integer> e)` because the JVM cannot distinguish `ParametricException<Integer>` from `ParametricException<String>` at runtime — both erase to `ParametricException`.
+
+Second, and more fundamentally, you cannot create a generic exception class at all. A class like `class ParametricException<T> extends Exception` is illegal because if it were allowed, you could catch parameterized exception types, which requires non-reifiable `instanceof` checks.
+
+However, type variables *are* allowed in `throws` clauses. A generic method can declare `throws X` where `X extends Throwable` is a type parameter. This is useful in the Function pattern (Chapter 9) where a function object may throw a checked exception determined by the caller.
 
 ```java
-// Not allowed
+// Not allowed: generic exception class
 class ParametricException<T> extends Exception { ... }  // compile-time error
+
+// Allowed: type variable in throws clause
+interface Action<X extends Exception> {
+  void perform() throws X;
+}
 ```
+
+**Key Points:**
+- Exception classes cannot be generic; `catch` requires reifiable types.
+- Type variables in `throws` clauses are allowed and useful for generic functional interfaces.
+- The restriction prevents ambiguous catch blocks that could not be distinguished at runtime.
 
 ---
 
@@ -794,20 +808,42 @@ class ArrayList<E> extends AbstractList<E> {
 
 ### 6.8 Array Creation and Varargs
 
-Varargs are implemented via arrays. If the vararg type is not reifiable, generic array creation warnings are emitted.
+Varargs (`T...`) are syntactic sugar for an array parameter (`T[]`). When the vararg element type is not reifiable (e.g., `List<Integer>`), the JVM must create an array of a non-reifiable component type, which triggers an unchecked generic array creation warning.
+
+This is unavoidable with methods like `Arrays.asList(T...)` when called with parameterized types. The array created at the call site has component type `List` (erased), not `List<Integer>`. If the array escapes the method and is stored in a field typed as `Object[]`, wrong elements could be inserted.
+
+Java 7 introduced `@SafeVarargs` to suppress these warnings on methods that do not store or expose the varargs array. Methods like `Arrays.asList`, `Collections.addAll`, and `EnumSet.of` are annotated with `@SafeVarargs` because they only read from the array.
 
 ```java
+List<Integer> a = Arrays.asList(1, 2);
+List<Integer> b = Arrays.asList(3, 4);
 List<List<Integer>> x = Arrays.asList(a, b);  // generic array creation warning
+
+@SafeVarargs
+static <T> List<T> safeList(T... elements) {
+  return Arrays.asList(elements);  // safe: only reads from array
+}
 ```
 
 **Key Points:**
-- Avoid varargs with non-reifiable types; prefer explicit `List` construction.
+- Varargs create arrays; non-reifiable element types trigger warnings.
+- Use `@SafeVarargs` on methods that only read from the varargs array.
+- Avoid varargs with non-reifiable types when the array could escape or be written to.
 
 ---
 
 ### 6.9 Arrays as a Deprecated Type?
 
-Collections are often preferable to arrays: richer typing, more flexibility, and avoidance of reification issues. Consider collections as the default; use arrays only when necessary.
+Given the many restrictions on generic arrays (no creation, no covariant safety, exposure risks), collections are often preferable to arrays. Collections offer richer typing (`List<? extends T>`, `List<? super T>`), more flexibility (dynamic sizing, richer APIs), and avoidance of reification issues entirely.
+
+The main cases where arrays are still justified: primitive arrays (`int[]`, `double[]`) for performance-critical code where boxing overhead matters; interop with APIs that require arrays (e.g., `main(String[] args)`, some legacy frameworks); and `varargs`, which are inherently array-based.
+
+Some JDK APIs (e.g., `TypeVariable<D>.getBounds()` returning `Type[]`) actually violate the Principle of Indecent Exposure — returning arrays of non-reifiable component types. This is a known wart in the API.
+
+**Key Points:**
+- Prefer collections as the default container; arrays for primitives and legacy interop.
+- Generic arrays are fraught with restrictions; collections avoid all of them.
+- Even the JDK has a few APIs that expose non-reifiable arrays inappropriately.
 
 ---
 
