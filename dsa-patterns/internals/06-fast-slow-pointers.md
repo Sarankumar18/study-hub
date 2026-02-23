@@ -1,34 +1,39 @@
 # Fast & Slow Pointers
 
-> Two pointers moving at different speeds reveal cycles, middles, and structural properties—without extra space or multiple passes.
+> Two pointers move at different speeds through a linked list or sequence. The fast one moves 2 steps, the slow one moves 1 step. This helps find cycles, middles, and more — using O(1) space.
 
 ## What Is This Pattern?
 
-The **Fast & Slow Pointers** pattern (also known as the **tortoise and hare** or **Floyd's cycle detection**) uses two pointers traversing a sequence at different speeds. Typically, the **slow pointer** advances by one step per iteration while the **fast pointer** advances by two. This asymmetry creates a predictable relationship: if there is a cycle, the fast pointer will eventually "lap" the slow one and meet it inside the cycle.
+The **Fast & Slow Pointers** pattern (also called **tortoise and hare**) uses two pointers that move at different speeds. The **slow pointer** moves one step at a time. The **fast pointer** moves two steps at a time.
 
-**Visual intuition:** Imagine a circular track with a tortoise and a hare. The hare runs twice as fast. If they start from the same point, the hare will eventually catch the tortoise from behind—proof of a loop. If the track is straight (no cycle), the hare simply reaches the end first. In linked lists or array-as-graph structures, we don't need to hash nodes or count steps; the meeting point (or its absence) tells us everything we need.
+**Simple analogy:** Imagine a circular running track. A tortoise and a hare start at the same spot. The hare runs twice as fast. If the track is a loop, the hare will eventually catch up to the tortoise from behind — proving there's a cycle. If the track is a straight road (no loop), the hare just reaches the end first.
 
-The pattern generalizes beyond cycle detection: when the fast pointer reaches the end of a linked list, the slow pointer is at the **middle** (or one step past it). We can also use it to find the **k-th element from the end** by giving the fast pointer a head start. These applications share one idea: **relative positioning** through differential speed—no extra data structures, often O(1) space.
+**This pattern does three main things:**
+1. **Detect cycles** — If the two pointers meet, there's a loop. If the fast pointer hits null, there's no loop.
+2. **Find the middle** — When the fast pointer reaches the end, the slow pointer is at the middle. (Fast moved 2× as far, so slow is at the halfway point.)
+3. **Find the k-th node from the end** — Give the fast pointer a head start of k steps. When fast hits the end, slow is at the k-th node from the end.
+
+All of these work with **O(1) extra space** — no HashSet, no counting, no extra arrays.
 
 ## When to Use This Pattern
 
-- **Cycle detection** in linked lists or implicit linked structures (e.g., array indices as "next" pointers)
+- **Cycle detection** — "Does this linked list have a loop?"
 - **Finding the middle** of a linked list in one pass
-- **Finding the k-th node from the end** without knowing the length
-- **Palindrome checks** on linked lists (find middle, reverse second half, compare)
-- **Reordering / restructuring** linked lists (split at middle, reverse, merge)
-- **Problems where** you need positional info (middle, nth-from-end) but can't afford multiple passes or O(n) extra space
+- **Finding the k-th node from the end** without knowing the total length
+- **Palindrome checks** on linked lists — find middle, reverse second half, compare
+- **Reordering linked lists** — split at middle, reverse, merge
+- **Array problems** where values in range [1, n] act like "next" pointers (e.g., Find the Duplicate Number)
+- **Happy Number** — repeated digit-squaring creates a cycle
 
 ## How to Identify This Pattern
 
-- "Detect cycle" / "has cycle" / "circular"
-- "Middle of the linked list"
-- "Nth node from the end"
-- "Palindrome linked list"
-- "Reorder list" / "in-place reorder"
-- Array with values in range [1, n] and "find duplicate" (array becomes implicit linked list)
-- "Happy number" (repeated squaring leads to a cycle)
-- Single pass, O(1) space, linked list or array-as-graph
+- Problem says "detect cycle", "has cycle", or "circular"
+- Problem says "middle of linked list"
+- Problem says "nth node from end"
+- Problem says "palindrome linked list"
+- Problem says "reorder list"
+- Array with values in range [1, n] and "find duplicate" — the array acts like a linked list
+- You need O(1) space and a single pass
 
 ## Core Template (Pseudocode)
 
