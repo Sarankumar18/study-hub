@@ -116,9 +116,10 @@ public int reverseBits(int n) {
 
 ### Easy (2 problems)
 
-#### Problem: Single Number (#136)
+#### Problem: [Single Number](https://leetcode.com/problems/single-number/) (LeetCode #136)
 
 - **Intuition:** Every element appears twice except one. XOR: a^a=0, a^0=a. XOR all cancels pairs, leaves the single.
+- **Brute Force:** Use a hash map to count occurrences; return the key with count 1. Time O(n), Space O(n).
 - **Approach:** result = 0; for each x: result ^= x; return result.
 - **Java Solution:**
 
@@ -136,9 +137,10 @@ class Solution {
 
 ---
 
-#### Problem: Number of 1 Bits (#191)
+#### Problem: [Number of 1 Bits](https://leetcode.com/problems/number-of-1-bits/) (LeetCode #191)
 
 - **Intuition:** Count set bits. n & (n-1) clears the rightmost 1. Repeat until 0.
+- **Brute Force:** Iterate through each bit with (n >> i) & 1 and count. Time O(32), Space O(1).
 - **Approach:** count = 0; while (n != 0) { n &= (n-1); count++; } return count.
 - **Java Solution:**
 
@@ -161,9 +163,10 @@ public class Solution {
 
 ### Medium (4 problems)
 
-#### Problem: Single Number II (#137)
+#### Problem: [Single Number II](https://leetcode.com/problems/single-number-ii/) (LeetCode #137)
 
 - **Intuition:** Every element appears 3 times except one. For each bit, count occurrences mod 3; remainder gives the single number's bits. Use two masks (ones, twos) to track mod 3.
+- **Brute Force:** Use a hash map to count occurrences; return the key with count 1. Time O(n), Space O(n).
 - **Approach:** ones = bits appearing 1 mod 3, twos = 2 mod 3. For each x: ones = (ones ^ x) & ~twos; twos = (twos ^ x) & ~ones. Return ones.
 - **Java Solution:**
 
@@ -184,9 +187,10 @@ class Solution {
 
 ---
 
-#### Problem: Counting Bits (#338)
+#### Problem: [Counting Bits](https://leetcode.com/problems/counting-bits/) (LeetCode #338)
 
 - **Intuition:** For each i, count of 1 bits. DP: res[i] = res[i >> 1] + (i & 1). Dropping last bit halves the number; LSB adds 0 or 1.
+- **Brute Force:** For each i from 0 to n, count 1 bits using a loop (n &= n-1 or bit check). Time O(n·k) where k = avg bits per number, Space O(1) excluding output.
 - **Approach:** res[0]=0. For i from 1 to n: res[i] = res[i>>1] + (i&1).
 - **Java Solution:**
 
@@ -205,9 +209,10 @@ class Solution {
 
 ---
 
-#### Problem: Reverse Bits (#190)
+#### Problem: [Reverse Bits](https://leetcode.com/problems/reverse-bits/) (LeetCode #190)
 
 - **Intuition:** Reverse the 32-bit representation. Shift result left, add LSB of n, shift n right.
+- **Brute Force:** Extract each bit (n >> i) & 1, place at position (31-i) in result. Time O(32), Space O(1).
 - **Approach:** result=0; for i 0..31: result = (result<<1)|(n&1); n>>=1; return result.
 - **Java Solution:**
 
@@ -228,9 +233,10 @@ public class Solution {
 
 ---
 
-#### Problem: Sum of Two Integers (#371)
+#### Problem: [Sum of Two Integers](https://leetcode.com/problems/sum-of-two-integers/) (LeetCode #371)
 
 - **Intuition:** Add without + or -. Use XOR for sum without carry, AND for carry. Sum = a^b, carry = (a&b)<<1. Repeat until carry is 0.
+- **Brute Force:** Simulate addition bit-by-bit with explicit carry propagation using only bit ops. Time O(32), Space O(1).
 - **Approach:** while (b != 0) { carry = (a & b) << 1; a = a ^ b; b = carry; } return a.
 - **Java Solution:**
 
@@ -253,9 +259,10 @@ class Solution {
 
 ### Hard (2 problems)
 
-#### Problem: Maximum XOR of Two Numbers in an Array (#421)
+#### Problem: [Maximum XOR of Two Numbers in an Array](https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/) (LeetCode #421)
 
 - **Intuition:** Find max xor of any pair. For each number, greedily choose the opposite bit at each position to maximize xor. Use a binary trie: insert all numbers, then for each number traverse trie preferring opposite bit.
+- **Brute Force:** Try all pairs of numbers, compute XOR for each, track maximum. Time O(n²), Space O(1).
 - **Approach:** 1) Build trie with all numbers (bit by bit). 2) For each number, traverse trie: at each bit, go to child with opposite bit if exists, else same. 3) Track max xor.
 - **Java Solution:**
 
@@ -301,9 +308,10 @@ class Solution {
 
 ---
 
-#### Problem: Minimum Flips to Make a OR b Equal to c (#1318)
+#### Problem: [Minimum Flips to Make a OR b Equal to c](https://leetcode.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/) (LeetCode #1318)
 
 - **Intuition:** Flip bits of a or b so (a|b)==c. For each bit: if c has 0, both a and b must be 0 (flip any 1s). If c has 1, at least one of a,b must be 1 (flip 0 only if both are 0).
+- **Brute Force:** Check each of the 32 bits: if (a|b) bit differs from c bit, count needed flips (0→1: 1 flip if both 0; 1→0: 1 or 2 flips). Time O(32), Space O(1).
 - **Approach:** For each bit i: if (c>>i)&1==0: flips += ((a>>i)&1) + ((b>>i)&1). Else: if ((a>>i)&1)==0 && ((b>>i)&1)==0: flips++.
 - **Java Solution:**
 

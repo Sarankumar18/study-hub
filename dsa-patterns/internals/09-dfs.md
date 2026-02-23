@@ -167,8 +167,9 @@ public class TreeNode {
 
 ---
 
-#### Problem: Maximum Depth of Binary Tree (LeetCode #104)
+#### Problem: [Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/) (LeetCode #104)
 
+- **Brute Force:** Use BFS level-order traversal, counting levels until the queue is empty. Time O(n), Space O(n)
 - **Intuition:** The depth of a tree is 1 plus the maximum of the depths of its left and right subtrees. Base case: null has depth 0.
 - **Approach:** Recursive DFS (post-order): if node is null return 0; else return 1 + max(left depth, right depth).
 - **Java Solution:**
@@ -206,8 +207,9 @@ class Lc104 {
 
 ---
 
-#### Problem: Invert Binary Tree (LeetCode #226)
+#### Problem: [Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/) (LeetCode #226)
 
+- **Brute Force:** Create a new tree by traversing the original and building a mirrored copy. Time O(n), Space O(n)
 - **Intuition:** Swap left and right subtrees at every node. Do it recursively: invert left, invert right, then swap the pointers.
 - **Approach:** Post-order DFS: recurse on left and right, then swap node.left and node.right.
 - **Java Solution:**
@@ -257,8 +259,9 @@ class Lc226 {
 
 ---
 
-#### Problem: Same Tree (LeetCode #100)
+#### Problem: [Same Tree](https://leetcode.com/problems/same-tree/) (LeetCode #100)
 
+- **Brute Force:** Serialize both trees to strings (e.g., pre-order with null markers) and compare the outputs. Time O(n), Space O(n)
 - **Intuition:** Two trees are the same iff their roots have the same value and their left and right subtrees are the same.
 - **Approach:** If both null → true. If one null → false. Else compare val and recurse on left and right.
 - **Java Solution:**
@@ -305,8 +308,9 @@ class Lc100 {
 
 ---
 
-#### Problem: Number of Islands (LeetCode #200 — DFS Approach)
+#### Problem: [Number of Islands](https://leetcode.com/problems/number-of-islands/) (LeetCode #200 — DFS Approach)
 
+- **Brute Force:** Use a separate visited matrix instead of mutating the grid; for each unvisited '1', run DFS and mark all connected cells. Time O(m×n), Space O(m×n)
 - **Intuition:** Scan the grid; when you find '1', sink the whole island (DFS) and increment count. Sinking = mark visited by changing '1' to '0'.
 - **Approach:** For each cell, if '1' then DFS from that cell (up/down/left/right), flip to '0', and count++.
 - **Java Solution:**
@@ -375,8 +379,9 @@ class Lc200 {
 
 ---
 
-#### Problem: Path Sum II (LeetCode #113)
+#### Problem: [Path Sum II](https://leetcode.com/problems/path-sum-ii/) (LeetCode #113)
 
+- **Brute Force:** Collect all root-to-leaf paths without pruning, then filter for those whose sum equals target. Time O(n), Space O(h) + output
 - **Intuition:** DFS from root, maintain current path and remaining target. At leaf, if remaining == 0, add path to result. Backtrack after exploring each subtree.
 - **Approach:** Pre-order DFS: add node to path, subtract node.val from target. If leaf and target == 0, copy path to result. Recurse left, recurse right, then remove node from path (backtrack).
 - **Java Solution:**
@@ -445,8 +450,9 @@ class Lc113 {
 
 ---
 
-#### Problem: Validate BST (LeetCode #98)
+#### Problem: [Validate BST](https://leetcode.com/problems/validate-binary-search-tree/) (LeetCode #98)
 
+- **Brute Force:** Perform in-order traversal, store values in a list, then check if the list is strictly increasing. Time O(n), Space O(n)
 - **Intuition:** A BST has every node in range (min, max). Root is (-∞, ∞). Left subtree upper bound = node.val; right subtree lower bound = node.val.
 - **Approach:** DFS passing (min, max). Null is valid. If node.val <= min or >= max, invalid. Recurse left with (min, node.val), right with (node.val, max).
 - **Java Solution:**
@@ -491,8 +497,9 @@ class Lc98 {
 
 ---
 
-#### Problem: Lowest Common Ancestor (LeetCode #236)
+#### Problem: [Lowest Common Ancestor](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/) (LeetCode #236)
 
+- **Brute Force:** Find the path from root to p and root to q, store both paths, then iterate to find the last common node. Time O(n), Space O(h)
 - **Intuition:** LCA is the deepest node that has both p and q as descendants. If we find p or q, we return it. If both subtrees return non-null, current node is LCA. If one returns non-null, propagate that up.
 - **Approach:** DFS: if node null or node == p or node == q, return node. Recurse left and right. If both non-null → LCA = current. Else return whichever is non-null.
 - **Java Solution:**
@@ -541,8 +548,9 @@ class Lc236 {
 
 ---
 
-#### Problem: Course Schedule (LeetCode #207)
+#### Problem: [Course Schedule](https://leetcode.com/problems/course-schedule/) (LeetCode #207)
 
+- **Brute Force:** Enumerate all n! course orderings and check if any satisfies the prerequisites; return true if one exists. Time O(n!), Space O(n)
 - **Intuition:** Build directed graph: course → prerequisites. Can finish iff no cycle. Use DFS: 0=unvisited, 1=visiting, 2=done. If we revisit a node in state 1, cycle exists.
 - **Approach:** Build adjacency list (prereq → list of courses that depend on it, or reverse). DFS from each node; if during DFS we hit a node in "visiting" state, return false.
 - **Java Solution:**
@@ -609,8 +617,9 @@ class Lc207 {
 
 ---
 
-#### Problem: Binary Tree Maximum Path Sum (LeetCode #124)
+#### Problem: [Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/) (LeetCode #124)
 
+- **Brute Force:** For each node, recursively compute max path sums in left and right subtrees and try all combinations through that node; update global max. Time O(n²), Space O(h)
 - **Intuition:** At each node, the max path through that node = node.val + max_gain(left) + max_gain(right). But when returning upward, we can only extend one path (left or right). Use a global max to track the best path seen.
 - **Approach:** Post-order DFS. Compute max gain from left and right (ignore negative gains). Update global max with path through node. Return node.val + max(leftGain, rightGain) for parent.
 - **Java Solution:**
@@ -666,8 +675,9 @@ class Lc124 {
 
 ---
 
-#### Problem: Serialize and Deserialize Binary Tree (LeetCode #297)
+#### Problem: [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/) (LeetCode #297)
 
+- **Brute Force:** Use level-order serialization with explicit null placeholders for a complete binary tree index, or store redundant structure. Time O(n), Space O(n)
 - **Intuition:** Use pre-order DFS. Serialize: visit node, output value (or "X" for null). Deserialize: read token, if "X" return null; else create node, deserialize left, deserialize right.
 - **Approach:** Pre-order with null markers. Split by delimiter (e.g. comma). Use an iterator or global index to consume tokens during deserialize.
 - **Java Solution:**
@@ -765,8 +775,9 @@ class Lc297 {
 
 ---
 
-#### Problem: Alien Dictionary (LeetCode #269)
+#### Problem: [Alien Dictionary](https://leetcode.com/problems/alien-dictionary/) (LeetCode #269)
 
+- **Brute Force:** Extract ordering rules from all pairs of words (not just adjacent), build a constraint graph, then try permutations or naive topological sort without cycle handling. Time O(n²×L), Space O(1)
 - **Intuition:** From adjacent word pairs, extract character order rules: first differing char gives edge (a→b). Build graph, run DFS topological sort. If cycle exists, invalid order.
 - **Approach:** Build graph: for each adjacent pair, find first differing char, add edge. DFS with 0/1/2 states. Post-order gives reverse topo order; reverse to get answer. Handle cycle detection.
 - **Java Solution:**

@@ -136,8 +136,9 @@ public class ListNode {
 
 ### Easy (2 problems)
 
-#### Problem: Linked List Cycle (LeetCode #141)
+#### Problem: [Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/) (LeetCode #141)
 
+- **Brute Force:** Use a HashSet to store visited nodes; if we encounter a node already in the set, a cycle exists. Time O(n), Space O(n).
 - **Intuition:** If the list has a cycle, the fast pointer will eventually meet the slow pointer. If there is no cycle, the fast pointer reaches the end (null) first.
 - **Approach:**
   1. Initialize both pointers at `head`
@@ -164,8 +165,9 @@ public class Solution {
 
 ---
 
-#### Problem: Middle of the Linked List (LeetCode #876)
+#### Problem: [Middle of the Linked List](https://leetcode.com/problems/middle-of-the-linked-list/) (LeetCode #876)
 
+- **Brute Force:** Traverse once to get the length, then traverse again to the middle node. Time O(n), Space O(1).
 - **Intuition:** When the fast pointer reaches the end (or past it), the slow pointer is exactly at the middle. For even-length lists, slow ends at the second middle node (as per LeetCode).
 - **Approach:**
   1. Both start at `head`
@@ -192,8 +194,9 @@ class Solution {
 
 ### Medium (4 problems)
 
-#### Problem: Linked List Cycle II (LeetCode #142)
+#### Problem: [Linked List Cycle II](https://leetcode.com/problems/linked-list-cycle-ii/) (LeetCode #142)
 
+- **Brute Force:** Use a HashSet to store visited nodes; the first node we see twice is the cycle entrance. Time O(n), Space O(n).
 - **Intuition:** After detecting a cycle (slow meets fast), reset slow to head. Move both one step at a time until they meet again—that meeting point is the cycle entrance. (Proof: distance from head to cycle start = distance from meeting point to cycle start.)
 - **Approach:**
   1. Use Floyd's cycle detection to find the meeting point
@@ -227,8 +230,9 @@ public class Solution {
 
 ---
 
-#### Problem: Happy Number (LeetCode #202)
+#### Problem: [Happy Number](https://leetcode.com/problems/happy-number/) (LeetCode #202)
 
+- **Brute Force:** Use a HashSet to store seen numbers in the digit-sum sequence; if we see a repeat before reaching 1, the number is not happy. Time O(log n) per step, Space O(log n).
 - **Intuition:** Repeatedly replacing n by the sum of squares of its digits creates a sequence. If we ever reach 1, we're happy. Otherwise we enter a cycle (numbers are bounded). Use fast/slow: if fast reaches 1, happy; if slow meets fast and neither is 1, not happy.
 - **Approach:**
   1. Slow and fast both start at n
@@ -265,8 +269,9 @@ class Solution {
 
 ---
 
-#### Problem: Reorder List (LeetCode #143)
+#### Problem: [Reorder List](https://leetcode.com/problems/reorder-list/) (LeetCode #143)
 
+- **Brute Force:** Copy all nodes into an array, then reorder by alternating indices (0, n-1, 1, n-2, ...) and rebuild the list. Time O(n), Space O(n).
 - **Intuition:** Reorder L0→L1→…→Ln-1 to L0→Ln→L1→Ln-1→… Use fast/slow to find the middle, reverse the second half, then merge the two lists alternately.
 - **Approach:**
   1. Find middle with fast/slow
@@ -318,8 +323,9 @@ class Solution {
 
 ---
 
-#### Problem: Remove Nth Node From End of List (LeetCode #19)
+#### Problem: [Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/) (LeetCode #19)
 
+- **Brute Force:** Two passes: first get the list length, then traverse to the (length - n)th node and remove it. Time O(n), Space O(1).
 - **Intuition:** Give the fast pointer an n-step head start. When fast reaches the last node (or past it), slow is at the node before the one to remove.
 - **Approach:**
   1. Use a dummy node to handle removal of head
@@ -353,8 +359,9 @@ class Solution {
 
 ### Hard (2 problems)
 
-#### Problem: Find the Duplicate Number (LeetCode #287)
+#### Problem: [Find the Duplicate Number](https://leetcode.com/problems/find-the-duplicate-number/) (LeetCode #287)
 
+- **Brute Force:** Use a HashSet; the first number we see twice is the duplicate. Time O(n), Space O(n).
 - **Intuition:** The array maps index i → nums[i], forming an implicit linked list. Because there's exactly one duplicate, there's exactly one node with two incoming edges—a cycle. Use Floyd's cycle detection: find meeting point, then find cycle entrance.
 - **Approach:**
   1. Treat slow = nums[slow], fast = nums[nums[fast]] as pointer moves
@@ -385,8 +392,9 @@ class Solution {
 
 ---
 
-#### Problem: Palindrome Linked List (LeetCode #234)
+#### Problem: [Palindrome Linked List](https://leetcode.com/problems/palindrome-linked-list/) (LeetCode #234)
 
+- **Brute Force:** Copy the list values into an array, then use two pointers to check if the array is a palindrome. Time O(n), Space O(n).
 - **Intuition:** Find the middle with fast/slow, reverse the second half, then compare first half with reversed second half node-by-node.
 - **Approach:**
   1. Find middle (slow)

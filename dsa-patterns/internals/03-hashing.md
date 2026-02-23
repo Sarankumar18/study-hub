@@ -107,10 +107,11 @@ for (int i = 0; i < nums.length; i++) {
 
 ### Easy (3 problems)
 
-#### Problem: Two Sum (LeetCode #1)
+#### Problem: [Two Sum](https://leetcode.com/problems/two-sum/) (LeetCode #1)
 
 - **Intuition:** Store each number and its index; for each new number, check if `target - num` exists in the map.
-- **Approach:**
+- **Brute Force:** For each pair (i, j), check if nums[i] + nums[j] == target. Time O(n²), Space O(1).
+- **Optimized Approach:**
   1. One pass: for each `nums[i]`, compute `complement = target - nums[i]`
   2. If `complement` is in the map, return `[map.get(complement), i]`
   3. Else put `(nums[i], i)` in the map
@@ -136,10 +137,11 @@ class Solution {
 
 ---
 
-#### Problem: Valid Anagram (LeetCode #242)
+#### Problem: [Valid Anagram](https://leetcode.com/problems/valid-anagram/) (LeetCode #242)
 
 - **Intuition:** Two strings are anagrams iff they have the same character frequency.
-- **Approach:**
+- **Brute Force:** Sort both strings and compare. Time O(n log n), Space O(n).
+- **Optimized Approach:**
   1. If lengths differ, return false
   2. Build frequency map for `s`: count each char
   3. For each char in `t`, decrement count; if count < 0, return false
@@ -167,10 +169,11 @@ class Solution {
 
 ---
 
-#### Problem: Contains Duplicate (LeetCode #217)
+#### Problem: [Contains Duplicate](https://leetcode.com/problems/contains-duplicate/) (LeetCode #217)
 
 - **Intuition:** Use a `HashSet` to track seen elements; if we see an element again, it's a duplicate.
-- **Approach:**
+- **Brute Force:** For each element, check all previous elements for a match. Time O(n²), Space O(1).
+- **Optimized Approach:**
   1. Create a `HashSet<Integer>`
   2. For each element, if it's already in the set, return true
   3. Otherwise add it and continue
@@ -195,10 +198,11 @@ class Solution {
 
 ### Medium (5 problems)
 
-#### Problem: Group Anagrams (LeetCode #49)
+#### Problem: [Group Anagrams](https://leetcode.com/problems/group-anagrams/) (LeetCode #49)
 
 - **Intuition:** Anagrams share the same sorted character sequence; use that as the grouping key.
-- **Approach:**
+- **Brute Force:** For each string, compare with all others to find anagram groups. Time O(n² * k), Space O(n * k).
+- **Optimized Approach:**
   1. For each string, compute canonical key (e.g., sorted chars)
   2. Group strings in a `Map<String, List<String>>`
   3. Return grouped lists
@@ -223,10 +227,11 @@ class Solution {
 
 ---
 
-#### Problem: Top K Frequent Elements (LeetCode #347)
+#### Problem: [Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/) (LeetCode #347)
 
 - **Intuition:** Count frequencies, then either bucket-sort by frequency or use a min-heap of size k.
-- **Approach:**
+- **Brute Force:** Count frequencies, sort entries by frequency, take top k. Time O(n log n), Space O(n).
+- **Optimized Approach:**
   1. Build frequency map
   2. Create buckets: `List<Integer>[]` where index = frequency
   3. Traverse buckets from high frequency to low; collect k elements
@@ -264,10 +269,11 @@ class Solution {
 
 ---
 
-#### Problem: Longest Consecutive Sequence (LeetCode #128)
+#### Problem: [Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence/) (LeetCode #128)
 
 - **Intuition:** Put all numbers in a set. A number starts a streak only if `num - 1` is not in the set; then expand forward.
-- **Approach:**
+- **Brute Force:** Sort array, then scan for longest consecutive run. Time O(n log n), Space O(1) or O(n) depending on sort.
+- **Optimized Approach:**
   1. Add all numbers to `HashSet`
   2. For each `num`, if `num - 1` is not in set, it's a streak start
   3. Count consecutive numbers from `num` (num, num+1, num+2, ...)
@@ -296,8 +302,9 @@ class Solution {
 
 ---
 
-#### Problem: Encode and Decode Strings (LeetCode #271)
+#### Problem: [Encode and Decode Strings](https://leetcode.com/problems/encode-and-decode-strings/) (LeetCode #271)
 
+- **Brute Force:** Join all strings with a delimiter that never appears in strings; split on delimiter to decode. Fails if delimiter can appear in input; otherwise O(n·k) encode, O(n·k) decode. Time O(n·k), Space O(n·k)
 - **Intuition:** Prepend each string with its length and a delimiter so we know where each string ends during decode.
 - **Approach:**
   - Encode: `length + "#" + str` for each string
@@ -334,10 +341,11 @@ public class Codec {
 
 ---
 
-#### Problem: Valid Sudoku (LeetCode #36)
+#### Problem: [Valid Sudoku](https://leetcode.com/problems/valid-sudoku/) (LeetCode #36)
 
 - **Intuition:** For each cell, check that its value does not repeat in its row, column, or 3×3 box. Use sets keyed by row, col, and box.
-- **Approach:**
+- **Brute Force:** For each filled cell, scan its row, column, and 3×3 box for duplicates. Time O(81 * 9) = O(1), Space O(1).
+- **Optimized Approach:**
   1. Create sets for rows, cols, boxes (e.g., `Set<String>` with keys like `"r5-3"`, `"c2-7"`, `"b1-5"`)
   2. For each filled cell, compute three keys; if any key already exists, invalid
   3. Else add all three keys
@@ -371,8 +379,9 @@ class Solution {
 
 ### Hard (2 problems)
 
-#### Problem: Minimum Window Substring (LeetCode #76)
+#### Problem: [Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/) (LeetCode #76)
 
+- **Brute Force:** Check every substring of s for containing all chars of t; compare char frequencies for each substring. Time O(n² · m), Space O(m)
 - **Intuition:** Sliding window with two pointers; expand right to include all chars of `t`, then shrink left while valid. Use a frequency map to track `t`'s chars and a running count.
 - **Approach:**
   1. Build frequency map for `t`
@@ -424,8 +433,9 @@ class Solution {
 
 ---
 
-#### Problem: Longest Substring with At Most K Distinct Characters (LeetCode #340)
+#### Problem: [Longest Substring with At Most K Distinct Characters](https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/) (LeetCode #340)
 
+- **Brute Force:** Try all substrings, count distinct chars in each, take max length among those with ≤ k distinct. Time O(n²), Space O(k)
 - **Intuition:** Sliding window; maintain a map of char counts in the window. Expand right; when distinct count > k, shrink left until valid.
 - **Approach:**
   1. Two pointers: `left`, `right`

@@ -123,8 +123,9 @@ class UnionFind {
 
 ### Easy (2 problems)
 
-#### Problem: Find if Path Exists in Graph (LeetCode #1971)
+#### Problem: [Find if Path Exists in Graph](https://leetcode.com/problems/find-if-path-exists-in-graph/) (LeetCode #1971)
 
+- **Brute Force:** BFS or DFS from source to destination to check reachability. Time O(n + E), Space O(n).
 - **Intuition:** Undirected graph with n vertices and edges. Check if there's any path from source to destination. Union-Find: union all edges, then check if source and destination are in the same component.
 - **Approach:** 1) Create UnionFind(n). 2) For each edge [u,v], union(u,v). 3) Return find(source) == find(destination).
 - **Java Solution:**
@@ -159,8 +160,9 @@ class Solution {
 
 ---
 
-#### Problem: Number of Provinces (LeetCode #547)
+#### Problem: [Number of Provinces](https://leetcode.com/problems/number-of-provinces/) (LeetCode #547)
 
+- **Brute Force:** BFS/DFS from each unvisited node to count connected components. Time O(n²), Space O(n).
 - **Intuition:** n cities; isConnected[i][j]=1 means i and j are directly connected. Find number of provinces (connected components).
 - **Approach:** 1) UnionFind(n). 2) For each pair (i,j) with isConnected[i][j]==1, union(i,j). 3) Count distinct roots.
 - **Java Solution:**
@@ -204,8 +206,9 @@ class Solution {
 
 ### Medium (4 problems)
 
-#### Problem: Redundant Connection (LeetCode #684)
+#### Problem: [Redundant Connection](https://leetcode.com/problems/redundant-connection/) (LeetCode #684)
 
+- **Brute Force:** For each edge in reverse order, remove it and run BFS/DFS to check connectivity; return the first edge whose removal keeps the graph connected (it's redundant). Time O(E·(V+E)), Space O(V+E).
 - **Intuition:** Tree + one extra edge creates exactly one cycle. Find the edge that can be removed to restore a tree. Add edges one by one; the first edge that connects two already-connected nodes is the answer.
 - **Approach:** 1) UnionFind(n+1) for 1-indexed nodes. 2) For each edge (u,v), if find(u)==find(v) return that edge. Else union(u,v). 3) Return last edge (guaranteed to exist).
 - **Java Solution:**
@@ -243,8 +246,9 @@ class Solution {
 
 ---
 
-#### Problem: Accounts Merge (LeetCode #721)
+#### Problem: [Accounts Merge](https://leetcode.com/problems/accounts-merge/) (LeetCode #721)
 
+- **Brute Force:** Build graph of email connectivity (emails as nodes, same-account edges); DFS to find connected components, merge emails per component. Time O(N·α(n)), Space O(N).
 - **Intuition:** Each account has a name and emails. Two accounts sharing an email are the same person. Merge accounts. Use Union-Find on account indices; union accounts that share any email.
 - **Approach:** 1) Map email → first account index that has it. 2) For each account, union with the account index of each email (if seen before). 3) Group emails by root account index. 4) Sort emails, prepend name.
 - **Java Solution:**
@@ -301,8 +305,9 @@ class Solution {
 
 ---
 
-#### Problem: Number of Connected Components (LeetCode #323)
+#### Problem: [Number of Connected Components](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/) (LeetCode #323)
 
+- **Brute Force:** BFS or DFS to traverse graph and count components. Time O(V + E), Space O(V).
 - **Intuition:** n nodes, edges added one by one (or given). Count connected components. Union all edges, then count distinct roots.
 - **Approach:** 1) UnionFind(n). 2) For each edge, union. 3) Count roots (parent[i]==i or find(i)==i).
 - **Java Solution:**
@@ -338,8 +343,9 @@ class Solution {
 
 ---
 
-#### Problem: Satisfiability of Equality Equations (LeetCode #990)
+#### Problem: [Satisfiability of Equality Equations](https://leetcode.com/problems/satisfiability-of-equality-equations/) (LeetCode #990)
 
+- **Brute Force:** Build graph from == equations; for each != pair, BFS/DFS to check if connected—if so, contradiction. Time O(n·α(26)), Space O(1).
 - **Intuition:** Equations like "a==b" or "a!=b". Determine if all can be satisfied. Union all == pairs. For each != pair, if find(a)==find(b), return false.
 - **Approach:** 1) UnionFind(26) for 'a'..'z'. 2) For "a==b", union(a-'a', b-'a'). 3) For "a!=b", if find(a-'a')==find(b-'a') return false. 4) Return true.
 - **Java Solution:**
@@ -385,8 +391,9 @@ class Solution {
 
 ### Hard (2 problems)
 
-#### Problem: Swim in Rising Water (LeetCode #778)
+#### Problem: [Swim in Rising Water](https://leetcode.com/problems/swim-in-rising-water/) (LeetCode #778)
 
+- **Brute Force:** Binary search on time t; for each t, BFS/DFS to check if (0,0) reaches (n-1,n-1) using only cells with elevation ≤ t. Time O(n² log n²), Space O(n²).
 - **Intuition:** n×n grid, each cell has elevation. At time t, you can swim to adjacent cells if both elevations ≤ t. Find minimum t to reach (0,0) to (n-1,n-1). Process cells by increasing elevation: at time t, "activate" all cells with elevation t, union with adjacent activated cells. When (0,0) and (n²-1) connect, return t.
 - **Approach:** 1) Build array index[elev] = cell index. 2) For t from 0 to n²-1: activate cell with elevation t, union with neighbors that have elevation ≤ t. 3) If find(0)==find(n²-1), return t.
 - **Java Solution:**
@@ -432,8 +439,9 @@ class Solution {
 
 ---
 
-#### Problem: Smallest String With Swaps (LeetCode #1202)
+#### Problem: [Smallest String With Swaps](https://leetcode.com/problems/smallest-string-with-swaps/) (LeetCode #1202)
 
+- **Brute Force:** Build graph from swap pairs; find connected components via BFS/DFS; within each component, sort chars and assign to indices. Time O(n·α(n) + n log n), Space O(n).
 - **Intuition:** String s and pairs of indices that can be swapped any number of times. Indices in the same connected component (via swap pairs) can be rearranged freely. To get lexicographically smallest: within each component, sort chars and assign smallest to smallest index.
 - **Approach:** 1) UnionFind on indices, union all pairs. 2) Group chars by root: Map<root, PriorityQueue<Character>>. 3) For each index i, poll from the heap of find(i).
 - **Java Solution:**

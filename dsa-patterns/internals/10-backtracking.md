@@ -148,8 +148,9 @@ void subsets(int[] nums, int start, List<Integer> path, List<List<Integer>> resu
 
 ### Easy (2)
 
-#### Letter Combinations of a Phone Number (LeetCode #17)
+#### [Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/) (LeetCode #17)
 
+- **Brute Force:** Nested loops for each digit's letters, generating all combinations exhaustively. Time O(4^n), Space O(n).
 - **Intuition:** Each digit maps to 3–4 letters. At each position, try every letter for that digit, recurse to the next digit, then backtrack. Base case: when you've processed all digits, add the built string to results.
 - **Approach:** 1) Map digits to letters. 2) Backtrack: for digit at index i, iterate over its letters, append to sb, recurse to i+1, remove last char. 3) Handle empty input (return empty list).
 - **Java Solution:**
@@ -186,8 +187,9 @@ class Solution {
 
 ---
 
-#### Binary Watch (LeetCode #401)
+#### [Binary Watch](https://leetcode.com/problems/binary-watch/) (LeetCode #401)
 
+- **Brute Force:** Enumerate all 12×60 (h,m) pairs, count set bits in each; keep only those where bitCount(h)+bitCount(m)==turnedOn. Time O(1), Space O(1).
 - **Intuition:** `turnedOn` LEDs must be distributed among 10 positions (4 hours + 6 minutes). Enumerate all valid (h, m) where the number of set bits in h + set bits in m equals turnedOn. Use Integer.bitCount for elegance.
 - **Approach:** 1) Loop h from 0 to 11, m from 0 to 59. 2) If bitCount(h) + bitCount(m) == turnedOn, format as "h:m" and add to result. 3) Alternative: backtrack to choose which of 10 positions to turn on—but brute-force is O(12·60) = O(1), simpler.
 - **Java Solution:**
@@ -214,8 +216,9 @@ class Solution {
 
 ### Medium (5)
 
-#### Subsets (LeetCode #78)
+#### [Subsets](https://leetcode.com/problems/subsets/) (LeetCode #78)
 
+- **Brute Force:** Generate all 2^n combinations by iterating through each element (include or exclude). Time O(n·2^n), Space O(n).
 - **Intuition:** At each step, either include nums[i] or skip. Use start index to avoid duplicates and ensure we only move forward. Every prefix of the recursion is a valid subset—add it at the start of each call.
 - **Approach:** 1) Add current path to result immediately. 2) For i from start to n-1: path.add(nums[i]), recurse(i+1), path.removeLast(). 3) No need to track "used"—start index naturally gives combinations.
 - **Java Solution:**
@@ -243,8 +246,9 @@ class Solution {
 
 ---
 
-#### Permutations (LeetCode #46)
+#### [Permutations](https://leetcode.com/problems/permutations/) (LeetCode #46)
 
+- **Brute Force:** Generate all n! permutations by trying each unused element at each position via recursion. Time O(n!·n), Space O(n).
 - **Intuition:** At each position, pick any unused element. Use a boolean[] used to avoid reusing the same element. When path size equals n, we have a complete permutation.
 - **Approach:** 1) If path.size() == nums.length, add copy to result. 2) For each i: if !used[i], mark used, add nums[i], recurse, unmark used, remove from path.
 - **Java Solution:**
@@ -278,8 +282,9 @@ class Solution {
 
 ---
 
-#### Combination Sum (LeetCode #39)
+#### [Combination Sum](https://leetcode.com/problems/combination-sum/) (LeetCode #39)
 
+- **Brute Force:** Try all combinations with repetition; recurse including or skipping each candidate until target is reached or exceeded. Time O(2^target), Space O(target).
 - **Intuition:** Pick candidates one at a time; you can reuse the same candidate. When remaining target hits 0, record the path. Prune when remaining < 0. Use start index to avoid generating duplicate combinations (e.g., [2,2,3] and [3,2,2]).
 - **Approach:** 1) Base: if remain == 0, add path and return; if remain < 0, return. 2) For i from start to n-1: path.add(candidates[i]), recurse with remain - candidates[i] and start=i (reuse allowed), path.removeLast().
 - **Java Solution:**
@@ -311,8 +316,9 @@ class Solution {
 
 ---
 
-#### Word Search (LeetCode #79)
+#### [Word Search](https://leetcode.com/problems/word-search/) (LeetCode #79)
 
+- **Brute Force:** From each cell matching word[0], DFS in 4 directions; mark visited, backtrack. Same as optimized—backtracking is the standard approach. Time O(mn·4^L), Space O(L).
 - **Intuition:** For each cell that matches word[0], DFS to find the rest. Mark visited cells (e.g., temporarily change to a non-letter) to avoid reusing; unmark when backtracking.
 - **Approach:** 1) For each (r,c): if board[r][c] == word[0] and dfs(r,c,0) returns true, return true. 2) dfs(r,c,idx): if idx == word.length return true. 3) If out of bounds or board[r][c] != word[idx], return false. 4) Save cell, mark as visited (e.g., '#'), recurse 4 neighbors, restore cell, return true if any neighbor succeeds.
 - **Java Solution:**
@@ -355,8 +361,9 @@ class Solution {
 
 ---
 
-#### Palindrome Partitioning (LeetCode #131)
+#### [Palindrome Partitioning](https://leetcode.com/problems/palindrome-partitioning/) (LeetCode #131)
 
+- **Brute Force:** Try all 2^(n-1) possible partition points; for each partition, check every substring is a palindrome. Time O(n·2^n), Space O(n).
 - **Intuition:** At each step, try cutting the string at position i: if s[0..i] is a palindrome, add it to path, recurse on s[i+1..], then backtrack. When we've processed the whole string, add the partition to results.
 - **Approach:** 1) Base: if start == s.length(), add path copy to result. 2) For end from start+1 to s.length(): if s.substring(start,end) is palindrome, path.add it, recurse(start=end), path.removeLast().
 - **Java Solution:**
@@ -400,8 +407,9 @@ class Solution {
 
 ### Hard (3)
 
-#### N-Queens (LeetCode #51)
+#### [N-Queens](https://leetcode.com/problems/n-queens/) (LeetCode #51)
 
+- **Brute Force:** Try all n^n placements (or all column permutations per row); check validity after each full placement. Backtracking with pruning is the practical approach. Time O(n!), Space O(n).
 - **Intuition:** Place one queen per row. For each row r, try each column c: if (r,c) is safe (no conflict with previous queens), place queen, recurse to row r+1, remove queen. Track cols and diagonals to check safety in O(1). Diagonals: r-c (same) and r+c (same) for anti-diagonal.
 - **Approach:** 1) Use col[], diag1[], diag2[] (or sets) for O(1) conflict check. 2) For row 0 to n-1: for col 0 to n-1, if safe, place queen, mark, recurse(row+1), unmark. 3) When row == n, convert board to list of strings.
 - **Java Solution:**
@@ -447,8 +455,9 @@ class Solution {
 
 ---
 
-#### Sudoku Solver (LeetCode #37)
+#### [Sudoku Solver](https://leetcode.com/problems/sudoku-solver/) (LeetCode #37)
 
+- **Brute Force:** Try digits 1–9 in each empty cell, recurse; backtrack when invalid. Same as optimized—no better brute force exists. Time O(9^m), Space O(1).
 - **Intuition:** Find the next empty cell. Try digits 1–9: if placing d is valid (no conflict in row, col, box), place it, recurse. If recursion returns true, we're done; else backtrack and try next digit.
 - **Approach:** 1) Find next empty (r,c). If none, return true (solved). 2) For d in '1'..'9': if valid(r,c,d), board[r][c]=d, if solve() return true, else board[r][c]='.'. 3) Return false if no digit works.
 - **Java Solution:**
@@ -497,8 +506,9 @@ class Solution {
 
 ---
 
-#### Word Search II (LeetCode #212)
+#### [Word Search II](https://leetcode.com/problems/word-search-ii/) (LeetCode #212)
 
+- **Brute Force:** For each word, run Word Search I (DFS from each cell). Time O(words·mn·4^L), Space O(L).
 - **Intuition:** Search for each word with DFS would be O(words · mn · 4^L). Use a **Trie** of all words: when traversing the grid, only continue DFS if the current path is a prefix of some word. When we find a complete word in the trie, add it and optionally mark the node to avoid duplicates.
 - **Approach:** 1) Build Trie from words. 2) For each cell, DFS: if current path not in trie as prefix, return. 3) If current node has a word, add to result and clear the word (avoid duplicates). 4) Mark cell visited, recurse 4 neighbors, unmark. 5) Use TrieNode with Map<Character, TrieNode> and String word (or isEnd).
 - **Java Solution:**

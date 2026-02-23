@@ -149,9 +149,10 @@ private boolean dfs(java.util.List<java.util.List<Integer>> graph, int u, int[] 
 
 ### Easy (2 problems)
 
-#### Problem: Course Schedule (LeetCode #207)
+#### Problem: [Course Schedule](https://leetcode.com/problems/course-schedule/) (LeetCode #207)
 
 - **Intuition:** numCourses and prerequisites [a,b] meaning b must be taken before a. Can you finish all? Equivalent to: is the graph a DAG?
+- **Brute Force:** Try all permutations of courses and check if each satisfies prerequisites—exponentially many orderings. Time O(n! · E), Space O(n).
 - **Approach:** 1) Build adjacency list: pre[i] -> courses that depend on i. 2) Kahn's: compute in-degrees, BFS from in-degree-0 nodes. 3) If we process all nodes, no cycle.
 - **Java Solution:**
 
@@ -184,9 +185,10 @@ class Solution {
 
 ---
 
-#### Problem: Find All Possible Recipes (LeetCode #2115)
+#### Problem: [Find All Possible Recipes from Given Supplies](https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/) (LeetCode #2115)
 
 - **Intuition:** Recipes have ingredients; some ingredients may be other recipes. Start with supplies. Which recipes can be made? Graph: ingredient -> recipe. In-degree of recipe = count of non-supply ingredients. Start with recipes having in-degree 0; when made, a recipe becomes available (reduces in-degree of recipes that need it).
+- **Brute Force:** Repeatedly scan all recipes in a loop and try making any whose ingredients are satisfied; stop when no progress—may loop many times. Time O(R² · I), Space O(R + I).
 - **Approach:** 1) Build graph: for each recipe's ingredient not in supplies, add edge ingredient->recipe, inDegree[recipe]++. 2) Queue = recipes with inDegree 0. 3) BFS: when we make a recipe, add to result; for recipes needing it, decrement inDegree; if 0, add to queue.
 - **Java Solution:**
 
@@ -232,9 +234,10 @@ class Solution {
 
 ### Medium (4 problems)
 
-#### Problem: Course Schedule II (LeetCode #210)
+#### Problem: [Course Schedule II](https://leetcode.com/problems/course-schedule-ii/) (LeetCode #210)
 
 - **Intuition:** Same as #207 but return one valid ordering (or empty if impossible).
+- **Brute Force:** Try all orderings and validate prerequisites; exponential. Time O(n! · E), Space O(n).
 - **Approach:** Kahn's algorithm; append to result instead of just counting.
 - **Java Solution:**
 
@@ -268,9 +271,10 @@ class Solution {
 
 ---
 
-#### Problem: Alien Dictionary (LeetCode #269)
+#### Problem: [Alien Dictionary](https://leetcode.com/problems/alien-dictionary/) (LeetCode #269)
 
 - **Intuition:** Words are lexicographically sorted in an alien language. Compare adjacent words; first differing char gives an edge (before -> after). Invalid: longer word that's a prefix of a shorter one. Topo sort the character graph.
+- **Brute Force:** Try all permutations of unique characters and check if any order satisfies all pairwise constraints from words. Time O(C! · N), Space O(C).
 - **Approach:** 1) Collect all chars, init inDegree. 2) Compare adjacent words, add edge at first diff. 3) Check prefix case (word1.length > word2.length and word1.startsWith(word2)) -> return "". 4) Kahn's on chars.
 - **Java Solution:**
 
@@ -321,9 +325,10 @@ class Solution {
 
 ---
 
-#### Problem: Minimum Height Trees (LeetCode #310)
+#### Problem: [Minimum Height Trees](https://leetcode.com/problems/minimum-height-trees/) (LeetCode #310)
 
 - **Intuition:** Tree with n nodes. Find all roots that minimize tree height. Optimal roots are the center(s)—at most 2. Repeatedly remove leaves until 1 or 2 nodes remain.
+- **Brute Force:** BFS from each node as root to compute height; pick roots with min height. Time O(n²), Space O(n).
 - **Approach:** 1) Build adjacency list, track degrees. 2) Add all leaves (degree 1) to queue. 3) Process layer by layer: remove leaves, update degrees of neighbors, add new leaves. 4) Last 1-2 nodes are the centers.
 - **Java Solution:**
 
@@ -367,9 +372,10 @@ class Solution {
 
 ---
 
-#### Problem: Parallel Courses (LeetCode #1136)
+#### Problem: [Parallel Courses](https://leetcode.com/problems/parallel-courses/) (LeetCode #1136)
 
 - **Intuition:** N courses, relations [a,b] meaning a before b. Take multiple courses per semester if prerequisites met. Minimum semesters? Kahn's with level-by-level BFS—each level = one semester.
+- **Brute Force:** BFS from each course as "first semester" and simulate; exponential combinations. Time O(n! · E), Space O(n).
 - **Approach:** 1) Build graph and in-degrees. 2) BFS in levels: each iteration processes all current in-degree-0 nodes, then adds newly ready nodes. 3) Count levels.
 - **Java Solution:**
 
@@ -411,9 +417,10 @@ class Solution {
 
 ### Hard (2 problems)
 
-#### Problem: Longest Increasing Path in a Matrix (LeetCode #329)
+#### Problem: [Longest Increasing Path in a Matrix](https://leetcode.com/problems/longest-increasing-path-in-a-matrix/) (LeetCode #329)
 
 - **Intuition:** From each cell, move to adjacent cell with strictly greater value. Longest path? DAG: edge from smaller to larger cell. Longest path in DAG = process in topo order (smallest first), DP[i][j] = 1 + max of smaller neighbors.
+- **Brute Force:** DFS from every cell without memoization; each path explores all branches. Time O(mn · 4^(mn)), Space O(mn).
 - **Approach:** DFS with memoization: from (i,j), try all 4 dirs; if neighbor is larger, 1 + dfs(neighbor). Cache result. Return max over all cells.
 - **Java Solution:**
 
@@ -449,9 +456,10 @@ class Solution {
 
 ---
 
-#### Problem: Sort Items by Groups Respecting Dependencies (LeetCode #1203)
+#### Problem: [Sort Items by Groups Respecting Dependencies](https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies/) (LeetCode #1203)
 
 - **Intuition:** n items, each in a group (or -1). beforeItems[i] = items that must come before i. Order items so same-group items are consecutive and dependencies respected. Use a single graph with "group boundary" nodes: each group g has groupStart (n+2g) and groupEnd (n+2g+1). Items in a group sit between start and end; inter-group deps become groupEnd(A)→groupStart(B).
+- **Brute Force:** Try all permutations of items/groups and validate both grouping and dependencies; exponential. Time O(n!), Space O(n).
 - **Approach:** 1) Build graph with n+2m nodes. 2) For each item: if in group, add groupStart→item, item→groupEnd; for each before dependency, add edges (before→item if same group, else groupEnd[before]→groupStart[i]). 3) Topo sort; filter to item indices only.
 - **Java Solution:**
 
