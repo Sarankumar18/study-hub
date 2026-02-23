@@ -162,7 +162,7 @@ public int maxProfitStateMachine(int[] prices) {
 
 #### Problem: [Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) (LeetCode #121)
 
-- **Brute Force:** Check every pair (i,j) with i<j; profit = prices[j]-prices[i], take max. Time O(n²), Space O(1).
+- **Brute Force:** Check every pair (i,j) with i<j; profit = prices[j]-prices[i], take max. Time O(n²) — nested loops over all pairs; Space O(1) — constant variables.
 - **Intuition:** One transaction only. Find max profit = max(price[j] - price[i]) for i < j. Equivalent to: track minimum price seen so far; at each day, profit = price - min, take max.
 - **Approach:** Single pass: maintain `minPrice`, at each day `profit = prices[i] - minPrice`, update `maxProfit`. No DP needed, but it's the simplest state-machine case (buy once, sell once).
 - **Java Solution:**
@@ -182,13 +182,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — single pass tracking min and max profit; Space O(1) — two variables only.
 
 ---
 
 #### Problem: [Best Time to Buy and Sell Stock II](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/) (LeetCode #122)
 
-- **Brute Force:** Recursively try all valid buy/sell sequences (buy then sell, repeat). Time O(2^n), Space O(n).
+- **Brute Force:** Recursively try all valid buy/sell sequences (buy then sell, repeat). Time O(2^n) — buy/skip at each day; Space O(n) — recursion depth.
 - **Intuition:** Unlimited transactions. Capture every price rise: if prices[i] > prices[i-1], add the difference. Greedy works; state machine: hold/notHold, always prefer selling when price rises.
 - **Approach:** Greedy: sum all positive (prices[i] - prices[i-1]). Or state machine: notHold = max(notHold, hold + p), hold = max(hold, notHold - p).
 - **Java Solution:**
@@ -207,7 +207,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — single pass summing all rises; Space O(1) — constant variables.
 
 ---
 
@@ -215,7 +215,7 @@ class Solution {
 
 #### Problem: [Best Time to Buy and Sell Stock with Cooldown](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/) (LeetCode #309)
 
-- **Brute Force:** Recursively try all valid buy/sell sequences with cooldown: at each day, buy (if not in cooldown), sell, or rest. Time O(2^n), Space O(n)
+- **Brute Force:** Recursively try all valid buy/sell sequences with cooldown: at each day, buy (if not in cooldown), sell, or rest. Time O(2^n) — multiple choices per day; Space O(n) — recursion stack.
 - **Intuition:** After selling, must wait one day before buying. States: `hold` (own stock), `sold` (just sold, in cooldown), `rest` (can buy). Transitions: hold→hold (rest) or hold→sold (sell); sold→rest; rest→rest or rest→hold (buy).
 - **Approach:** Three states: `hold = max(hold, rest - p)`, `sold = hold + p`, `rest = max(rest, sold)`. Process in order: sold depends on old hold; hold and rest depend on previous rest/sold.
 - **Java Solution:**
@@ -236,13 +236,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — single pass with three state variables; Space O(1) — rolling hold/sold/rest only.
 
 ---
 
 #### Problem: [Best Time to Buy and Sell Stock with Transaction Fee](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/) (LeetCode #714)
 
-- **Brute Force:** Recursively try all buy/sell sequences, subtracting fee on each sell. Time O(2^n), Space O(n).
+- **Brute Force:** Recursively try all buy/sell sequences, subtracting fee on each sell. Time O(2^n) — buy/sell/rest choices; Space O(n) — recursion depth.
 - **Intuition:** Each sell incurs `fee`. States: hold, notHold. `notHold = max(notHold, hold + p - fee)`, `hold = max(hold, notHold - p)`.
 - **Approach:** Two-state DP; subtract fee when selling.
 - **Java Solution:**
@@ -262,13 +262,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — single pass, two-state DP; Space O(1) — rolling hold/notHold variables.
 
 ---
 
 #### Problem: [Minimum Cost Tree From Leaf Values](https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/) (LeetCode #1130)
 
-- **Brute Force:** Try all possible binary tree structures with in-order leaves; compute cost for each. Time O(n!), Space O(n).
+- **Brute Force:** Try all possible binary tree structures with in-order leaves; compute cost for each. Time O(n!) — enumerate all tree orderings; Space O(n) — recursion for tree structure.
 - **Intuition:** Build a binary tree from leaf array (in-order). Non-leaf value = left.max × right.max. Minimize sum of all non-leaf values. Interval DP: `dp[i][j]` = min cost for leaves i..j; split at k, cost = dp[i][k] + dp[k+1][j] + max(i..k)*max(k+1..j).
 - **Approach:** Precompute `max[i][j]`. Fill `dp` by length. `dp[i][j] = min over k of (dp[i][k] + dp[k+1][j] + max[i][k]*max[k+1][j])`.
 - **Java Solution:**
@@ -300,13 +300,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n³), Space O(n²)
+- **Complexity:** Time O(n³) — triple loop over len, i, k; each split O(1); Space O(n²) — interval DP table + max table.
 
 ---
 
 #### Problem: [Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence/) (LeetCode #516)
 
-- **Brute Force:** Generate all 2^n subsequences, check each if palindrome, take max length. Time O(2^n · n), Space O(n).
+- **Brute Force:** Generate all 2^n subsequences, check each if palindrome, take max length. Time O(2^n · n) — 2^n subsequences, each O(n) to check; Space O(n) — recursion for subsequence.
 - **Intuition:** LPS of s = LCS(s, reverse(s)). Or interval DP: `dp[i][j]` = LPS length for s[i..j]. If s[i]==s[j]: 2 + dp[i+1][j-1]; else: max(dp[i+1][j], dp[i][j-1]).
 - **Approach:** Fill by length. Base: `dp[i][i]=1`. For len≥2: `dp[i][j] = s[i]==s[j] ? 2+dp[i+1][j-1] : max(dp[i+1][j], dp[i][j-1])`.
 - **Java Solution:**
@@ -332,7 +332,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n²), Space O(n²)
+- **Complexity:** Time O(n²) — fill n×n by interval length, each cell O(1); Space O(n²) — interval DP table for LPS.
 
 ---
 
@@ -340,7 +340,7 @@ class Solution {
 
 #### Problem: [Best Time to Buy and Sell Stock III](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/) (LeetCode #123)
 
-- **Brute Force:** Try all pairs of non-overlapping buy-sell intervals (split at each k). Time O(n⁴), Space O(1).
+- **Brute Force:** Try all pairs of non-overlapping buy-sell intervals (split at each k). Time O(n⁴) — four nested loops for two intervals; Space O(1) — no extra structure.
 - **Intuition:** At most 2 transactions. Track best profit after 1 buy, 1 sell, 2 buys, 2 sells. `buy1 = max(buy1, -p)`, `sell1 = max(sell1, buy1+p)`, `buy2 = max(buy2, sell1-p)`, `sell2 = max(sell2, buy2+p)`.
 - **Approach:** Four variables in one pass; each uses the previous.
 - **Java Solution:**
@@ -363,13 +363,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — single pass with four variables (buy1/sell1/buy2/sell2); Space O(1) — constant state only.
 
 ---
 
 #### Problem: [Best Time to Buy and Sell Stock IV](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/) (LeetCode #188)
 
-- **Brute Force:** Recursively try all sequences of up to k buy-sell pairs. Time O(2^n), Space O(n).
+- **Brute Force:** Recursively try all sequences of up to k buy-sell pairs. Time O(2^n) — buy/sell at each day; Space O(n) — recursion stack.
 - **Intuition:** At most k transactions. `dp[t][0]` = max profit after t sells (not holding), `dp[t][1]` = after t sells and one buy (holding). For each day: update all transaction levels. When k ≥ n/2, same as unlimited (#122).
 - **Approach:** `dp[k][0]` and `dp[k][1]` arrays. `dp[j][0] = max(dp[j][0], dp[j][1] + p)`, `dp[j][1] = max(dp[j][1], dp[j-1][0] - p)` for j from k down to 1.
 - **Java Solution:**
@@ -399,13 +399,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n × k), Space O(k)
+- **Complexity:** Time O(n × k) — each day updates k transaction levels; Space O(k) — sell/buy arrays of size k.
 
 ---
 
 #### Problem: [Burst Balloons](https://leetcode.com/problems/burst-balloons/) (LeetCode #312)
 
-- **Brute Force:** Try all n! orders of bursting balloons; compute coins for each order. Time O(n!), Space O(n).
+- **Brute Force:** Try all n! orders of bursting balloons; compute coins for each order. Time O(n!) — all permutation orders; Space O(n) — recursion for burst order.
 - **Intuition:** Burst balloons to maximize coins. When bursting `k` last in range [i,j], coins = nums[i-1]*nums[k]*nums[j+1]. Interval DP: `dp[i][j]` = max coins from bursting balloons in (i,j) with boundaries. Pad array with 1s.
 - **Approach:** Build `vals = [1, ... nums, 1]`. `dp[i][j] = max over k in (i,j) of (vals[i]*vals[k]*vals[j] + dp[i][k] + dp[k][j])`. Iterate by length.
 - **Java Solution:**
@@ -434,7 +434,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n³), Space O(n²)
+- **Complexity:** Time O(n³) — triple loop len×i×k, each cell O(1); Space O(n²) — interval DP table for burst order.
 
 ---
 

@@ -129,7 +129,7 @@ public int variableWindow(int[] nums, int target) {
 #### Problem: [Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) (LeetCode #121)
 
 - **Intuition:** Track the minimum price seen so far; at each day, the best profit is selling today minus that minimum. This is a "one-way" sliding window where we only expand right and conceptually compare with a left-bound min.
-- **Brute Force:** Try every pair (i, j) where i < j; compute prices[j] - prices[i] and track the maximum. Time O(n²), Space O(1)
+- **Brute Force:** Try every pair (i, j) where i < j; compute prices[j] - prices[i] and track the maximum. Time O(n²) — nested loops check all pairs. Space O(1) — constant variables only.
 - **Optimized Approach:** 1) Initialize minPrice = prices[0], maxProfit = 0. 2) For each price from index 1: update maxProfit = max(maxProfit, price - minPrice), then minPrice = min(minPrice, price). 3) Return maxProfit.
 - **Java Solution:**
 
@@ -148,14 +148,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — single pass through prices, each day visited once. Space O(1) — minPrice and maxProfit variables only.
 
 ---
 
 #### Problem: [Maximum Average Subarray I](https://leetcode.com/problems/maximum-average-subarray-i/) (LeetCode #643)
 
 - **Intuition:** Fixed-size window of k elements. Compute sum of first k, then slide by adding the next and subtracting the first; track max sum (or max average = maxSum/k).
-- **Brute Force:** For each starting index i, compute the sum of the k elements nums[i..i+k-1] from scratch; track the maximum sum. Time O(n·k), Space O(1)
+- **Brute Force:** For each starting index i, compute the sum of the k elements nums[i..i+k-1] from scratch; track the maximum sum. Time O(n·k) — n windows, each takes O(k) to sum. Space O(1) — constant variables only.
 - **Optimized Approach:** 1) Sum first k elements. 2) Slide right from k to n-1: windowSum += nums[right] - nums[right-k]. 3) Track max window sum. 4) Return maxSum / k.
 - **Java Solution:**
 
@@ -176,7 +176,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — single pass, incremental update per slide. Space O(1) — windowSum and maxSum variables only.
 
 ---
 
@@ -185,7 +185,7 @@ class Solution {
 #### Problem: [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/) (LeetCode #3)
 
 - **Intuition:** Variable window. Expand right, add chars to a set/map; when a repeat appears, shrink left until the duplicate is removed.
-- **Brute Force:** Check every substring for uniqueness; for each starting index, expand and add chars until a duplicate is found. Time O(n²), Space O(min(n, charset))
+- **Brute Force:** Check every substring for uniqueness; for each starting index, expand and add chars until a duplicate is found. Time O(n²) — n starts, up to n chars per substring. Space O(min(n, charset)) — set stores chars in window.
 - **Optimized Approach:** 1) Use a Set (or freq map) to track chars in window. 2) For each right: while s[right] is in set, remove s[left] and advance left. 3) Add s[right], update maxLen = max(maxLen, right - left + 1). 4) Return maxLen.
 - **Java Solution:**
 
@@ -209,14 +209,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(min(n, charset))
+- **Complexity:** Time O(n) — each char added once, removed at most once; left and right only advance. Space O(min(n, charset)) — set stores distinct chars in window.
 
 ---
 
 #### Problem: [Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/) (LeetCode #424)
 
 - **Intuition:** Variable window. We can replace at most k chars; the window is valid if (windowSize - maxFreq) ≤ k. Track freq of each char; window size minus the dominant char's count gives replacements needed.
-- **Brute Force:** Try every substring; for each, count char frequencies, compute replacements needed (windowSize - maxFreq), and keep it if ≤ k. Time O(n²·26), Space O(26)
+- **Brute Force:** Try every substring; for each, count char frequencies, compute replacements needed (windowSize - maxFreq), and keep it if ≤ k. Time O(n²·26) — n² substrings, each counts 26 chars. Space O(26) — fixed freq array.
 - **Optimized Approach:** 1) Freq map for chars in window. 2) Expand right, update freq. 3) While (right-left+1 - maxFreq) > k, shrink left and decrement freq. 4) maxLen = max(maxLen, right-left+1). Note: we don't shrink when valid—we only need the longest valid window.
 - **Java Solution:**
 
@@ -243,14 +243,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — single pass, left only advances when shrinking. Space O(1) — fixed 26-char freq array.
 
 ---
 
 #### Problem: [Permutation in String](https://leetcode.com/problems/permutation-in-string/) (LeetCode #567)
 
 - **Intuition:** Fixed window of len(s1). Check if any window in s2 has the same character frequencies as s1—i.e., is a permutation.
-- **Brute Force:** Slide a window of size len(s1) over s2; for each window, build a freq map and compare with s1's freq map. Time O(n·m·26), Space O(26)
+- **Brute Force:** Slide a window of size len(s1) over s2; for each window, build a freq map and compare with s1's freq map. Time O(n·m·26) — n windows, each builds and compares m chars. Space O(26) — fixed freq arrays.
 - **Optimized Approach:** 1) Build freq map of s1. 2) Slide a window of size len(s1) over s2. 3) For each window, maintain freq of chars in window; when window size equals len(s1), compare with s1's map (or use a "matches" count). 4) Return true if any window matches.
 - **Java Solution:**
 
@@ -285,14 +285,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n + m), Space O(1)
+- **Complexity:** Time O(n + m) — one pass over s2, init with s1 length; each char processed once. Space O(1) — fixed 26-char freq arrays.
 
 ---
 
 #### Problem: [Minimum Size Subarray Sum](https://leetcode.com/problems/minimum-size-subarray-sum/) (LeetCode #209)
 
 - **Intuition:** Variable window. Expand right, add to sum; when sum ≥ target, shrink left while sum ≥ target, track min window length.
-- **Brute Force:** Try every subarray; for each starting index, extend right until sum ≥ target and record the length. Time O(n²), Space O(1)
+- **Brute Force:** Try every subarray; for each starting index, extend right until sum ≥ target and record the length. Time O(n²) — n starts, each may extend to n. Space O(1) — constant variables only.
 - **Optimized Approach:** 1) left=0, sum=0, minLen=∞. 2) For each right: sum += nums[right]. 3) While sum ≥ target: minLen = min(minLen, right-left+1); sum -= nums[left]; left++. 4) Return minLen or 0.
 - **Java Solution:**
 
@@ -314,14 +314,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — each element added once, removed at most once; left only advances. Space O(1) — sum, left, minLen variables.
 
 ---
 
 #### Problem: [Fruit Into Baskets](https://leetcode.com/problems/fruit-into-baskets/) (LeetCode #904)
 
 - **Intuition:** Variable window with at most 2 distinct types. Expand right; when a third type appears, shrink left until we're back to 2 types.
-- **Brute Force:** Try every subarray; for each, count distinct fruit types and keep the longest with ≤ 2 types. Time O(n²), Space O(1)
+- **Brute Force:** Try every subarray; for each, count distinct fruit types and keep the longest with ≤ 2 types. Time O(n²) — n starts, each extends up to n. Space O(1) — count map has at most 3 keys (constant).
 - **Optimized Approach:** 1) Map from fruit type to count (or last index). 2) Expand right, add fruit. 3) While distinct count > 2: remove left fruit, advance left. 4) Track max window size.
 - **Java Solution:**
 
@@ -346,14 +346,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1) (at most 3 keys)
+- **Complexity:** Time O(n) — each fruit added once, removed at most once. Space O(1) — map has at most 3 keys, constant.
 
 ---
 
 #### Problem: [Max Consecutive Ones III](https://leetcode.com/problems/max-consecutive-ones-iii/) (LeetCode #1004)
 
 - **Intuition:** Variable window. We can flip at most k zeros to ones. Track zeros in window; when zeros > k, shrink left until zeros ≤ k.
-- **Brute Force:** Try every subarray; for each, count zeros and keep the longest with ≤ k zeros. Time O(n²), Space O(1)
+- **Brute Force:** Try every subarray; for each, count zeros and keep the longest with ≤ k zeros. Time O(n²) — n starts, each extends up to n. Space O(1) — constant variables only.
 - **Optimized Approach:** 1) left=0, zeros=0. 2) For each right: if nums[right]==0, zeros++. 3) While zeros>k: if nums[left]==0, zeros--; left++. 4) maxLen = max(maxLen, right-left+1).
 - **Java Solution:**
 
@@ -376,7 +376,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — each element visited once; left only advances when shrinking. Space O(1) — zeros count and pointers only.
 
 ---
 
@@ -385,7 +385,7 @@ class Solution {
 #### Problem: [Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/) (LeetCode #76)
 
 - **Intuition:** Variable window. Expand right until we have all chars of t; then shrink left while still valid; track the minimum valid window.
-- **Brute Force:** Try every substring of s; for each, check if it contains all chars of t (with correct frequencies); keep the shortest valid one. Time O(n²·m), Space O(m)
+- **Brute Force:** Try every substring of s; for each, check if it contains all chars of t (with correct frequencies); keep the shortest valid one. Time O(n²·m) — n² substrings, each checks against t. Space O(m) — freq map of t.
 - **Optimized Approach:** 1) Build freq map of t. 2) Expand right: add s[right], decrement required count when we satisfy a char. 3) When all required chars present: shrink left until invalid, then back up by one. 4) Track min window start/length.
 - **Java Solution:**
 
@@ -427,14 +427,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(m + n), Space O(m + n)
+- **Complexity:** Time O(m + n) — each char of s added once, removed at most once; left only advances. Space O(m + n) — t freq map + window freq map.
 
 ---
 
 #### Problem: [Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/) (LeetCode #239)
 
 - **Intuition:** Fixed-size window. Use a monotonically decreasing deque: elements that can never be the max (smaller than newer elements) are discarded. Front of deque is always the max for current window.
-- **Brute Force:** For each window position, scan all k elements to find the maximum. Time O(n·k), Space O(1)
+- **Brute Force:** For each window position, scan all k elements to find the maximum. Time O(n·k) — n windows, each scans k elements. Space O(1) — no extra structures.
 - **Optimized Approach:** 1) Deque stores indices (by value, decreasing). 2) For each right: remove from back while nums[back] < nums[right]. Add right. 3) Remove front if it's outside window (index < left). 4) When window has k elements, record nums[deque.front()].
 - **Java Solution:**
 
@@ -461,14 +461,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(k)
+- **Complexity:** Time O(n) — each element pushed once, popped at most once (amortized). Space O(k) — deque stores at most k indices.
 
 ---
 
 #### Problem: [Substring with Concatenation of All Words](https://leetcode.com/problems/substring-with-concatenation-of-all-words/) (LeetCode #30)
 
 - **Intuition:** We need to find substrings that are a concatenation of all words in `words` (each exactly once, any order). Word length is fixed (wLen), so we can try starting positions 0, 1, ..., wLen-1 and slide by wLen.
-- **Brute Force:** Try every substring of length totalLen; for each, split into words and check if it's a permutation of the words array. Time O(n·totalLen·m), Space O(m)
+- **Brute Force:** Try every substring of length totalLen; for each, split into words and check if it's a permutation of the words array. Time O(n·totalLen·m) — n positions, each splits and compares. Space O(m) — word freq map.
 - **Optimized Approach:** 1) Build freq map of words. 2) For each start in [0, wLen): slide a window that advances by wLen. 3) For each step, add the next word to window map; when we have more than expected of any word, shrink left by wLen until valid. 4) When window has exactly all words, record start index.
 - **Java Solution:**
 
@@ -517,7 +517,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n * wLen), Space O(m) where m = words.length
+- **Complexity:** Time O(n * wLen) — wLen start offsets, each slides O(n/wLen) steps by word. Space O(m) — word count map stores m words.
 
 ---
 

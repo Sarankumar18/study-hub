@@ -141,7 +141,7 @@ public int minMeetingRooms(int[][] intervals) {
 #### Problem: [Meeting Rooms](https://leetcode.com/problems/meeting-rooms/) (LeetCode #252)
 
 - **Intuition:** Can one person attend all meetings? No overlap between any two. Sort by start; check intervals[i].start >= intervals[i-1].end.
-- **Brute Force:** Compare every pair of intervals for overlap. Time O(n²), Space O(1).
+- **Brute Force:** Compare every pair of intervals for overlap. Time O(n²) — all pairs checked for overlap, Space O(1) — no extra allocation.
 - **Approach:** 1) Sort by start. 2) For i from 1 to n-1: if intervals[i][0] < intervals[i-1][1] return false. 3) Return true.
 - **Java Solution:**
 
@@ -157,14 +157,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n log n), Space O(log n)
+- **Complexity:** Time O(n log n) — sort dominates then single scan, Space O(log n) — sort recursion stack.
 
 ---
 
 #### Problem: [Merge Intervals](https://leetcode.com/problems/merge-intervals/) (LeetCode #56)
 
 - **Intuition:** Merge all overlapping intervals. Sort by start; if current overlaps with last merged, extend last; else add new.
-- **Brute Force:** For each interval, check all others for overlap and merge repeatedly until no changes. Time O(n²), Space O(n).
+- **Brute Force:** For each interval, check all others for overlap and merge repeatedly until no changes. Time O(n²) — pairwise checks until stable, Space O(n) — merged result storage.
 - **Approach:** 1) Sort by start. 2) result = [intervals[0]]. 3) For each: if overlap with last, merge; else add. 4) Return result.
 - **Java Solution:**
 
@@ -187,7 +187,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n log n), Space O(n)
+- **Complexity:** Time O(n log n) — sort dominates then single merge pass, Space O(n) — output merged intervals.
 
 ---
 
@@ -196,7 +196,7 @@ class Solution {
 #### Problem: [Insert Interval](https://leetcode.com/problems/insert-interval/) (LeetCode #57)
 
 - **Intuition:** Non-overlapping intervals sorted by start. Insert newInterval and merge. Add all ending before newInterval, merge overlapping, add rest.
-- **Brute Force:** Append newInterval to the list, sort by start, then merge all intervals in one pass. Time O(n log n), Space O(n).
+- **Brute Force:** Append newInterval to the list, sort by start, then merge all intervals in one pass. Time O(n log n) — sort then one merge pass, Space O(n) — output list.
 - **Approach:** 1) Add intervals ending before newInterval.start. 2) Merge newInterval with all that overlap (start <= newInterval.end). 3) Add remaining. 4) Return.
 - **Java Solution:**
 
@@ -219,14 +219,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — single pass through sorted input, Space O(n) — output list for merged result.
 
 ---
 
 #### Problem: [Non-overlapping Intervals](https://leetcode.com/problems/non-overlapping-intervals/) (LeetCode #435)
 
 - **Intuition:** Minimum intervals to remove so rest are non-overlapping. Equivalent to max non-overlapping we can keep. Sort by end; greedily keep non-overlapping.
-- **Brute Force:** Try all subsets of intervals, find the largest non-overlapping subset; return n - its size. Time O(2ⁿ), Space O(n).
+- **Brute Force:** Try all subsets of intervals, find the largest non-overlapping subset; return n - its size. Time O(2ⁿ) — exponential subset enumeration, Space O(n) — recursion or subset storage.
 - **Approach:** 1) Sort by end. 2) keep = 1, prevEnd = intervals[0][1]. 3) For each: if start >= prevEnd, keep++, prevEnd = end. 4) Return n - keep.
 - **Java Solution:**
 
@@ -247,14 +247,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n log n), Space O(log n)
+- **Complexity:** Time O(n log n) — sort by end then greedy pass, Space O(log n) — sort recursion stack.
 
 ---
 
 #### Problem: [Meeting Rooms II](https://leetcode.com/problems/meeting-rooms-ii/) (LeetCode #253)
 
 - **Intuition:** Minimum rooms so all meetings can be held. Sweep line: sort starts and ends; when a meeting starts before one ends, need new room.
-- **Brute Force:** For each interval, count how many others overlap with it; max overlap equals rooms needed. Time O(n²), Space O(1).
+- **Brute Force:** For each interval, count how many others overlap with it; max overlap equals rooms needed. Time O(n²) — each interval checks all others, Space O(1) — only counters.
 - **Approach:** 1) Extract and sort starts and ends. 2) Two pointers: when starts[s] < ends[e], rooms++; else rooms--, e++. 3) Track max rooms.
 - **Java Solution:**
 
@@ -285,14 +285,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n log n), Space O(n)
+- **Complexity:** Time O(n log n) — sort starts and ends then two-pointer sweep, Space O(n) — separate start/end arrays.
 
 ---
 
 #### Problem: [Minimum Number of Arrows to Burst Balloons](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/) (LeetCode #452)
 
 - **Intuition:** Intervals = balloons. One vertical arrow bursts all it touches. Min arrows. Greedy: sort by end; shoot at first end; skip overlapping; repeat.
-- **Brute Force:** Sort by end, then repeatedly pick the leftmost unburst balloon, shoot at its end, remove all burst balloons; repeat. Time O(n²), Space O(n).
+- **Brute Force:** Sort by end, then repeatedly pick the leftmost unburst balloon, shoot at its end, remove all burst balloons; repeat. Time O(n²) — repeated removal passes, Space O(n) — tracking burst state.
 - **Approach:** 1) Sort by end. 2) arrows = 1, pos = points[0][1]. 3) For each: if start > pos, arrows++, pos = end. 4) Return arrows.
 - **Java Solution:**
 
@@ -313,14 +313,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n log n), Space O(log n)
+- **Complexity:** Time O(n log n) — sort by end then greedy shoot pass, Space O(log n) — sort recursion stack.
 
 ---
 
 #### Problem: [Interval List Intersections](https://leetcode.com/problems/interval-list-intersections/) (LeetCode #986)
 
 - **Intuition:** Two lists of disjoint intervals sorted by start. Find all intersections. Two pointers: intersect [max(a.start,b.start), min(a.end,b.end)] if max <= min.
-- **Brute Force:** For each pair (A[i], B[j]), compute intersection if overlapping and add to result. Time O(n·m), Space O(1) excluding output.
+- **Brute Force:** For each pair (A[i], B[j]), compute intersection if overlapping and add to result. Time O(n·m) — all pairs checked, Space O(1) — excluding output.
 - **Approach:** 1) i=0, j=0. 2) While both in range: lo = max(A[i][0], B[j][0]), hi = min(A[i][1], B[j][1]). If lo<=hi, add [lo,hi]. 3) Advance pointer of interval with smaller end.
 - **Java Solution:**
 
@@ -341,7 +341,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n + m), Space O(1) excluding output
+- **Complexity:** Time O(n + m) — two pointers, each advanced at most once, Space O(1) — excluding output.
 
 ---
 
@@ -350,7 +350,7 @@ class Solution {
 #### Problem: [Employee Free Time](https://leetcode.com/problems/employee-free-time/) (LeetCode #759)
 
 - **Intuition:** Each employee has sorted list of busy intervals. Find free time common to all. Merge all intervals, then gaps between merged intervals are free time.
-- **Brute Force:** Flatten and sort all intervals, merge overlapping, then output gaps between consecutive merged intervals. Time O(n log n), Space O(n).
+- **Brute Force:** Flatten and sort all intervals, merge overlapping, then output gaps between consecutive merged intervals. Time O(n log n) — sort all then merge pass, Space O(n) — flattened and merged lists.
 - **Approach:** 1) Flatten all intervals, sort by start. 2) Merge overlapping. 3) Gaps between consecutive merged intervals (merged[i][1] to merged[i+1][0]) are free time.
 - **Java Solution:**
 
@@ -391,14 +391,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n log n), Space O(n)
+- **Complexity:** Time O(n log n) — flatten, sort then merge; n = total intervals, Space O(n) — flattened and merged lists.
 
 ---
 
 #### Problem: [Data Stream as Disjoint Intervals](https://leetcode.com/problems/data-stream-as-disjoint-intervals/) (LeetCode #352)
 
 - **Intuition:** Numbers added one by one. getIntervals() returns sorted list of disjoint intervals covering all numbers so far. Use TreeMap: key = start, value = end. When adding val: find邻居, merge if adjacent.
-- **Brute Force:** Store all added numbers in a set; on getIntervals(), sort and merge into intervals. Time O(k log k) per getIntervals where k = count, Space O(k).
+- **Brute Force:** Store all added numbers in a set; on getIntervals(), sort and merge into intervals. Time O(k log k) — sort then merge per call, Space O(k) — store all added values.
 - **Approach:** 1) TreeMap<Integer,Integer> for [start, end]. 2) addNum: find floor and ceiling of val. Merge with left if val <= leftEnd+1, with right if val >= rightStart-1. Handle both neighbors. 3) getIntervals: convert to list.
 - **Java Solution:**
 
@@ -433,7 +433,7 @@ class SummaryRanges {
 }
 ```
 
-- **Complexity:** addNum O(log n), getIntervals O(n); Space O(n)
+- **Complexity:** addNum O(log n) — TreeMap floor/ceiling lookup and insert, getIntervals O(n) — iterate all entries; Space O(n) — TreeMap holds disjoint intervals.
 
 ---
 

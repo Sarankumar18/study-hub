@@ -170,7 +170,7 @@ Arrays.sort(arr, (a, b) -> {
 
 #### Problem: [Squares of a Sorted Array](https://leetcode.com/problems/squares-of-a-sorted-array/) (LeetCode #977)
 
-- **Brute Force:** Square each element, then sort the result array. Time O(n log n), Space O(n)
+- **Brute Force:** Square each element, then sort the result array. Time O(n log n) — comparison sort on n elements. Space O(n) — output array.
 - **Intuition:** The array is sorted but has negatives; squares of negatives can be larger than squares of small positives. Use two pointers from both ends: compare absolute values, place the larger square at the end of the result.
 - **Approach:**
   1. Two pointers: `left = 0`, `right = n - 1`
@@ -200,13 +200,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1) excluding output
+- **Complexity:** Time O(n) — single pass comparing both ends. Space O(1) — only pointers, excluding output array.
 
 ---
 
 #### Problem: [Merge Sorted Array](https://leetcode.com/problems/merge-sorted-array/) (LeetCode #88)
 
-- **Brute Force:** Copy nums2 into the end of nums1, then sort the entire nums1 array. Time O((m+n) log(m+n)), Space O(log(m+n))
+- **Brute Force:** Copy nums2 into the end of nums1, then sort the entire nums1 array. Time O((m+n) log(m+n)) — sorting m+n elements. Space O(log(m+n)) — sort recursion stack.
 - **Intuition:** Merge two sorted arrays in-place into `nums1`, which has extra space at the end. Fill from the right (largest first) to avoid overwriting.
 - **Approach:**
   1. Three pointers: `i = m - 1`, `j = n - 1`, `k = m + n - 1`
@@ -232,7 +232,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(m + n), Space O(1)
+- **Complexity:** Time O(m + n) — each element visited once during merge. Space O(1) — in-place merge, no extra arrays.
 
 ---
 
@@ -240,7 +240,7 @@ class Solution {
 
 #### Problem: [Sort an Array](https://leetcode.com/problems/sort-an-array/) (LeetCode #912)
 
-- **Brute Force:** Use built-in sort (Arrays.sort) or any naive comparison sort like bubble sort. Time O(n log n) or O(n²), Space O(log n)
+- **Brute Force:** Use built-in sort (Arrays.sort) or any naive comparison sort like bubble sort. Time O(n log n) or O(n²) — Arrays.sort vs bubble. Space O(log n) — recursion depth for quick sort.
 - **Intuition:** Implement merge sort (or quick sort) from scratch. Merge sort gives guaranteed O(n log n) and is stable.
 - **Approach:**
   1. Recursively split into halves until size 1
@@ -277,13 +277,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n log n), Space O(n)
+- **Complexity:** Time O(n log n) — divide log n times, merge n elements each level. Space O(n) — auxiliary array for merge step.
 
 ---
 
 #### Problem: [Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/) (LeetCode #215)
 
-- **Brute Force:** Sort the array and return the element at index n - k. Time O(n log n), Space O(log n)
+- **Brute Force:** Sort the array and return the element at index n - k. Time O(n log n) — full sort required. Space O(log n) — partition recursion stack.
 - **Intuition:** kth largest = (n - k)th smallest in 0-indexed. Use quick select: partition around pivot; if pivot lands at (n-k), we're done.
 - **Approach:**
   1. Quick select with random pivot for average O(n)
@@ -324,13 +324,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n) average, O(n²) worst; Space O(1)
+- **Complexity:** Time O(n) average — pivot halves on average; O(n²) worst — bad pivot each time. Space O(1) — in-place partition, no recursion needed with tail call.
 
 ---
 
 #### Problem: [Sort List](https://leetcode.com/problems/sort-list/) (LeetCode #148)
 
-- **Brute Force:** Copy list to array, sort the array, rebuild the linked list. Time O(n log n), Space O(n)
+- **Brute Force:** Copy list to array, sort the array, rebuild the linked list. Time O(n log n) — sort dominates. Space O(n) — array copy of n nodes.
 - **Intuition:** Sort a linked list in O(n log n) time and O(1) space. Use merge sort on linked list: find middle with slow/fast pointers, split, recursively sort, merge.
 - **Approach:**
   1. Find middle: slow and fast pointer; when fast reaches end, slow is mid
@@ -389,13 +389,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n log n), Space O(log n) recursion stack
+- **Complexity:** Time O(n log n) — merge sort on linked list, log n splits. Space O(log n) — recursion stack depth for merge sort.
 
 ---
 
 #### Problem: [Largest Number](https://leetcode.com/problems/largest-number/) (LeetCode #179)
 
-- **Brute Force:** Try all permutations of the numbers, concatenate each to form a number, take the maximum. Time O(n!), Space O(n)
+- **Brute Force:** Try all permutations of the numbers, concatenate each to form a number, take the maximum. Time O(n!) — n factorial permutations. Space O(n) — recursion stack for permutations.
 - **Intuition:** Sort numbers as strings so that "a" comes before "b" when "ab" > "ba". Then concatenate. Custom comparator: compare (b+a) vs (a+b).
 - **Approach:**
   1. Convert each number to string
@@ -417,13 +417,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n log n * k) where k = avg digit count, Space O(n)
+- **Complexity:** Time O(n log n * k) — sort does n log n comparisons, each O(k). Space O(n) — string array of n numbers.
 
 ---
 
 #### Problem: [Meeting Rooms II](https://leetcode.com/problems/meeting-rooms-ii/) (LeetCode #253)
 
-- **Brute Force:** For each time point (discretize to all start/end times), count how many intervals contain it; take max count. Time O(n²), Space O(1)
+- **Brute Force:** For each time point (discretize to all start/end times), count how many intervals contain it; take max count. Time O(n²) — n points × n intervals to check. Space O(1) — constant counters.
 - **Intuition:** Track maximum concurrent meetings. Sort start times and end times separately; sweep: when we see a start, room++; when we see an end, room--. The max room count is the answer. Alternatively: sort intervals by start, use a min-heap for end times.
 - **Approach:**
   1. Extract start times and end times into arrays, sort both
@@ -460,7 +460,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n log n), Space O(n)
+- **Complexity:** Time O(n log n) — two sorts of n elements. Space O(n) — separate start and end arrays.
 
 ---
 
@@ -468,7 +468,7 @@ class Solution {
 
 #### Problem: [Count of Smaller Numbers After Self](https://leetcode.com/problems/count-of-smaller-numbers-after-self/) (LeetCode #315)
 
-- **Brute Force:** For each element nums[i], scan all elements to its right and count how many are smaller. Time O(n²), Space O(1)
+- **Brute Force:** For each element nums[i], scan all elements to its right and count how many are smaller. Time O(n²) — n elements, each scans O(n) right. Space O(1) — output array excluded.
 - **Intuition:** For each element, count how many elements to its right are smaller. Use merge sort with an index array to track original positions. During merge: when we take from the *right* half (right element is smaller), we increment `rightCount`. When we take from the *left* half, we add `rightCount` to that element—those right elements have higher original indices and are smaller, so they are "smaller numbers after self" for this left element.
 
 - **Approach:**
@@ -523,13 +523,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n log n), Space O(n)
+- **Complexity:** Time O(n log n) — merge sort structure, count during merge. Space O(n) — auxiliary array for merge plus index array.
 
 ---
 
 #### Problem: [Reverse Pairs](https://leetcode.com/problems/reverse-pairs/) (LeetCode #493)
 
-- **Brute Force:** Check all pairs (i, j) with i < j, count those where nums[i] > 2 * nums[j]. Time O(n²), Space O(1)
+- **Brute Force:** Check all pairs (i, j) with i < j, count those where nums[i] > 2 * nums[j]. Time O(n²) — nested loops over all pairs. Space O(1) — only count variable.
 - **Intuition:** Count pairs (i, j) where i < j and nums[i] > 2 * nums[j]. Use merge sort: when merging, for each element in the right half, count how many in the left half satisfy left > 2*right. Since both halves are sorted, use two pointers.
 - **Approach:**
   1. Merge sort the array
@@ -573,13 +573,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n log n), Space O(n)
+- **Complexity:** Time O(n log n) — merge sort with pair count per merge. Space O(n) — tmp array for merge step.
 
 ---
 
 #### Problem: [Maximum Gap](https://leetcode.com/problems/maximum-gap/) (LeetCode #164)
 
-- **Brute Force:** Sort the array, then scan consecutive differences and take the maximum. Time O(n log n), Space O(log n)
+- **Brute Force:** Sort the array, then scan consecutive differences and take the maximum. Time O(n log n) — comparison sort on n elements. Space O(log n) — sort recursion stack.
 - **Intuition:** Find maximum gap between successive elements in sorted form. Under O(n) constraint, we can't sort. Use bucket sort: distribute n elements into (n-1) buckets; by pigeonhole, at least one bucket is empty, so max gap is at least (max-min)/(n-1). Put each element in bucket by value; max gap is either within a bucket (max-min of bucket) or between adjacent non-empty buckets.
 - **Approach:**
   1. Find min and max; if n < 2, return 0
@@ -622,7 +622,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — one pass to bucket, one to find gaps. Space O(n) — bucket min/max arrays.
 
 ---
 

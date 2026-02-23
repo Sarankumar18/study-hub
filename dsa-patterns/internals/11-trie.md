@@ -155,7 +155,7 @@ class Trie {
 
 #### Problem: [Implement Trie](https://leetcode.com/problems/implement-trie-prefix-tree/) (LeetCode #208)
 
-- **Brute Force:** Store strings in a list or set; search/prefix by scanning all strings. Time O(n·L) per operation, Space O(n).
+- **Brute Force:** Store strings in a list or set; search/prefix by scanning all strings. Time O(n·L) — scan n strings of length L; Space O(n) — store all strings.
 - **Intuition:** Standard Trie: insert builds the path char by char; search returns true only if we reach a node with `isWord`; startsWith returns true if we can traverse the full prefix.
 - **Approach:** 1) TrieNode with children[26] and isWord. 2) insert: traverse, create nodes as needed, set isWord at end. 3) search: traverse and check isWord. 4) startsWith: traverse and check non-null.
 - **Java Solution:**
@@ -203,13 +203,13 @@ class Trie {
 }
 ```
 
-- **Complexity:** Time O(L) per operation, Space O(N) where N = total chars inserted
+- **Complexity:** Time O(L) — traverse one path of length L per operation; Space O(N) — trie nodes store total chars, N = total chars inserted
 
 ---
 
 #### Problem: [Search Suggestions System](https://leetcode.com/problems/search-suggestions-system/) (LeetCode #1268)
 
-- **Brute Force:** For each prefix of searchWord, filter products that start with it, sort, take first 3. Time O(m·L + n·L²), Space O(m).
+- **Brute Force:** For each prefix of searchWord, filter products that start with it, sort, take first 3. Time O(m·L + n·L²) — filter and sort per prefix; Space O(m) — store products.
 - **Intuition:** For each character typed, we need the 3 lexicographically smallest products that have the current string as prefix. Build a Trie, store sorted suggestions at each node (or DFS to collect when needed).
 - **Approach:** 1) Build Trie from products (sorted). 2) For each prefix of searchWord, traverse Trie and collect up to 3 words via DFS (lexicographical order).
 - **Java Solution:**
@@ -245,7 +245,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(m + n·L) where m = products total chars, n = products count, L = searchWord length; Space O(m)
+- **Complexity:** Time O(m + n·L) — m to build trie, L steps per prefix; Space O(m) — trie stores all product chars; m = products total chars, n = products count, L = searchWord length
 
 ---
 
@@ -253,7 +253,7 @@ class Solution {
 
 #### Problem: [Design Add and Search Words](https://leetcode.com/problems/design-add-and-search-words-data-structure/) (LeetCode #211)
 
-- **Brute Force:** Store words in a list; for search with '.', try all 26 chars at wildcard positions via DFS. Time O(n·26^L) worst case for many wildcards, Space O(N).
+- **Brute Force:** Store words in a list; for search with '.', try all 26 chars at wildcard positions via DFS. Time O(n·26^L) — wildcards branch 26 ways; Space O(N) — store all chars.
 - **Intuition:** Same as Trie but search supports '.' as wildcard. When we hit '.', try all 26 children via recursive/iterative DFS.
 - **Approach:** 1) Standard insert. 2) search: if char is '.', recursively search all non-null children; else follow the single child.
 - **Java Solution:**
@@ -299,13 +299,13 @@ class WordDictionary {
 }
 ```
 
-- **Complexity:** Time O(N) insert, O(26^L) worst-case search with '.'; Space O(N)
+- **Complexity:** Time O(N) insert — each char creates one node; O(26^L) search — each '.' branches 26 ways; Space O(N) — trie stores all word chars
 
 ---
 
 #### Problem: [Replace Words](https://leetcode.com/problems/replace-words/) (LeetCode #648)
 
-- **Brute Force:** For each word, check each dictionary root as prefix and use shortest match. Time O(D·S·k) where k = max root length, Space O(1).
+- **Brute Force:** For each word, check each dictionary root as prefix and use shortest match. Time O(D·S·k) — check each root per word; Space O(1) — no extra structure.
 - **Intuition:** Given a dictionary of roots and a sentence, replace each word with its shortest root if one exists. Build Trie from roots, then for each word find the shortest prefix that is a root.
 - **Approach:** 1) Insert all roots into Trie. 2) For each word, traverse Trie; as soon as we hit isWord, return that prefix. 3) If no root found, use original word.
 - **Java Solution:**
@@ -349,13 +349,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(D + S) where D = sum of dictionary lengths, S = sentence length; Space O(D)
+- **Complexity:** Time O(D + S) — D to build trie, S to traverse sentence words; Space O(D) — trie stores dictionary; D = sum of dictionary lengths, S = sentence length
 
 ---
 
 #### Problem: [Map Sum Pairs](https://leetcode.com/problems/map-sum-pairs/) (LeetCode #677)
 
-- **Brute Force:** Store key-value in a map; for sum(prefix), iterate all keys and sum values whose key starts with prefix. Time O(n·L) per sum call, Space O(N).
+- **Brute Force:** Store key-value in a map; for sum(prefix), iterate all keys and sum values whose key starts with prefix. Time O(n·L) — scan all keys per sum; Space O(N) — store all chars.
 - **Intuition:** Insert key-value pairs; sum(prefix) returns sum of values for all keys with that prefix. Store value at the end node; for sum, traverse to prefix node then DFS to sum all values in subtree.
 - **Approach:** 1) TrieNode stores value (default 0). 2) insert: if key exists, we need to update—store delta or re-insert. LeetCode allows overwrite. 3) sum: traverse to prefix node, DFS sum all isWord values (or store sum at each node for O(L) sum).
 - **Java Solution:**
@@ -396,13 +396,13 @@ class MapSum {
 }
 ```
 
-- **Complexity:** Time O(L) per operation; Space O(N)
+- **Complexity:** Time O(L) — traverse path length L, O(1) sum at node; Space O(N) — trie stores all key chars
 
 ---
 
 #### Problem: [Maximum XOR of Two Numbers](https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/) (LeetCode #421)
 
-- **Brute Force:** Try all pairs of numbers, compute XOR, return maximum. Time O(n²), Space O(1).
+- **Brute Force:** Try all pairs of numbers, compute XOR, return maximum. Time O(n²) — all pairs; Space O(1) — no extra structure.
 - **Intuition:** For each number, we want the other number that maximizes XOR. XOR is maximized when bits differ. Use a **binary Trie**: each node has children for bit 0 and 1. Insert all numbers as 31-bit paths. For each number, traverse greedily taking the opposite bit when available.
 - **Approach:** 1) Build binary Trie with numbers (bits from MSB to LSB). 2) For each number, traverse: prefer child for (1 - currentBit) to maximize XOR; else take same bit. 3) Track max XOR.
 - **Java Solution:**
@@ -444,7 +444,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(32n) = O(n), Space O(32n)
+- **Complexity:** Time O(32n) = O(n) — 32 bits per number, n insert/lookup; Space O(32n) — trie depth 32, n numbers
 
 ---
 
@@ -452,7 +452,7 @@ class Solution {
 
 #### Problem: [Word Search II](https://leetcode.com/problems/word-search-ii/) (LeetCode #212)
 
-- **Brute Force:** For each word, run Word Search I (DFS from each cell). Time O(words·mn·4^L), Space O(L).
+- **Brute Force:** For each word, run Word Search I (DFS from each cell). Time O(words·mn·4^L) — Word Search per word; Space O(L) — recursion depth.
 - **Intuition:** Find all words from dictionary that exist on the board. Bruteforce: for each word, run Word Search I—O(words × m × n × 4^L). Better: build Trie from words, then DFS from each cell, traversing Trie simultaneously. When we hit a word node, add to result.
 - **Approach:** 1) Build Trie, store word at end node (to avoid StringBuilder). 2) For each cell (i,j), if root has child for board[i][j], DFS. 3) DFS: mark visited (e.g. board[i][j]='#'), if node.isWord add word and set to null to avoid duplicates. Recurse 4 directions. Backtrack.
 - **Java Solution:**
@@ -506,13 +506,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(m×n×4^L) worst case; Space O(sum of word lengths)
+- **Complexity:** Time O(m×n×4^L) — mn starts, trie prunes invalid prefixes; Space O(sum of word lengths) — trie stores all word chars
 
 ---
 
 #### Problem: [Palindrome Pairs](https://leetcode.com/problems/palindrome-pairs/) (LeetCode #336)
 
-- **Brute Force:** Try all pairs (i,j), concatenate words[i]+words[j] and check if palindrome. Time O(n²·k), Space O(1).
+- **Brute Force:** Try all pairs (i,j), concatenate words[i]+words[j] and check if palindrome. Time O(n²·k) — n² pairs, O(k) per check; Space O(1) — no extra structure.
 - **Intuition:** Find pairs (i,j) such that words[i]+words[j] is a palindrome. For word A + word B to be palindrome: either A is reverse of B, or one is prefix of the other and the remainder is palindrome. Use Trie with words inserted in **reverse**. For each word, traverse Trie (simulating reversed other word). Cases: 1) Exact match. 2) Our word is longer—remaining suffix must be palindrome. 3) Trie path is longer—store palindromic suffixes at nodes.
 - **Approach:** 1) Build Trie from reversed words; at each node store list of word indices whose remaining suffix (from that point) is palindrome. 2) For each word, traverse Trie; when we reach a complete reversed word and i≠j, add pair if our remainder is palindrome. 3) When we finish our word at a node, add pairs with all stored indices (their remainder matched our prefix as reversed).
 - **Java Solution:**
@@ -571,7 +571,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n·k²) where k = max word length; Space O(n·k)
+- **Complexity:** Time O(n·k²) — traverse trie, O(k) palindrome check per node; Space O(n·k) — trie stores all words; k = max word length
 
 ---
 

@@ -110,7 +110,7 @@ for (int i = 0; i < nums.length; i++) {
 #### Problem: [Two Sum](https://leetcode.com/problems/two-sum/) (LeetCode #1)
 
 - **Intuition:** Store each number and its index; for each new number, check if `target - num` exists in the map.
-- **Brute Force:** For each pair (i, j), check if nums[i] + nums[j] == target. Time O(n²), Space O(1).
+- **Brute Force:** For each pair (i, j), check if nums[i] + nums[j] == target. Time O(n²) — check all pairs. Space O(1) — no map needed.
 - **Optimized Approach:**
   1. One pass: for each `nums[i]`, compute `complement = target - nums[i]`
   2. If `complement` is in the map, return `[map.get(complement), i]`
@@ -133,14 +133,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — single pass with O(1) map lookups. Space O(n) — HashMap stores up to n elements.
 
 ---
 
 #### Problem: [Valid Anagram](https://leetcode.com/problems/valid-anagram/) (LeetCode #242)
 
 - **Intuition:** Two strings are anagrams iff they have the same character frequency.
-- **Brute Force:** Sort both strings and compare. Time O(n log n), Space O(n).
+- **Brute Force:** Sort both strings and compare. Time O(n log n) — sort dominates. Space O(n) — char arrays for sort.
 - **Optimized Approach:**
   1. If lengths differ, return false
   2. Build frequency map for `s`: count each char
@@ -165,14 +165,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1) (fixed 26 chars)
+- **Complexity:** Time O(n) — two passes over both strings. Space O(1) — fixed-size 26-char frequency array.
 
 ---
 
 #### Problem: [Contains Duplicate](https://leetcode.com/problems/contains-duplicate/) (LeetCode #217)
 
 - **Intuition:** Use a `HashSet` to track seen elements; if we see an element again, it's a duplicate.
-- **Brute Force:** For each element, check all previous elements for a match. Time O(n²), Space O(1).
+- **Brute Force:** For each element, check all previous elements for a match. Time O(n²) — nested scans. Space O(1) — no auxiliary structure.
 - **Optimized Approach:**
   1. Create a `HashSet<Integer>`
   2. For each element, if it's already in the set, return true
@@ -192,7 +192,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — one pass with HashSet add/contains. Space O(n) — HashSet stores unique elements seen.
 
 ---
 
@@ -201,7 +201,7 @@ class Solution {
 #### Problem: [Group Anagrams](https://leetcode.com/problems/group-anagrams/) (LeetCode #49)
 
 - **Intuition:** Anagrams share the same sorted character sequence; use that as the grouping key.
-- **Brute Force:** For each string, compare with all others to find anagram groups. Time O(n² * k), Space O(n * k).
+- **Brute Force:** For each string, compare with all others to find anagram groups. Time O(n² * k) — all pairs, compare per pair. Space O(n * k) — store grouped results.
 - **Optimized Approach:**
   1. For each string, compute canonical key (e.g., sorted chars)
   2. Group strings in a `Map<String, List<String>>`
@@ -223,14 +223,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n * k log k) where k = max string length, Space O(n * k)
+- **Complexity:** Time O(n * k log k) — n strings each sorted in O(k log k). Space O(n * k) — map stores all strings, grouped.
 
 ---
 
 #### Problem: [Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/) (LeetCode #347)
 
 - **Intuition:** Count frequencies, then either bucket-sort by frequency or use a min-heap of size k.
-- **Brute Force:** Count frequencies, sort entries by frequency, take top k. Time O(n log n), Space O(n).
+- **Brute Force:** Count frequencies, sort entries by frequency, take top k. Time O(n log n) — sort by frequency. Space O(n) — frequency map.
 - **Optimized Approach:**
   1. Build frequency map
   2. Create buckets: `List<Integer>[]` where index = frequency
@@ -265,14 +265,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — freq map + bucket fill + bucket scan. Space O(n) — freq map and bucket array.
 
 ---
 
 #### Problem: [Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence/) (LeetCode #128)
 
 - **Intuition:** Put all numbers in a set. A number starts a streak only if `num - 1` is not in the set; then expand forward.
-- **Brute Force:** Sort array, then scan for longest consecutive run. Time O(n log n), Space O(1) or O(n) depending on sort.
+- **Brute Force:** Sort array, then scan for longest consecutive run. Time O(n log n) — sort dominates. Space O(1) or O(n) depending on sort — in-place vs copy.
 - **Optimized Approach:**
   1. Add all numbers to `HashSet`
   2. For each `num`, if `num - 1` is not in set, it's a streak start
@@ -298,13 +298,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — each num in set at most twice (add, expand). Space O(n) — HashSet stores all numbers.
 
 ---
 
 #### Problem: [Encode and Decode Strings](https://leetcode.com/problems/encode-and-decode-strings/) (LeetCode #271)
 
-- **Brute Force:** Join all strings with a delimiter that never appears in strings; split on delimiter to decode. Fails if delimiter can appear in input; otherwise O(n·k) encode, O(n·k) decode. Time O(n·k), Space O(n·k)
+- **Brute Force:** Join all strings with a delimiter that never appears in strings; split on delimiter to decode. Fails if delimiter can appear in input; otherwise O(n·k) encode, O(n·k) decode. Time O(n·k) — scan all chars. Space O(n·k) — encoded string and output list.
 - **Intuition:** Prepend each string with its length and a delimiter so we know where each string ends during decode.
 - **Approach:**
   - Encode: `length + "#" + str` for each string
@@ -337,14 +337,14 @@ public class Codec {
 }
 ```
 
-- **Complexity:** Time O(n) encode/decode, Space O(1) extra for encode (output is required)
+- **Complexity:** Time O(n) encode/decode — single pass through all strings. Space O(1) extra for encode — output StringBuilder required anyway.
 
 ---
 
 #### Problem: [Valid Sudoku](https://leetcode.com/problems/valid-sudoku/) (LeetCode #36)
 
 - **Intuition:** For each cell, check that its value does not repeat in its row, column, or 3×3 box. Use sets keyed by row, col, and box.
-- **Brute Force:** For each filled cell, scan its row, column, and 3×3 box for duplicates. Time O(81 * 9) = O(1), Space O(1).
+- **Brute Force:** For each filled cell, scan its row, column, and 3×3 box for duplicates. Time O(81 * 9) = O(1) — fixed board size. Space O(1) — constant grid.
 - **Optimized Approach:**
   1. Create sets for rows, cols, boxes (e.g., `Set<String>` with keys like `"r5-3"`, `"c2-7"`, `"b1-5"`)
   2. For each filled cell, compute three keys; if any key already exists, invalid
@@ -373,7 +373,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(1) (81 cells), Space O(1)
+- **Complexity:** Time O(1) — fixed 81 cells, each O(1) set ops. Space O(1) — fixed 9×9, sets bounded by 81 entries.
 
 ---
 
@@ -381,7 +381,7 @@ class Solution {
 
 #### Problem: [Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/) (LeetCode #76)
 
-- **Brute Force:** Check every substring of s for containing all chars of t; compare char frequencies for each substring. Time O(n² · m), Space O(m)
+- **Brute Force:** Check every substring of s for containing all chars of t; compare char frequencies for each substring. Time O(n² · m) — O(n²) substrings, each O(m) check. Space O(m) — frequency map for t.
 - **Intuition:** Sliding window with two pointers; expand right to include all chars of `t`, then shrink left while valid. Use a frequency map to track `t`'s chars and a running count.
 - **Approach:**
   1. Build frequency map for `t`
@@ -429,13 +429,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n + m), Space O(m) where n = len(s), m = len(t)
+- **Complexity:** Time O(n + m) — each pointer visits each char at most once. Space O(m) — need and window maps for t's chars.
 
 ---
 
 #### Problem: [Longest Substring with At Most K Distinct Characters](https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/) (LeetCode #340)
 
-- **Brute Force:** Try all substrings, count distinct chars in each, take max length among those with ≤ k distinct. Time O(n²), Space O(k)
+- **Brute Force:** Try all substrings, count distinct chars in each, take max length among those with ≤ k distinct. Time O(n²) — all substrings, distinct count each. Space O(k) — map for up to k chars.
 - **Intuition:** Sliding window; maintain a map of char counts in the window. Expand right; when distinct count > k, shrink left until valid.
 - **Approach:**
   1. Two pointers: `left`, `right`
@@ -467,7 +467,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(k)
+- **Complexity:** Time O(n) — each char added/removed at most twice. Space O(k) — map holds at most k distinct chars.
 
 ---
 

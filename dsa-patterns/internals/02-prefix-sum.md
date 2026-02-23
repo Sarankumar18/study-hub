@@ -89,7 +89,7 @@ for (int num : nums) {
 #### Problem: [Running Sum of 1d Array](https://leetcode.com/problems/running-sum-of-1d-array/) (LeetCode #1480)
 
 - **Intuition:** Each element of the result is the sum of all elements from index 0 to the current index—exactly the definition of prefix sum.
-- **Brute Force:** For each index i, iterate from 0 to i and sum all elements. Time O(n²), Space O(1) for in-place output.
+- **Brute Force:** For each index i, iterate from 0 to i and sum all elements. Time O(n²) — nested loops summing prefixes. Space O(1) for in-place output — no extra arrays.
 - **Optimized Approach:** Initialize `runningSum[0] = nums[0]`. For each `i > 0`, set `runningSum[i] = runningSum[i-1] + nums[i]`. Can be done in-place.
 - **Java Solution:**
 
@@ -104,14 +104,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1) in-place (O(n) if output must be separate)
+- **Complexity:** Time O(n) — single pass updating each element. Space O(1) in-place — reusing input array (O(n) if output must be separate — copy of input).
 
 ---
 
 #### Problem: [Range Sum Query - Immutable](https://leetcode.com/problems/range-sum-query-immutable/) (LeetCode #303)
 
 - **Intuition:** Precompute prefix sums so any range `[left, right]` is `prefix[right+1] - prefix[left]` in O(1).
-- **Brute Force:** For each query, iterate from left to right and sum elements. Time O(n) per query, Space O(1).
+- **Brute Force:** For each query, iterate from left to right and sum elements. Time O(n) per query — full scan per query. Space O(1) — no precomputation.
 - **Optimized Approach:** In constructor, build `prefix[i] = sum of nums[0..i-1]`. For `sumRange(left, right)`, return `prefix[right+1] - prefix[left]`.
 - **Java Solution:**
 
@@ -132,7 +132,7 @@ class NumArray {
 }
 ```
 
-- **Complexity:** Time O(n) preprocess, O(1) per query; Space O(n)
+- **Complexity:** Time O(n) preprocess — one pass building prefix array. O(1) per query — single subtraction. Space O(n) — prefix array of length n+1.
 
 ---
 
@@ -141,7 +141,7 @@ class NumArray {
 #### Problem: [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/) (LeetCode #560)
 
 - **Intuition:** Subarray `nums[i..j]` has sum `prefix[j+1] - prefix[i] = k`. Rearranging: `prefix[j+1] - k = prefix[i]`. So for each prefix, count how many previous prefixes equal `prefix - k`.
-- **Brute Force:** For each pair (i, j), compute sum of nums[i..j] and count if equals k. Time O(n²), Space O(1).
+- **Brute Force:** For each pair (i, j), compute sum of nums[i..j] and count if equals k. Time O(n²) — O(n²) pairs each requiring sum. Space O(1) — no auxiliary structures.
 - **Optimized Approach:** Use a hash map to store prefix sum frequencies. For each position, add `nums[i]` to running prefix, then add `count(prefix - k)` to the answer and increment `count(prefix)`.
 - **Java Solution:**
 
@@ -161,14 +161,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — single pass with HashMap lookups. Space O(n) — HashMap stores at most n prefix sums.
 
 ---
 
 #### Problem: [Contiguous Array](https://leetcode.com/problems/contiguous-array/) (LeetCode #525)
 
 - **Intuition:** Replace 0 with -1 so "equal 0s and 1s" means subarray sum = 0. Use prefix sum + hash map: longest subarray with sum 0 is `max(j - i)` where `prefix[j] = prefix[i]`.
-- **Brute Force:** For each pair (i, j), check if subarray has equal 0s and 1s by counting. Time O(n²), Space O(1).
+- **Brute Force:** For each pair (i, j), check if subarray has equal 0s and 1s by counting. Time O(n²) — check all pairs, count per subarray. Space O(1) — no extra storage.
 - **Optimized Approach:** Map prefix sum to first index seen. When we see a prefix again, the distance from first occurrence is the length of a valid subarray. Track the maximum.
 - **Java Solution:**
 
@@ -191,14 +191,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — one pass mapping prefix to first index. Space O(n) — HashMap stores prefix sums seen.
 
 ---
 
 #### Problem: [Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self/) (LeetCode #238)
 
 - **Intuition:** For each index `i`, we need product of all elements except `nums[i]`. That's `(prefix product before i) × (suffix product after i)`. Use prefix and suffix product arrays.
-- **Brute Force:** For each index i, compute product of all elements except nums[i] by iterating through the array. Time O(n²), Space O(1) excluding output.
+- **Brute Force:** For each index i, compute product of all elements except nums[i] by iterating through the array. Time O(n²) — n indices, each needs n-1 multiplies. Space O(1) excluding output — no aux arrays.
 - **Optimized Approach:** Build `left[i] = product of nums[0..i-1]` and `right[i] = product of nums[i+1..n-1]`. Result `ans[i] = left[i] * right[i]`. Can optimize to O(1) extra space by computing result in one pass using running prefix, then a second pass with running suffix.
 - **Java Solution:**
 
@@ -221,14 +221,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1) excluding output
+- **Complexity:** Time O(n) — two passes (prefix then suffix). Space O(1) excluding output — reusing output array for prefix/suffix.
 
 ---
 
 #### Problem: [Find Pivot Index](https://leetcode.com/problems/find-pivot-index/) (LeetCode #724)
 
 - **Intuition:** Pivot index `i` satisfies: sum of elements left of `i` = sum of elements right of `i`. With prefix sum, left sum = `prefix[i]`, total = `prefix[n]`; right sum = `prefix[n] - prefix[i+1]`. So `prefix[i] == prefix[n] - prefix[i+1]` → `2 * prefix[i] = prefix[n] - nums[i]`, or equivalently `prefix[i] + nums[i] = prefix[n] - prefix[i]`.
-- **Brute Force:** For each index i, compute left sum and right sum by iterating through both sides. Time O(n²), Space O(1).
+- **Brute Force:** For each index i, compute left sum and right sum by iterating through both sides. Time O(n²) — each pivot requires two scans. Space O(1) — no precomputation.
 - **Optimized Approach:** Build full prefix, then iterate. At index `i`, left sum = `prefix[i]`, right sum = `total - prefix[i] - nums[i]`. If equal, return `i`. Alternatively, iterate with running left sum and compute right from total.
 - **Java Solution:**
 
@@ -247,14 +247,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — two passes (total sum, then pivot check). Space O(1) — only running left sum variable.
 
 ---
 
 #### Problem: [Subarray Sums Divisible by K](https://leetcode.com/problems/subarray-sums-divisible-by-k/) (LeetCode #974)
 
 - **Intuition:** Subarray sum divisible by K means `(prefix[j] - prefix[i]) % K == 0` → `prefix[j] % K == prefix[i] % K`. Count pairs of indices with the same prefix mod K.
-- **Brute Force:** For each pair (i, j), compute subarray sum and check if divisible by K. Time O(n²), Space O(1).
+- **Brute Force:** For each pair (i, j), compute subarray sum and check if divisible by K. Time O(n²) — all pairs, sum per subarray. Space O(1) — no hash structure.
 - **Optimized Approach:** Use prefix sum mod K. Handle negatives: `(prefix % K + K) % K`. Count frequencies of each remainder; for each remainder `r` with count `c`, add `c*(c-1)/2` pairs. Include empty prefix: `count[0] = 1` initially.
 - **Java Solution:**
 
@@ -274,7 +274,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(k)
+- **Complexity:** Time O(n) — single pass counting mod-K remainders. Space O(k) — count array of size k for remainders.
 
 ---
 
@@ -283,7 +283,7 @@ class Solution {
 #### Problem: [Count of Range Sum](https://leetcode.com/problems/count-of-range-sum/) (LeetCode #327)
 
 - **Intuition:** For each prefix sum `prefix[j]`, we need count of `prefix[i]` (i < j) such that `lower ≤ prefix[j] - prefix[i] ≤ upper` → `prefix[j] - upper ≤ prefix[i] ≤ prefix[j] - lower`. Use merge sort on prefix array: when merging, for each element in right half, count elements in left half in the range `[prefix[j]-upper, prefix[j]-lower]` using binary search or two pointers.
-- **Brute Force:** For each pair (i, j), compute prefix[j]-prefix[i] and count if in [lower, upper]. Time O(n²), Space O(n) for prefix array.
+- **Brute Force:** For each pair (i, j), compute prefix[j]-prefix[i] and count if in [lower, upper]. Time O(n²) — check all prefix pairs. Space O(n) for prefix array — precompute prefix sums.
 - **Optimized Approach:** Build prefix array. Implement merge sort that counts valid pairs during merge: for each `right[j]`, find count of `left` elements in `[right[j]-upper, right[j]-lower]` (left subarray is sorted). Add to result. Merge and return.
 - **Java Solution:**
 
@@ -332,14 +332,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n log n), Space O(n)
+- **Complexity:** Time O(n log n) — merge sort on prefix array with counting. Space O(n) — prefix array plus merge temporary arrays.
 
 ---
 
 #### Problem: [Maximum Sum of 3 Non-Overlapping Subarrays](https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays/) (LeetCode #689)
 
 - **Intuition:** We need three non-overlapping subarrays of length `k` with maximum total sum. Fix the middle subarray at some position; then choose best left subarray (before it) and best right subarray (after it). Prefix sum gives each subarray sum in O(1).
-- **Brute Force:** Try all combinations of 3 non-overlapping windows of size k; for each triple compute sum and track maximum. Time O(n²), Space O(n).
+- **Brute Force:** Try all combinations of 3 non-overlapping windows of size k; for each triple compute sum and track maximum. Time O(n²) — O(n²) triple combinations. Space O(n) — window sum array.
 - **Optimized Approach:** (1) Build `windowSum[i] = sum of nums[i..i+k-1]` using prefix sum. (2) Build `leftBest[i]` = index of best window in `[0..i]`. (3) Build `rightBest[i]` = index of best window in `[i..n-k]`. (4) For each middle start index `i` from `k` to `n-2k`, compute total = windowSum[leftBest[i-1]] + windowSum[i] + windowSum[rightBest[i+k]], track max and indices.
 - **Java Solution:**
 
@@ -388,7 +388,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — prefix build plus four linear passes. Space O(n) — prefix, windowSum, leftBest, rightBest arrays.
 
 ---
 

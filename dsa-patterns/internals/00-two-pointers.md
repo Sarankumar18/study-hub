@@ -143,7 +143,7 @@ public List<List<Integer>> threePointers(int[] arr, int target) {
 #### Problem: [Two Sum II - Input Array Is Sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/) (LeetCode #167)
 
 - **Intuition:** Because the array is sorted, a larger left value increases the sum and a smaller right value decreases it. Move pointers based on whether the current sum is above or below target.
-- **Brute Force:** Try all pairs with two nested loops, checking if each pair sums to target. Time O(n²), Space O(1)
+- **Brute Force:** Try all pairs with two nested loops, checking if each pair sums to target. Time O(n²) — nested loops enumerate all n² pairs. Space O(1) — no extra data structures.
 - **Optimized Approach:**
   1. Start with `left = 0`, `right = length - 1`
   2. Compute `sum = numbers[left] + numbers[right]`
@@ -173,14 +173,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — each pointer moves at most n steps, so total work is linear. Space O(1) — only two pointer variables, no extra data structures.
 
 ---
 
 #### Problem: [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/) (LeetCode #125)
 
 - **Intuition:** A palindrome reads the same forward and backward. Compare characters from both ends and move inward; skip non-alphanumeric characters.
-- **Brute Force:** Create a new string with only alphanumeric chars (lowercased), then check if it equals its reverse. Time O(n), Space O(n)
+- **Brute Force:** Create a new string with only alphanumeric chars (lowercased), then check if it equals its reverse. Time O(n) — one pass to filter, one pass to compare. Space O(n) — new string stores up to n chars.
 - **Optimized Approach:**
   1. Use `left = 0`, `right = s.length() - 1`
   2. Skip non-alphanumeric at each pointer
@@ -212,14 +212,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — each char visited at most twice (skip non-alphanumeric, then compare). Space O(1) — two pointers only, no extra allocation.
 
 ---
 
 #### Problem: [Merge Sorted Array](https://leetcode.com/problems/merge-sorted-array/) (LeetCode #88)
 
 - **Intuition:** Merge from the end of `nums1` where there is space. Compare largest elements of each array and place the larger one at the back.
-- **Brute Force:** Copy nums2 into the end of nums1, then sort the entire nums1 array. Time O((m+n) log(m+n)), Space O(log(m+n)) for sort
+- **Brute Force:** Copy nums2 into the end of nums1, then sort the entire nums1 array. Time O((m+n) log(m+n)) — sort dominates. Space O(log(m+n)) — sort recursion/stack depth.
 - **Optimized Approach:**
   1. Use `i = m - 1`, `j = n - 1`, `k = m + n - 1`
   2. While both arrays have elements, put the larger of `nums1[i]` and `nums2[j]` at `nums1[k]`, decrement indices
@@ -246,7 +246,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(m + n), Space O(1)
+- **Complexity:** Time O(m + n) — each element visited once when merging. Space O(1) — three index variables, in-place merge.
 
 ---
 
@@ -254,7 +254,7 @@ class Solution {
 
 #### Problem: [3Sum](https://leetcode.com/problems/3sum/) (LeetCode #15)
 
-- **Brute Force:** Try all triplets with three nested loops, check if each sums to zero, then deduplicate results. Time O(n³), Space O(1)
+- **Brute Force:** Try all triplets with three nested loops, check if each sums to zero, then deduplicate results. Time O(n³) — three nested loops enumerate all triplets. Space O(1) — no extra structures (excluding output).
 - **Intuition:** Fix one element, then reduce to Two Sum II for the remaining two. Sort first to enable two-pointer search and skip duplicates.
 - **Approach:**
   1. Sort the array
@@ -293,13 +293,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n²), Space O(1) (excluding output)
+- **Complexity:** Time O(n²) — outer loop n iterations, inner two-pointer scan O(n) each. Space O(1) — constant vars, sort in place (excluding output).
 
 ---
 
 #### Problem: [Container With Most Water](https://leetcode.com/problems/container-with-most-water/) (LeetCode #11)
 
-- **Brute Force:** Try all pairs (i, j) with two nested loops, compute area = min(height[i], height[j]) * (j - i), take max. Time O(n²), Space O(1)
+- **Brute Force:** Try all pairs (i, j) with two nested loops, compute area = min(height[i], height[j]) * (j - i), take max. Time O(n²) — nested loops check all pairs. Space O(1) — constant variables only.
 - **Intuition:** Start with maximum width. The limiting factor is the shorter line; moving the pointer at the shorter line inward might find a taller one and improve area.
 - **Approach:**
   1. `left = 0`, `right = length - 1`
@@ -329,14 +329,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — each pointer moves at most n steps total, single pass. Space O(1) — two pointers and maxArea variable.
 
 ---
 
 #### Problem: [Two Sum](https://leetcode.com/problems/two-sum/) (LeetCode #1)
 
 - **Intuition:** Sort the array while preserving original indices. Then use two pointers to find the pair; map back to original indices for the answer.
-- **Brute Force:** Try all pairs with two nested loops, return indices when the pair sums to target. Time O(n²), Space O(1)
+- **Brute Force:** Try all pairs with two nested loops, return indices when the pair sums to target. Time O(n²) — nested loops check all pairs. Space O(1) — no extra data structures.
 - **Optimized Approach:**
   1. Create `(value, index)` pairs and sort by value
   2. Use converging two pointers to find the pair summing to target
@@ -372,14 +372,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n log n), Space O(n)
+- **Complexity:** Time O(n log n) — sort dominates, two-pointer scan is O(n). Space O(n) — indexed pairs array stores n elements.
 
 ---
 
 #### Problem: [Remove Duplicates from Sorted Array II](https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/) (LeetCode #80)
 
 - **Intuition:** Allow at most 2 of each value. Use a write pointer and track how many of the current value we've written; only write when count ≤ 2.
-- **Brute Force:** Use an auxiliary array to build the result, copying each element only if we've seen fewer than two of that value so far. Time O(n), Space O(n)
+- **Brute Force:** Use an auxiliary array to build the result, copying each element only if we've seen fewer than two of that value so far. Time O(n) — single pass through array. Space O(n) — auxiliary array stores n elements.
 - **Optimized Approach:**
   1. `write = 0`; iterate with `read`
   2. Write `nums[read]` if it's the first occurrence or the second (same as previous and we've only written one so far)
@@ -401,13 +401,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — single read-write pass, each element visited once. Space O(1) — write pointer only, in-place overwrite.
 
 ---
 
 #### Problem: [Sort Colors](https://leetcode.com/problems/sort-colors/) (LeetCode #75)
 
-- **Brute Force:** Sort the array in-place (e.g., quicksort or any O(n log n) sort). Time O(n log n), Space O(log n)
+- **Brute Force:** Sort the array in-place (e.g., quicksort or any O(n log n) sort). Time O(n log n) — comparison sort. Space O(log n) — recursion/stack depth for sort.
 - **Intuition:** Dutch National Flag: partition into [0s][1s][2s] with three pointers. `low` = next 0, `mid` = scanner, `high` = next 2.
 - **Approach:**
   1. `low = 0`, `mid = 0`, `high = n - 1`
@@ -441,13 +441,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — mid pointer visits each element once, each element swapped at most twice. Space O(1) — three pointers, in-place swaps.
 
 ---
 
 #### Problem: [Trapping Rain Water - Simplified Approach](https://leetcode.com/problems/trapping-rain-water/) (LeetCode #42)
 
-- **Brute Force:** For each index i, find max height to the left and right by scanning in both directions; water at i = min(leftMax, rightMax) - height[i]. Time O(n²), Space O(1)
+- **Brute Force:** For each index i, find max height to the left and right by scanning in both directions; water at i = min(leftMax, rightMax) - height[i]. Time O(n²) — for each of n indices, scan n elements both ways. Space O(1) — no extra arrays.
 - **Intuition:** Water at index `i` is trapped up to `min(maxLeft, maxRight) - height[i]`. Precompute `leftMax[i]` and `rightMax[i]` with two passes, then sum the water.
 - **Approach:**
   1. Build `leftMax[i]` = max height from 0 to i (inclusive)
@@ -479,7 +479,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — three passes: leftMax, rightMax, then sum water. Space O(n) — leftMax and rightMax arrays of size n.
 
 ---
 
@@ -487,7 +487,7 @@ class Solution {
 
 #### Problem: [Trapping Rain Water - Optimal Two Pointers](https://leetcode.com/problems/trapping-rain-water/) (LeetCode #42)
 
-- **Brute Force:** For each index i, find max height to the left and right by scanning in both directions; water at i = min(leftMax, rightMax) - height[i]. Time O(n²), Space O(1)
+- **Brute Force:** For each index i, find max height to the left and right by scanning in both directions; water at i = min(leftMax, rightMax) - height[i]. Time O(n²) — for each of n indices, scan n elements both ways. Space O(1) — no extra arrays.
 - **Intuition:** Use converging pointers with `leftMax` and `rightMax`. Whichever side has the smaller max is the limiting factor; process that side and advance.
 - **Approach:**
   1. `left = 0`, `right = n-1`, `leftMax = 0`, `rightMax = 0`
@@ -525,13 +525,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — each pointer moves at most n steps total, single converging pass. Space O(1) — four variables for left, right, leftMax, rightMax.
 
 ---
 
 #### Problem: [3Sum Closest](https://leetcode.com/problems/3sum-closest/) (LeetCode #16)
 
-- **Brute Force:** Try all triplets with three nested loops, compute |sum - target| for each, keep the triplet with minimum distance. Time O(n³), Space O(1)
+- **Brute Force:** Try all triplets with three nested loops, compute |sum - target| for each, keep the triplet with minimum distance. Time O(n³) — three nested loops enumerate all triplets. Space O(1) — constant variables only.
 - **Intuition:** Same as 3Sum: fix one element, two-pointer search for the other two. Track the triplet with minimum `|sum - target|`.
 - **Approach:**
   1. Sort the array
@@ -568,14 +568,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n²), Space O(1)
+- **Complexity:** Time O(n²) — outer loop n iterations, inner two-pointer scan O(n) each. Space O(1) — constant vars, sort in place.
 
 ---
 
 #### Problem: [4Sum](https://leetcode.com/problems/4sum/) (LeetCode #18)
 
 - **Intuition:** Add one more outer loop to 3Sum: fix two elements, then two-pointer search for the remaining two.
-- **Brute Force:** Enumerate all quadruplets with four nested loops; filter those summing to target and deduplicate. Time O(n⁴), Space O(1)
+- **Brute Force:** Enumerate all quadruplets with four nested loops; filter those summing to target and deduplicate. Time O(n⁴) — four nested loops enumerate all quadruplets. Space O(1) — no extra structures (excluding output).
 - **Optimized Approach:**
   1. Sort the array
   2. For each `i` and `j` (with `j > i`), skip duplicates
@@ -618,7 +618,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n³), Space O(1) (excluding output)
+- **Complexity:** Time O(n³) — two outer loops O(n²), inner two-pointer scan O(n). Space O(1) — constant vars, sort in place (excluding output).
 
 ---
 

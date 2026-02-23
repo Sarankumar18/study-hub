@@ -138,7 +138,7 @@ public class ListNode {
 
 #### Problem: [Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/) (LeetCode #141)
 
-- **Brute Force:** Use a HashSet to store visited nodes; if we encounter a node already in the set, a cycle exists. Time O(n), Space O(n).
+- **Brute Force:** Use a HashSet to store visited nodes; if we encounter a node already in the set, a cycle exists. Time O(n) — visit each node once. Space O(n) — HashSet stores up to n nodes.
 - **Intuition:** If the list has a cycle, the fast pointer will eventually meet the slow pointer. If there is no cycle, the fast pointer reaches the end (null) first.
 - **Approach:**
   1. Initialize both pointers at `head`
@@ -161,13 +161,13 @@ public class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — fast traverses list, meets slow or hits end. Space O(1) — only two pointers.
 
 ---
 
 #### Problem: [Middle of the Linked List](https://leetcode.com/problems/middle-of-the-linked-list/) (LeetCode #876)
 
-- **Brute Force:** Traverse once to get the length, then traverse again to the middle node. Time O(n), Space O(1).
+- **Brute Force:** Traverse once to get the length, then traverse again to the middle node. Time O(n) — two passes over list. Space O(1) — only length counter.
 - **Intuition:** When the fast pointer reaches the end (or past it), the slow pointer is exactly at the middle. For even-length lists, slow ends at the second middle node (as per LeetCode).
 - **Approach:**
   1. Both start at `head`
@@ -188,7 +188,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — single pass, fast moves twice as far. Space O(1) — only two pointers.
 
 ---
 
@@ -196,7 +196,7 @@ class Solution {
 
 #### Problem: [Linked List Cycle II](https://leetcode.com/problems/linked-list-cycle-ii/) (LeetCode #142)
 
-- **Brute Force:** Use a HashSet to store visited nodes; the first node we see twice is the cycle entrance. Time O(n), Space O(n).
+- **Brute Force:** Use a HashSet to store visited nodes; the first node we see twice is the cycle entrance. Time O(n) — visit nodes until cycle found. Space O(n) — HashSet for visited nodes.
 - **Intuition:** After detecting a cycle (slow meets fast), reset slow to head. Move both one step at a time until they meet again—that meeting point is the cycle entrance. (Proof: distance from head to cycle start = distance from meeting point to cycle start.)
 - **Approach:**
   1. Use Floyd's cycle detection to find the meeting point
@@ -226,13 +226,13 @@ public class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — detection + cycle-start phase, each ≤ n steps. Space O(1) — only two pointers, no hash.
 
 ---
 
 #### Problem: [Happy Number](https://leetcode.com/problems/happy-number/) (LeetCode #202)
 
-- **Brute Force:** Use a HashSet to store seen numbers in the digit-sum sequence; if we see a repeat before reaching 1, the number is not happy. Time O(log n) per step, Space O(log n).
+- **Brute Force:** Use a HashSet to store seen numbers in the digit-sum sequence; if we see a repeat before reaching 1, the number is not happy. Time O(log n) per step — digit count. Space O(log n) — HashSet stores cycle elements.
 - **Intuition:** Repeatedly replacing n by the sum of squares of its digits creates a sequence. If we ever reach 1, we're happy. Otherwise we enter a cycle (numbers are bounded). Use fast/slow: if fast reaches 1, happy; if slow meets fast and neither is 1, not happy.
 - **Approach:**
   1. Slow and fast both start at n
@@ -265,13 +265,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(log n) per digit op, Space O(1)
+- **Complexity:** Time O(log n) per digit op — cycle size bounded by digit space. Space O(1) — only slow and fast values.
 
 ---
 
 #### Problem: [Reorder List](https://leetcode.com/problems/reorder-list/) (LeetCode #143)
 
-- **Brute Force:** Copy all nodes into an array, then reorder by alternating indices (0, n-1, 1, n-2, ...) and rebuild the list. Time O(n), Space O(n).
+- **Brute Force:** Copy all nodes into an array, then reorder by alternating indices (0, n-1, 1, n-2, ...) and rebuild the list. Time O(n) — one pass to fill, one to rebuild. Space O(n) — array of n nodes.
 - **Intuition:** Reorder L0→L1→…→Ln-1 to L0→Ln→L1→Ln-1→… Use fast/slow to find the middle, reverse the second half, then merge the two lists alternately.
 - **Approach:**
   1. Find middle with fast/slow
@@ -319,13 +319,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — find middle, reverse, merge in one pass each. Space O(1) — in-place reverse and merge.
 
 ---
 
 #### Problem: [Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/) (LeetCode #19)
 
-- **Brute Force:** Two passes: first get the list length, then traverse to the (length - n)th node and remove it. Time O(n), Space O(1).
+- **Brute Force:** Two passes: first get the list length, then traverse to the (length - n)th node and remove it. Time O(n) — two full traversals. Space O(1) — only length and pointers.
 - **Intuition:** Give the fast pointer an n-step head start. When fast reaches the last node (or past it), slow is at the node before the one to remove.
 - **Approach:**
   1. Use a dummy node to handle removal of head
@@ -353,7 +353,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — fast gets n-step head start, both move until fast at end. Space O(1) — only dummy and two pointers.
 
 ---
 
@@ -361,7 +361,7 @@ class Solution {
 
 #### Problem: [Find the Duplicate Number](https://leetcode.com/problems/find-the-duplicate-number/) (LeetCode #287)
 
-- **Brute Force:** Use a HashSet; the first number we see twice is the duplicate. Time O(n), Space O(n).
+- **Brute Force:** Use a HashSet; the first number we see twice is the duplicate. Time O(n) — scan until duplicate found. Space O(n) — HashSet stores seen values.
 - **Intuition:** The array maps index i → nums[i], forming an implicit linked list. Because there's exactly one duplicate, there's exactly one node with two incoming edges—a cycle. Use Floyd's cycle detection: find meeting point, then find cycle entrance.
 - **Approach:**
   1. Treat slow = nums[slow], fast = nums[nums[fast]] as pointer moves
@@ -388,13 +388,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — cycle detection then cycle-start find, each O(n). Space O(1) — array indices as pointers.
 
 ---
 
 #### Problem: [Palindrome Linked List](https://leetcode.com/problems/palindrome-linked-list/) (LeetCode #234)
 
-- **Brute Force:** Copy the list values into an array, then use two pointers to check if the array is a palindrome. Time O(n), Space O(n).
+- **Brute Force:** Copy the list values into an array, then use two pointers to check if the array is a palindrome. Time O(n) — traverse list, then compare. Space O(n) — array of n values.
 - **Intuition:** Find the middle with fast/slow, reverse the second half, then compare first half with reversed second half node-by-node.
 - **Approach:**
   1. Find middle (slow)
@@ -441,7 +441,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(1)
+- **Complexity:** Time O(n) — find middle, reverse half, compare in linear passes. Space O(1) — in-place reverse, no extra structure.
 
 ---
 

@@ -169,7 +169,7 @@ public class TreeNode {
 
 #### Problem: [Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/) (LeetCode #104)
 
-- **Brute Force:** Use BFS level-order traversal, counting levels until the queue is empty. Time O(n), Space O(n)
+- **Brute Force:** Use BFS level-order traversal, counting levels until the queue is empty. Time O(n) — visit every node once. Space O(n) — queue holds up to n nodes.
 - **Intuition:** The depth of a tree is 1 plus the maximum of the depths of its left and right subtrees. Base case: null has depth 0.
 - **Approach:** Recursive DFS (post-order): if node is null return 0; else return 1 + max(left depth, right depth).
 - **Java Solution:**
@@ -203,13 +203,13 @@ class Lc104 {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(h)
+- **Complexity:** Time O(n) — visit every node exactly once. Space O(h) — recursion stack depth equals tree height.
 
 ---
 
 #### Problem: [Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/) (LeetCode #226)
 
-- **Brute Force:** Create a new tree by traversing the original and building a mirrored copy. Time O(n), Space O(n)
+- **Brute Force:** Create a new tree by traversing the original and building a mirrored copy. Time O(n) — traverse every node once. Space O(n) — allocate new node per original node.
 - **Intuition:** Swap left and right subtrees at every node. Do it recursively: invert left, invert right, then swap the pointers.
 - **Approach:** Post-order DFS: recurse on left and right, then swap node.left and node.right.
 - **Java Solution:**
@@ -255,13 +255,13 @@ class Lc226 {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(h)
+- **Complexity:** Time O(n) — visit every node exactly once. Space O(h) — recursion stack depth equals tree height.
 
 ---
 
 #### Problem: [Same Tree](https://leetcode.com/problems/same-tree/) (LeetCode #100)
 
-- **Brute Force:** Serialize both trees to strings (e.g., pre-order with null markers) and compare the outputs. Time O(n), Space O(n)
+- **Brute Force:** Serialize both trees to strings (e.g., pre-order with null markers) and compare the outputs. Time O(n) — traverse both trees once. Space O(n) — serialized string length proportional to nodes.
 - **Intuition:** Two trees are the same iff their roots have the same value and their left and right subtrees are the same.
 - **Approach:** If both null → true. If one null → false. Else compare val and recurse on left and right.
 - **Java Solution:**
@@ -300,7 +300,7 @@ class Lc100 {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(h)
+- **Complexity:** Time O(n) — visit every node exactly once. Space O(h) — recursion stack depth equals tree height.
 
 ---
 
@@ -310,7 +310,7 @@ class Lc100 {
 
 #### Problem: [Number of Islands](https://leetcode.com/problems/number-of-islands/) (LeetCode #200 — DFS Approach)
 
-- **Brute Force:** Use a separate visited matrix instead of mutating the grid; for each unvisited '1', run DFS and mark all connected cells. Time O(m×n), Space O(m×n)
+- **Brute Force:** Use a separate visited matrix instead of mutating the grid; for each unvisited '1', run DFS and mark all connected cells. Time O(m×n) — each cell processed at most once. Space O(m×n) — visited matrix stores all cells.
 - **Intuition:** Scan the grid; when you find '1', sink the whole island (DFS) and increment count. Sinking = mark visited by changing '1' to '0'.
 - **Approach:** For each cell, if '1' then DFS from that cell (up/down/left/right), flip to '0', and count++.
 - **Java Solution:**
@@ -375,13 +375,13 @@ class Lc200 {
 }
 ```
 
-- **Complexity:** Time O(m×n), Space O(m×n) recursion
+- **Complexity:** Time O(m×n) — each cell visited at most once. Space O(m×n) — recursion stack depth can reach full grid in worst case.
 
 ---
 
 #### Problem: [Path Sum II](https://leetcode.com/problems/path-sum-ii/) (LeetCode #113)
 
-- **Brute Force:** Collect all root-to-leaf paths without pruning, then filter for those whose sum equals target. Time O(n), Space O(h) + output
+- **Brute Force:** Collect all root-to-leaf paths without pruning, then filter for those whose sum equals target. Time O(n) — visit each node once. Space O(h) — path list depth plus output storage.
 - **Intuition:** DFS from root, maintain current path and remaining target. At leaf, if remaining == 0, add path to result. Backtrack after exploring each subtree.
 - **Approach:** Pre-order DFS: add node to path, subtract node.val from target. If leaf and target == 0, copy path to result. Recurse left, recurse right, then remove node from path (backtrack).
 - **Java Solution:**
@@ -446,13 +446,13 @@ class Lc113 {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(h) + O(paths × path_len) for result
+- **Complexity:** Time O(n) — visit every node exactly once. Space O(h) — recursion stack plus path list depth; O(paths × path_len) for result storage.
 
 ---
 
 #### Problem: [Validate BST](https://leetcode.com/problems/validate-binary-search-tree/) (LeetCode #98)
 
-- **Brute Force:** Perform in-order traversal, store values in a list, then check if the list is strictly increasing. Time O(n), Space O(n)
+- **Brute Force:** Perform in-order traversal, store values in a list, then check if the list is strictly increasing. Time O(n) — single traversal of all nodes. Space O(n) — list stores n values.
 - **Intuition:** A BST has every node in range (min, max). Root is (-∞, ∞). Left subtree upper bound = node.val; right subtree lower bound = node.val.
 - **Approach:** DFS passing (min, max). Null is valid. If node.val <= min or >= max, invalid. Recurse left with (min, node.val), right with (node.val, max).
 - **Java Solution:**
@@ -493,13 +493,13 @@ class Lc98 {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(h)
+- **Complexity:** Time O(n) — visit every node exactly once. Space O(h) — recursion stack depth equals tree height.
 
 ---
 
 #### Problem: [Lowest Common Ancestor](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/) (LeetCode #236)
 
-- **Brute Force:** Find the path from root to p and root to q, store both paths, then iterate to find the last common node. Time O(n), Space O(h)
+- **Brute Force:** Find the path from root to p and root to q, store both paths, then iterate to find the last common node. Time O(n) — two DFS traversals. Space O(h) — path lists store up to h nodes.
 - **Intuition:** LCA is the deepest node that has both p and q as descendants. If we find p or q, we return it. If both subtrees return non-null, current node is LCA. If one returns non-null, propagate that up.
 - **Approach:** DFS: if node null or node == p or node == q, return node. Recurse left and right. If both non-null → LCA = current. Else return whichever is non-null.
 - **Java Solution:**
@@ -544,13 +544,13 @@ class Lc236 {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(h)
+- **Complexity:** Time O(n) — visit every node at most once. Space O(h) — recursion stack depth equals tree height.
 
 ---
 
 #### Problem: [Course Schedule](https://leetcode.com/problems/course-schedule/) (LeetCode #207)
 
-- **Brute Force:** Enumerate all n! course orderings and check if any satisfies the prerequisites; return true if one exists. Time O(n!), Space O(n)
+- **Brute Force:** Enumerate all n! course orderings and check if any satisfies the prerequisites; return true if one exists. Time O(n!) — try every permutation of n courses. Space O(n) — recursion depth and state array.
 - **Intuition:** Build directed graph: course → prerequisites. Can finish iff no cycle. Use DFS: 0=unvisited, 1=visiting, 2=done. If we revisit a node in state 1, cycle exists.
 - **Approach:** Build adjacency list (prereq → list of courses that depend on it, or reverse). DFS from each node; if during DFS we hit a node in "visiting" state, return false.
 - **Java Solution:**
@@ -609,7 +609,7 @@ class Lc207 {
 }
 ```
 
-- **Complexity:** Time O(V + E), Space O(V)
+- **Complexity:** Time O(V + E) — each vertex and edge processed once. Space O(V) — recursion stack and state array.
 
 ---
 
@@ -619,7 +619,7 @@ class Lc207 {
 
 #### Problem: [Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/) (LeetCode #124)
 
-- **Brute Force:** For each node, recursively compute max path sums in left and right subtrees and try all combinations through that node; update global max. Time O(n²), Space O(h)
+- **Brute Force:** For each node, recursively compute max path sums in left and right subtrees and try all combinations through that node; update global max. Time O(n²) — each node triggers subtree recomputation. Space O(h) — recursion stack depth.
 - **Intuition:** At each node, the max path through that node = node.val + max_gain(left) + max_gain(right). But when returning upward, we can only extend one path (left or right). Use a global max to track the best path seen.
 - **Approach:** Post-order DFS. Compute max gain from left and right (ignore negative gains). Update global max with path through node. Return node.val + max(leftGain, rightGain) for parent.
 - **Java Solution:**
@@ -671,13 +671,13 @@ class Lc124 {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(h)
+- **Complexity:** Time O(n) — visit every node exactly once. Space O(h) — recursion stack depth equals tree height.
 
 ---
 
 #### Problem: [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/) (LeetCode #297)
 
-- **Brute Force:** Use level-order serialization with explicit null placeholders for a complete binary tree index, or store redundant structure. Time O(n), Space O(n)
+- **Brute Force:** Use level-order serialization with explicit null placeholders for a complete binary tree index, or store redundant structure. Time O(n) — traverse each node once. Space O(n) — serialized output size.
 - **Intuition:** Use pre-order DFS. Serialize: visit node, output value (or "X" for null). Deserialize: read token, if "X" return null; else create node, deserialize left, deserialize right.
 - **Approach:** Pre-order with null markers. Split by delimiter (e.g. comma). Use an iterator or global index to consume tokens during deserialize.
 - **Java Solution:**
@@ -771,13 +771,13 @@ class Lc297 {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n) for serialized string and recursion
+- **Complexity:** Time O(n) — serialize and deserialize each node once. Space O(n) — serialized string length and recursion stack.
 
 ---
 
 #### Problem: [Alien Dictionary](https://leetcode.com/problems/alien-dictionary/) (LeetCode #269)
 
-- **Brute Force:** Extract ordering rules from all pairs of words (not just adjacent), build a constraint graph, then try permutations or naive topological sort without cycle handling. Time O(n²×L), Space O(1)
+- **Brute Force:** Extract ordering rules from all pairs of words (not just adjacent), build a constraint graph, then try permutations or naive topological sort without cycle handling. Time O(n²×L) — compare all word pairs. Space O(1) — no dominant auxiliary structure.
 - **Intuition:** From adjacent word pairs, extract character order rules: first differing char gives edge (a→b). Build graph, run DFS topological sort. If cycle exists, invalid order.
 - **Approach:** Build graph: for each adjacent pair, find first differing char, add edge. DFS with 0/1/2 states. Post-order gives reverse topo order; reverse to get answer. Handle cycle detection.
 - **Java Solution:**
@@ -864,7 +864,7 @@ class Lc269 {
 }
 ```
 
-- **Complexity:** Time O(C) where C = total chars + edges, Space O(1) or O(26) for alphabet
+- **Complexity:** Time O(C) where C = total chars + edges — process each char and edge once. Space O(1) or O(26) — fixed alphabet size for state/graph.
 
 ---
 

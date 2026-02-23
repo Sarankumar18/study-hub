@@ -129,7 +129,7 @@ public int[] nextSmallerRight(int[] arr) {
 #### Problem: [Next Greater Element I](https://leetcode.com/problems/next-greater-element-i/) (LeetCode #496)
 
 - **Intuition:** `nums1` is a subset of `nums2`. For each element in `nums1`, find its next greater in `nums2`. Use a monotonic decreasing stack on `nums2` to compute next greater for every element, then map results to `nums1`.
-- **Brute Force:** For each element in nums1, linearly scan nums2 to find it, then scan rightward until finding a greater element. Time O(n×m), Space O(1).
+- **Brute Force:** For each element in nums1, linearly scan nums2 to find it, then scan rightward until finding a greater element. Time O(n×m) — nested loops over nums1 and nums2. Space O(1) — no auxiliary structures.
 - **Approach:** 1) Build a map from value → next greater using a decreasing stack on `nums2`. 2) For each value in `nums1`, look up its next greater in the map. 3) Return the result array.
 - **Java Solution:**
 
@@ -155,12 +155,12 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n + m), Space O(n) where n = nums2.length, m = nums1.length
+- **Complexity:** Time O(n + m) — one pass over nums2 plus one over nums1. Space O(n) — stack and map may hold up to n elements.
 
 #### Problem: [Daily Temperatures](https://leetcode.com/problems/daily-temperatures/) (LeetCode #739)
 
 - **Intuition:** For each day, find the number of days until a warmer temperature. A "next greater element" problem where we need the *index* of the next greater, not the value.
-- **Brute Force:** For each day i, scan days i+1 to n-1 until finding a warmer day. Time O(n²), Space O(1).
+- **Brute Force:** For each day i, scan days i+1 to n-1 until finding a warmer day. Time O(n²) — each day may scan all remaining days. Space O(1) — no extra storage.
 - **Approach:** 1) Use a monotonically decreasing stack of indices. 2) When we find a warmer day (current > stack top), pop and set result[idx] = i - idx. 3) Push current index. 4) Any remaining in stack have no warmer day (default 0).
 - **Java Solution:**
 
@@ -183,7 +183,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — each element pushed and popped at most once. Space O(n) — stack may hold all elements in worst case.
 
 ---
 
@@ -192,7 +192,7 @@ class Solution {
 #### Problem: [Next Greater Element II](https://leetcode.com/problems/next-greater-element-ii/) (LeetCode #503)
 
 - **Intuition:** Same as next greater, but the array is circular. For the last elements, we may need to wrap around to the start. Simulate by iterating twice (or use modulo) so every element gets a chance to find its next greater.
-- **Brute Force:** For each element, scan rightward (wrapping around if needed) until finding a greater element. Time O(n²), Space O(1).
+- **Brute Force:** For each element, scan rightward (wrapping around if needed) until finding a greater element. Time O(n²) — each element may scan full circle. Space O(1) — no auxiliary structures.
 - **Approach:** 1) Use a monotonically decreasing stack of indices. 2) Iterate i from 0 to 2*n - 1, using num = arr[i % n]. 3) When current > stack top, pop and set result[idx] = num. 4) Only push when i < n to avoid duplicate pushes.
 - **Java Solution:**
 
@@ -218,12 +218,12 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — each index pushed and popped at most once across two passes. Space O(n) — stack may hold all indices.
 
 #### Problem: [Online Stock Span](https://leetcode.com/problems/online-stock-span/) (LeetCode #901)
 
 - **Intuition:** For each price, span = 1 + count of consecutive previous days with price ≤ today. This is "previous greater or equal" in reverse—we want the count of elements we "dominate" to the left.
-- **Brute Force:** For each new price, scan backwards through previous prices counting consecutive days with price ≤ current. Time O(n²) amortized, Space O(1).
+- **Brute Force:** For each new price, scan backwards through previous prices counting consecutive days with price ≤ current. Time O(n²) amortized — each next() may scan all prior prices. Space O(1) — no extra storage.
 - **Approach:** 1) Use a monotonically decreasing stack storing (price, span). 2) When a larger price comes in, pop smaller prices and accumulate their spans. 3) Push (price, totalSpan). 4) Return totalSpan for each next(price).
 - **Java Solution:**
 
@@ -246,12 +246,12 @@ class StockSpanner {
 }
 ```
 
-- **Complexity:** Amortized O(1) per next(), Space O(n) worst case
+- **Complexity:** Amortized O(1) per next() — each price popped at most once across all calls. Space O(n) worst case — stack can hold all prices in decreasing order.
 
 #### Problem: [Sum of Subarray Minimums](https://leetcode.com/problems/sum-of-subarray-minimums/) (LeetCode #907)
 
 - **Intuition:** For each element arr[i], count subarrays where it is the minimum. Assign each subarray to the leftmost minimum to avoid double-counting duplicates. Left extent = elements until previous ≤ arr[i]; right extent = elements until next < arr[i].
-- **Brute Force:** Enumerate all O(n²) subarrays, compute the minimum of each in O(n). Time O(n³), Space O(1).
+- **Brute Force:** Enumerate all O(n²) subarrays, compute the minimum of each in O(n). Time O(n³) — three nested loops over ranges. Space O(1) — no auxiliary structures.
 - **Approach:** 1) One left-to-right pass: pop when stack top > current (next smaller for popped); prevSmallerOrEqual[i] = stack.peek(). 2) For each i: left = i - prevSmallerOrEqual[i], right = nextSmaller[i] - i. 3) Sum += arr[i] * left * right, mod 10^9+7.
 - **Java Solution:**
 
@@ -286,12 +286,12 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — single pass; each index pushed and popped at most once. Space O(n) — stacks for prevSmaller and nextSmaller.
 
 #### Problem: [Remove K Digits](https://leetcode.com/problems/remove-k-digits/) (LeetCode #402)
 
 - **Intuition:** To get the smallest number by removing k digits, we want to remove larger digits that appear before smaller ones (greedy). Use an increasing stack: when we see a digit smaller than the top, pop (remove) the larger one—as long as we have removals left.
-- **Brute Force:** Try all C(n,k) combinations of k digits to remove and pick the smallest resulting number. Time O(C(n,k)), Space O(n).
+- **Brute Force:** Try all C(n,k) combinations of k digits to remove and pick the smallest resulting number. Time O(C(n,k)) — exponentially many combinations. Space O(n) — store each candidate.
 - **Approach:** 1) Use a StringBuilder as stack. 2) For each digit: while we have k > 0 and stack not empty and stack top > current digit, pop and k--. 3) Push current (skip leading zeros by not pushing if stack is empty and digit is '0'). 4) After scan, if k > 0, remove from end. 5) Handle empty result (return "0").
 - **Java Solution:**
 
@@ -320,12 +320,12 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — each digit seen once; each pop counts as a removal. Space O(n) — StringBuilder/stack holds result.
 
 #### Problem: [Asteroid Collision](https://leetcode.com/problems/asteroid-collision/) (LeetCode #735)
 
 - **Intuition:** Asteroids move in direction of sign. Opposing ones (positive right, negative left) collide. Smaller explodes; equal both explode. Use a stack to simulate: push positives; when negative appears, pop positives until one survives or stack empty.
-- **Brute Force:** Repeatedly scan for adjacent (+, -) pairs and resolve collisions until no more collisions occur. Time O(n²) worst case, Space O(n).
+- **Brute Force:** Repeatedly scan for adjacent (+, -) pairs and resolve collisions until no more collisions occur. Time O(n²) worst case — each scan may only resolve one collision. Space O(n) — stack for surviving asteroids.
 - **Approach:** 1) For each asteroid: if positive, push. 2) If negative: while stack not empty and top > 0 and top < |current|, pop. 3) If stack empty or top < 0, push current. 4) If top == |current|, pop and skip (both explode). 5) Convert stack to result array.
 - **Java Solution:**
 
@@ -358,7 +358,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — each asteroid pushed and popped at most once. Space O(n) — stack may hold all asteroids.
 
 ---
 
@@ -367,7 +367,7 @@ class Solution {
 #### Problem: [Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/) (LeetCode #84)
 
 - **Intuition:** For each bar, the largest rectangle with that bar as height extends from "previous smaller" to "next smaller" (exclusive). Width = (nextSmaller - prevSmaller - 1). Use monotonic increasing stack to find both boundaries in one pass.
-- **Brute Force:** For each bar, expand left and right to find the first shorter bar on each side; compute area = height × width. Time O(n²), Space O(1).
+- **Brute Force:** For each bar, expand left and right to find the first shorter bar on each side; compute area = height × width. Time O(n²) — each bar may expand to full width. Space O(1) — no auxiliary structures.
 - **Approach:** 1) Maintain an increasing stack of indices. 2) When we pop (because current bar is shorter), the popped bar's right boundary = current index, left boundary = new stack top (or -1). 3) Width = right - left - 1, area = height * width. 4) After loop, pop remaining with right = n.
 - **Java Solution:**
 
@@ -392,12 +392,12 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — single pass; each bar pushed and popped at most once. Space O(n) — stack holds indices.
 
 #### Problem: [Maximal Rectangle](https://leetcode.com/problems/maximal-rectangle/) (LeetCode #85)
 
 - **Intuition:** Treat each row as the base of a histogram: height[j] = consecutive 1's upward at column j. Then "Largest Rectangle in Histogram" per row. Use the same monotonic stack approach.
-- **Brute Force:** Try every possible top-left and bottom-right rectangle, check if all cells are '1', track max area. Time O(rows² × cols² × rows×cols) = O(m³n³), Space O(1).
+- **Brute Force:** Try every possible top-left and bottom-right rectangle, check if all cells are '1', track max area. Time O(rows² × cols² × rows×cols) = O(m³n³) — enumerate all rectangles and validate each. Space O(1) — no extra storage.
 - **Approach:** 1) Build heights[] for each row (add 1 if matrix[i][j]=='1', else reset to 0). 2) For each row, compute max rectangle via histogram algorithm. 3) Return global max.
 - **Java Solution:**
 
@@ -437,12 +437,12 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(rows × cols), Space O(cols)
+- **Complexity:** Time O(rows × cols) — each cell processed once per row; histogram runs per row. Space O(cols) — heights array and stack for histogram.
 
 #### Problem: [Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/) (LeetCode #42)
 
 - **Intuition:** Water at index i is trapped by the minimum of "max height to the left" and "max height to the right" minus height[i]. Monotonic stack approach: when we see a bar higher than stack top, the stack top is a "valley" between two higher bars—compute trapped water in that segment.
-- **Brute Force:** For each index i, scan left for max height and right for max height; water += min(leftMax, rightMax) - height[i]. Time O(n²), Space O(1).
+- **Brute Force:** For each index i, scan left for max height and right for max height; water += min(leftMax, rightMax) - height[i]. Time O(n²) — each index scans O(n) cells. Space O(1) — no extra arrays.
 - **Approach:** 1) Use a decreasing stack of indices. 2) When current height > stack top, we have a "pit": pop to get the floor, then left boundary = new stack top, right = current. Water += (min(leftH, rightH) - floorH) * width. 3) Repeat until stack empty or top >= current. 4) Push current.
 - **Java Solution:**
 
@@ -468,7 +468,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(n)
+- **Complexity:** Time O(n) — each bar pushed and popped at most once. Space O(n) — stack may hold all bars.
 
 ---
 

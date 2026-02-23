@@ -221,7 +221,7 @@ public class TreeNode {
 #### Problem: [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/) (LeetCode #102)
 
 - **Intuition:** Process the tree level by level. Use a queue; for each level, poll exactly `size` nodes and collect their values, enqueue their children.
-- **Brute Force:** DFS with depth parameter, collect all nodes, then group by depth. Time O(n), Space O(n).
+- **Brute Force:** DFS with depth parameter, collect all nodes, then group by depth. Time O(n) — visit each node once. Space O(n) — recursion stack or result storage.
 - **Approach:** 1) BFS from root. 2) For each iteration, record `size = queue.size()`, poll `size` nodes into a level list, add children to queue. 3) Append level to result.
 - **Java Solution:**
 
@@ -250,14 +250,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n), Space O(w) where w = max level width
+- **Complexity:** Time O(n) — each node enqueued and processed once. Space O(w) — queue holds at most one full level.
 
 ---
 
 #### Problem: [Flood Fill](https://leetcode.com/problems/flood-fill/) (LeetCode #733)
 
 - **Intuition:** From (sr, sc), replace all connected pixels of the same color with newColor. BFS (or DFS) from start, only expand to cells matching the original color.
-- **Brute Force:** BFS or DFS from start cell, exploring all 4-directional neighbors with same color and repainting them. Time O(mn), Space O(mn).
+- **Brute Force:** BFS or DFS from start cell, exploring all 4-directional neighbors with same color and repainting them. Time O(mn) — each cell visited at most once. Space O(mn) — queue or call stack in worst case.
 - **Approach:** 1) If `image[sr][sc] == newColor`, return image unchanged (avoids infinite loop). 2) BFS from (sr, sc), enqueue neighbors with same original color. 3) Paint each dequeued cell with newColor.
 - **Java Solution:**
 
@@ -288,7 +288,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(mn), Space O(mn)
+- **Complexity:** Time O(mn) — each cell enqueued at most once. Space O(mn) — queue may hold all connected cells.
 
 ---
 
@@ -297,7 +297,7 @@ class Solution {
 #### Problem: [Rotting Oranges](https://leetcode.com/problems/rotting-oranges/) (LeetCode #994)
 
 - **Intuition:** Multi-source BFS from all rotten oranges (value 2). Each minute, rot adjacent fresh oranges (1). Track minutes per level; count fresh at start—if any remain after BFS, return -1.
-- **Brute Force:** Simulate minute by minute: each minute scan the grid for fresh oranges adjacent to rotten, mark them rotten. Repeat until no change. Time O(mn × minutes) = O(m²n²) worst case, Space O(mn).
+- **Brute Force:** Simulate minute by minute: each minute scan the grid for fresh oranges adjacent to rotten, mark them rotten. Repeat until no change. Time O(mn × minutes) = O(m²n²) worst case — full grid scan each minute. Space O(mn) — grid and auxiliary structures.
 - **Approach:** 1) Scan grid for rotten (2) and count fresh (1). 2) Enqueue all rotten cells. 3) BFS: each "level" = 1 minute; when visiting a fresh neighbor, rot it and decrement fresh count. 4) Return minutes if fresh == 0, else -1.
 - **Java Solution:**
 
@@ -342,14 +342,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(mn), Space O(mn)
+- **Complexity:** Time O(mn) — each cell enqueued at most once. Space O(mn) — queue may hold many cells per level.
 
 ---
 
 #### Problem: [01 Matrix](https://leetcode.com/problems/01-matrix/) (LeetCode #542)
 
 - **Intuition:** Multi-source BFS from all 0s. Distance from each 0 to every cell is computed level by level; first time we reach a cell is shortest distance to nearest 0.
-- **Brute Force:** For each cell with 1, run BFS to find nearest 0. Time O(mn × mn) = O(m²n²), Space O(mn).
+- **Brute Force:** For each cell with 1, run BFS to find nearest 0. Time O(mn × mn) = O(m²n²) — BFS from each 1 cell. Space O(mn) — queue per BFS.
 - **Approach:** 1) Enqueue all (r,c) where mat[r][c]==0; set result[r][c]=0. 2) Mark 0s as visited (or use result != -1). 3) BFS: neighbors get result = cur + 1. 4) Return result matrix.
 - **Java Solution:**
 
@@ -389,14 +389,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(mn), Space O(mn)
+- **Complexity:** Time O(mn) — each cell enqueued at most once. Space O(mn) — queue for multi-source BFS.
 
 ---
 
 #### Problem: [Number of Islands](https://leetcode.com/problems/number-of-islands/) (LeetCode #200)
 
 - **Intuition:** Count connected components of '1's. For each unvisited '1', run BFS (or DFS) to mark all connected '1's, then increment count.
-- **Brute Force:** Scan grid for each '1'; when found, run BFS to mark entire connected component as visited. Time O(mn), Space O(mn).
+- **Brute Force:** Scan grid for each '1'; when found, run BFS to mark entire connected component as visited. Time O(mn) — each cell visited once across all BFS. Space O(mn) — queue per island.
 - **Approach:** 1) Scan grid for '1'. 2) When found, BFS from that cell, mark all connected '1's as visited (e.g., flip to '0'). 3) Increment island count. 4) Return count.
 - **Java Solution:**
 
@@ -433,14 +433,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(mn), Space O(mn)
+- **Complexity:** Time O(mn) — each land cell processed once. Space O(mn) — queue holds island cells.
 
 ---
 
 #### Problem: [Open the Lock](https://leetcode.com/problems/open-the-lock/) (LeetCode #752)
 
 - **Intuition:** State = 4-digit string. From "0000", BFS: each move is turn one wheel up or down. Deadends are blocked. First time we reach target = minimum moves.
-- **Brute Force:** BFS from "0000" exploring all 8 possible moves (each digit ±1), skipping deadends and visited states. Time O(10000) = O(1), Space O(10000).
+- **Brute Force:** BFS from "0000" exploring all 8 possible moves (each digit ±1), skipping deadends and visited states. Time O(10000) = O(1) — at most 10^4 states. Space O(10000) — visited set and queue.
 - **Approach:** 1) Put deadends in a set. 2) If "0000" in deadends or is target, handle. 3) BFS from "0000": for each digit, try +1 and -1 (wrap 0-9). 4) Skip deadends and visited. 5) Return steps when target found.
 - **Java Solution:**
 
@@ -489,14 +489,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(10000) = O(1) states, Space O(10000)
+- **Complexity:** Time O(10000) = O(1) — at most 10^4 lock states explored. Space O(10000) — visited set and queue hold states.
 
 ---
 
 #### Problem: [Minimum Knight Moves](https://leetcode.com/problems/minimum-knight-moves/) (LeetCode #1197)
 
 - **Intuition:** BFS from (0,0) to (x,y) on infinite board. Knight has 8 L-shaped moves. Use BFS; first reach of (x,y) = minimum moves. Symmetry: only need first quadrant (|x|, |y|) since board is symmetric.
-- **Brute Force:** BFS from (0,0) exploring all 8 knight moves until reaching (x,y). Time O((|x|+|y|)²) in practice, Space O((|x|+|y|)²).
+- **Brute Force:** BFS from (0,0) exploring all 8 knight moves until reaching (x,y). Time O((|x|+|y|)²) in practice — BFS explores reachable area. Space O((|x|+|y|)²) — visited set covers search region.
 - **Approach:** 1) BFS from (0,0). 2) 8 moves: (±2,±1), (±1,±2). 3) Use visited set. 4) Can optimize by only exploring positive quadrant and using symmetry for target.
 - **Java Solution:**
 
@@ -539,7 +539,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(|x|×|y|) in practice, Space O(|x|×|y|). Constraint |x|+|y| ≤ 300 keeps it manageable.
+- **Complexity:** Time O(|x|×|y|) in practice — BFS visits each reachable cell at most once. Space O(|x|×|y|) — queue and visited set. Constraint |x|+|y| ≤ 300 keeps it manageable.
 
 ---
 
@@ -548,7 +548,7 @@ class Solution {
 #### Problem: [Word Ladder](https://leetcode.com/problems/word-ladder/) (LeetCode #127)
 
 - **Intuition:** Words form implicit graph: two words are adjacent if they differ by one letter. BFS from beginWord; first reach of endWord = shortest transformation length (word count).
-- **Brute Force:** BFS from beginWord; at each step try changing each position to 'a'-'z' and enqueue if in wordList. Time O(M² × N), Space O(M × N).
+- **Brute Force:** BFS from beginWord; at each step try changing each position to 'a'-'z' and enqueue if in wordList. Time O(M² × N) — each word generates M×26 variants; N words. Space O(M × N) — visited set and queue.
 - **Approach:** 1) Put wordList in a set for O(1) lookup. 2) BFS from beginWord: for each position, try 'a'-'z'. 3) If new word in set and not visited, enqueue. 4) Return level + 1 when endWord found (levels = intermediate steps, +1 for begin).
 - **Java Solution:**
 
@@ -592,14 +592,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(M² × N) where M = word length, N = list size; Space O(M × N)
+- **Complexity:** Time O(M² × N) — each of N words explored; string ops cost O(M). Space O(M × N) — visited set stores up to N words.
 
 ---
 
 #### Problem: [Shortest Path in a Grid with Obstacles Elimination](https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/) (LeetCode #1293)
 
 - **Intuition:** State = (r, c, obstacles_used). BFS over state space. When stepping on an obstacle (1), increment obstacles_used; only allow if ≤ k. Track visited per (r, c, k) or track min obstacles to reach (r, c).
-- **Brute Force:** BFS from (0,0) with state (r, c, obstacles_used); explore all 4 neighbors, only allow stepping on obstacle if obstacles_used < k. Time O(m × n × k), Space O(m × n).
+- **Brute Force:** BFS from (0,0) with state (r, c, obstacles_used); explore all 4 neighbors, only allow stepping on obstacle if obstacles_used < k. Time O(m × n × k) — state space has k obstacle levels. Space O(m × n) — minObstacles array.
 - **Approach:** 1) State = (r, c, obstacles_eliminated). 2) visited[r][c] = min obstacles used to reach (r,c). Re-visit (r,c) only if we reach it with fewer obstacles. 3) BFS; return steps when (m-1,n-1) reached.
 - **Java Solution:**
 
@@ -647,14 +647,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(m × n × k), Space O(m × n)
+- **Complexity:** Time O(m × n × k) — each (r,c,obs) state processed at most once. Space O(m × n) — minObstacles matrix.
 
 ---
 
 #### Problem: [Bus Routes](https://leetcode.com/problems/bus-routes/) (LeetCode #815)
 
 - **Intuition:** Graph of bus stops: two stops are "adjacent" if they share a route. BFS from stops reachable by routes containing `source`; target: reach a stop that has `target`. Minimum number of buses = minimum route changes.
-- **Brute Force:** BFS over routes: start with routes containing source, at each step try all routes that share a stop with current route. Time O(R × S), Space O(R + S).
+- **Brute Force:** BFS over routes: start with routes containing source, at each step try all routes that share a stop with current route. Time O(R × S) — each route processed; each has S stops. Space O(R + S) — stopToRoutes map and visited routes.
 - **Approach:** 1) Build: stop -> list of route indices. 2) BFS over *routes*: start with routes containing source. State = (routeId, busCount). For each stop in route, for each other route through that stop, if not visited, enqueue. 3) When a route contains target, return busCount. 4) Need to track visited routes.
 - **Java Solution:**
 
@@ -703,7 +703,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(R × S) where R = routes, S = total stops; Space O(R + S)
+- **Complexity:** Time O(R × S) — each route visited once; each stop processed. Space O(R + S) — stopToRoutes map and visited routes array.
 
 ---
 

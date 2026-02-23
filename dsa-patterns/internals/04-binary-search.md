@@ -177,7 +177,7 @@ public int binarySearchOnAnswer(int[] nums, int threshold) {
 #### Problem: [Binary Search](https://leetcode.com/problems/binary-search/) (LeetCode #704)
 
 - **Intuition:** Sorted array, find exact target. Classic template: compare `nums[mid]` to `target` and narrow the search space.
-- **Brute Force:** Linear scan through the array, comparing each element to the target until a match is found or the end is reached. Time O(n), Space O(1)
+- **Brute Force:** Linear scan through the array, comparing each element to the target until a match is found or the end is reached. Time O(n) — may visit every element once. Space O(1) — no extra data structures.
 - **Optimized Approach:** 1) `left=0`, `right=length-1`. 2) While `left <= right`: compute mid, return mid if match. 3) If `nums[mid] < target`, search right; else search left. 4) Return -1 if not found.
 - **Java Solution:**
 
@@ -197,13 +197,13 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(log n), Space O(1)
+- **Complexity:** Time O(log n) — search space halves each iteration. Space O(1) — only left/right/mid pointers.
 
 ---
 
 #### Problem: [Search Insert Position](https://leetcode.com/problems/search-insert-position/) (LeetCode #35)
 
-- **Brute Force:** Linear scan from left to right, returning the first index where `nums[i] >= target`, or `nums.length` if all elements are smaller. Time O(n), Space O(1)
+- **Brute Force:** Linear scan from left to right, returning the first index where `nums[i] >= target`, or `nums.length` if all elements are smaller. Time O(n) — worst case scans entire array. Space O(1) — only loop counter.
 - **Optimized Approach:** Use left-boundary template: find first index where element is >= target. If all elements are smaller, left ends at `nums.length`.
 - **Intuition:** Find the position where we would insert target to keep sorted order—i.e., the leftmost index where `nums[i] >= target`.
 - **Java Solution:**
@@ -223,7 +223,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(log n), Space O(1)
+- **Complexity:** Time O(log n) — left-boundary halves search space. Space O(1) — only left/right/mid indices.
 
 ---
 
@@ -232,7 +232,7 @@ class Solution {
 #### Problem: [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/) (LeetCode #33)
 
 - **Intuition:** Array is sorted but rotated. At least one half (left or right of mid) is always sorted. Compare target with the sorted half to decide where to search.
-- **Brute Force:** Linear scan through the rotated array until the target is found or the end is reached. Time O(n), Space O(1)
+- **Brute Force:** Linear scan through the rotated array until the target is found or the end is reached. Time O(n) — may check every element. Space O(1) — no auxiliary storage.
 - **Optimized Approach:** 1) If `nums[mid] == target`, return mid. 2) If `nums[left] <= nums[mid]`, left half is sorted: search there if target in range, else right. 3) Else right half is sorted: search there if target in range, else left.
 - **Java Solution:**
 
@@ -261,14 +261,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(log n), Space O(1)
+- **Complexity:** Time O(log n) — each step discards one sorted half. Space O(1) — fixed left/right/mid variables.
 
 ---
 
 #### Problem: [Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/) (LeetCode #153)
 
 - **Intuition:** Minimum is the pivot point. Compare `nums[mid]` with `nums[right]`: if `nums[mid] > nums[right]`, minimum is in right half; else in left half (including mid).
-- **Brute Force:** Linear scan to find the first element smaller than its predecessor (the pivot), or return the first element if array is not rotated. Time O(n), Space O(1)
+- **Brute Force:** Linear scan to find the first element smaller than its predecessor (the pivot), or return the first element if array is not rotated. Time O(n) — scans until pivot found. Space O(1) — single pass, no extra space.
 - **Optimized Approach:** 1) While `left < right`: compare mid with right. 2) If mid > right, min is right of mid → `left = mid + 1`. 3) Else min is at mid or left → `right = mid`. 4) Return `nums[left]`.
 - **Java Solution:**
 
@@ -287,14 +287,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(log n), Space O(1)
+- **Complexity:** Time O(log n) — compare mid to right, halve search space. Space O(1) — only index variables.
 
 ---
 
 #### Problem: [Find Peak Element](https://leetcode.com/problems/find-peak-element/) (LeetCode #162)
 
 - **Intuition:** Peak: element greater than both neighbors. Binary search: if `nums[mid] < nums[mid+1]`, there's a peak in the right half (climb right); else in the left half (including mid).
-- **Brute Force:** Linear scan checking each index to see if it is greater than both neighbors; return the first peak found. Time O(n), Space O(1)
+- **Brute Force:** Linear scan checking each index to see if it is greater than both neighbors; return the first peak found. Time O(n) — checks each position once. Space O(1) — no extra memory.
 - **Optimized Approach:** 1) While `left < right`: compute mid. 2) If `nums[mid] < nums[mid+1]`, peak is right → `left = mid + 1`. 3) Else peak is at mid or left → `right = mid`. 4) Return left.
 - **Java Solution:**
 
@@ -313,14 +313,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(log n), Space O(1)
+- **Complexity:** Time O(log n) — climb toward peak, discard half each step. Space O(1) — constant variables.
 
 ---
 
 #### Problem: [Search a 2D Matrix](https://leetcode.com/problems/search-a-2d-matrix/) (LeetCode #74)
 
 - **Intuition:** Rows and columns are sorted; treat as 1D sorted array via `index → row = index/cols, col = index%cols`.
-- **Brute Force:** Scan every cell in the matrix row by row until the target is found or the end is reached. Time O(mn), Space O(1)
+- **Brute Force:** Scan every cell in the matrix row by row until the target is found or the end is reached. Time O(mn) — visits every cell in worst case. Space O(1) — no extra structures.
 - **Optimized Approach:** 1) Flatten to `[0, m*n-1]`. 2) Classic binary search. 3) Map mid to (row, col) and compare with target.
 - **Java Solution:**
 
@@ -345,14 +345,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(log(mn)), Space O(1)
+- **Complexity:** Time O(log(mn)) — flattened array halves each step. Space O(1) — only left/right/mid indices.
 
 ---
 
 #### Problem: [Koko Eating Bananas](https://leetcode.com/problems/koko-eating-bananas/) (LeetCode #875)
 
 - **Intuition:** Binary search on answer: try speed k. For each k, compute hours needed. If feasible (hours ≤ h), try lower k; else try higher.
-- **Brute Force:** Try k from 1 to max(piles) in order, compute hours for each k, and return the first k for which hours ≤ h. Time O(max(piles) * n), Space O(1)
+- **Brute Force:** Try k from 1 to max(piles) in order, compute hours for each k, and return the first k for which hours ≤ h. Time O(max(piles) * n) — tries each k, sums piles each time. Space O(1) — no extra storage.
 - **Optimized Approach:** 1) low=1, high=max(piles). 2) While low < high: mid=k. 3) Sum ceiling(p/mid) for each pile. 4) If hours ≤ h, high=mid; else low=mid+1. 5) Return low.
 - **Java Solution:**
 
@@ -382,14 +382,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n log(max(piles))), Space O(1)
+- **Complexity:** Time O(n log(max(piles))) — log(max) guesses, each feasible check scans n piles. Space O(1) — iterative, no recursion or extra arrays.
 
 ---
 
 #### Problem: [Time Based Key-Value Store](https://leetcode.com/problems/time-based-key-value-store/) (LeetCode #981)
 
 - **Intuition:** Store `(timestamp, value)` pairs per key. `get` needs the largest timestamp ≤ given timestamp—binary search on the sorted list of timestamps for that key.
-- **Brute Force:** For `get`, linear scan the list of (timestamp, value) pairs from the end backward until finding the largest timestamp ≤ target. Time O(k) per get where k = number of values for key; Space O(n)
+- **Brute Force:** For `get`, linear scan the list of (timestamp, value) pairs from the end backward until finding the largest timestamp ≤ target. Time O(k) per get where k = number of values for key — scans up to all pairs. Space O(n) — stores all key-value pairs.
 - **Optimized Approach:** 1) Map<String, List<Pair>> where Pair = (timestamp, value). 2) set: append to list (timestamps are strictly increasing). 3) get: binary search right-boundary style for largest timestamp ≤ target.
 - **Java Solution:**
 
@@ -423,7 +423,7 @@ class TimeMap {
 }
 ```
 
-- **Complexity:** Time O(1) set, O(log k) get per key with k values; Space O(n)
+- **Complexity:** Time O(1) set — append to list, O(log k) get — binary search on sorted timestamps per key; Space O(n) — map plus all stored pairs.
 
 ---
 
@@ -432,7 +432,7 @@ class TimeMap {
 #### Problem: [Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays/) (LeetCode #4)
 
 - **Intuition:** Binary search on the smaller array's partition. Partition both arrays so all left elements ≤ all right elements; median is derived from the partition boundaries.
-- **Brute Force:** Merge both arrays into one sorted array (linear merge), then return the median of the merged array. Time O(m+n), Space O(m+n)
+- **Brute Force:** Merge both arrays into one sorted array (linear merge), then return the median of the merged array. Time O(m+n) — linear merge pass. Space O(m+n) — merged array storage.
 - **Optimized Approach:** 1) Ensure nums1 is smaller. 2) Binary search partition in nums1; derive nums2 partition so total left size = (m+n+1)/2. 3) Check maxLeft1 ≤ minRight2 and maxLeft2 ≤ minRight1. 4) If odd: maxLeft; if even: avg of maxLeft and minRight.
 - **Java Solution:**
 
@@ -466,14 +466,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(log(min(m,n))), Space O(1)
+- **Complexity:** Time O(log(min(m,n))) — binary search partition on smaller array. Space O(1) — only partition indices, no merge.
 
 ---
 
 #### Problem: [Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum/) (LeetCode #410)
 
 - **Intuition:** Binary search on the answer (max subarray sum). For a given max sum, greedy: pack elements until adding the next would exceed max, then start new subarray. Count splits. If splits ≤ k-1, feasible.
-- **Brute Force:** Try all possible partition points (dynamic programming or recursive enumeration) to find the minimum possible largest sum. Time O(n²) or exponential; Space O(n)
+- **Brute Force:** Try all possible partition points (dynamic programming or recursive enumeration) to find the minimum possible largest sum. Time O(n²) or exponential — explores many partitions; Space O(n) — recursion stack or DP table.
 - **Optimized Approach:** 1) low = max(nums), high = sum(nums). 2) While low < high: mid = max sum. 3) Greedy count subarrays. 4) If count ≤ k, high = mid; else low = mid + 1. 5) Return low.
 - **Java Solution:**
 
@@ -509,14 +509,14 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(n log(sum)), Space O(1)
+- **Complexity:** Time O(n log(sum)) — log(sum) binary search iterations, O(n) greedy split check each. Space O(1) — iterative, no extra arrays.
 
 ---
 
 #### Problem: [Find in Mountain Array](https://leetcode.com/problems/find-in-mountain-array/) (LeetCode #1095)
 
 - **Intuition:** Mountain: strictly increasing then strictly decreasing. Find peak with binary search; then binary search left half (ascending), then right half (descending) if not found. Return minimum index.
-- **Brute Force:** Linear scan through the mountain array, calling `get(i)` for each index until the target is found. Time O(n), Space O(1)
+- **Brute Force:** Linear scan through the mountain array, calling `get(i)` for each index until the target is found. Time O(n) — worst case checks every index. Space O(1) — no auxiliary storage.
 - **Optimized Approach:** 1) Binary search for peak: nums[i] < nums[i+1] → search right. 2) Binary search left [0, peak] ascending. 3) If found, return. 4) Binary search right [peak, n) descending. 5) Return -1 if not found.
 - **Java Solution:**
 
@@ -572,7 +572,7 @@ class Solution {
 }
 ```
 
-- **Complexity:** Time O(log n), Space O(1). Note: Limit 100 `get()` calls—three binary searches use ~3*log(n) ≈ 27 for n=10^4.
+- **Complexity:** Time O(log n) — peak find + left search + right search, each O(log n). Space O(1) — only pointers, no extra storage. Note: Limit 100 `get()` calls—three binary searches use ~3*log(n) ≈ 27 for n=10^4.
 
 ---
 
