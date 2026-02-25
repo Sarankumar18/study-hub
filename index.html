@@ -825,7 +825,17 @@ function buildDocNav(topic) {
 
 function renderMarkdown(md) {
   if (typeof marked !== 'undefined') {
+    const renderer = new marked.Renderer();
+    const defaultLinkRenderer = renderer.link.bind(renderer);
+    renderer.link = function(href, title, text) {
+      const html = defaultLinkRenderer(href, title, text);
+      if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
+        return html.replace('<a ', '<a target="_blank" rel="noopener noreferrer" ');
+      }
+      return html;
+    };
     marked.setOptions({
+      renderer,
       highlight(code, lang) {
         if (typeof hljs !== 'undefined' && lang && hljs.getLanguage(lang)) return hljs.highlight(code, { language: lang }).value;
         if (typeof hljs !== 'undefined') return hljs.highlightAuto(code).value;
