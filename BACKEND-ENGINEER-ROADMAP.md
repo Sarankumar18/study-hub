@@ -26,7 +26,9 @@
 
 ---
 
-## Current Mission (July–September 2026)
+## Current Mission — RESET August 8, 2026
+
+**Day 1 starts today. Everything before this was warmup.**
 
 My only objective is to become **interview-ready**.
 
@@ -36,18 +38,20 @@ Everything I study must improve one of these:
 - System design confidence — DDIA + HLD practice
 - Resume & interview skills
 
-Anything outside these objectives is postponed.
+**Start:** August 8, 2026
+**Target:** Interview-ready by **September 30, 2026**
+**Days available:** 53
+**Interview window:** October 1 – November 30, 2026
+**Job search:** Running in parallel from Day 1
 
-**Target:** Interview-ready by **September 20, 2026**.
-**Interview window:** September 20 – October 31, 2026.
+### Non-Negotiable Daily Commitments
 
-### Commitments
-
-- **DSA:** minimum 3 problems/day, every day
-- **Java:** 30 min/day minimum, paired with DSA pattern
-- **System Design:** 30 min/day minimum, DDIA chapters + HLD
-- **No compromise** on quality and depth
-- **Show up daily** — Bronze day (1 problem + review) beats zero day
+- **DSA:** 3 problems/day, every day, no exceptions
+- **Java:** 30 min/day, paired with DSA pattern
+- **System Design:** 30 min/day, DDIA + HLD
+- **Job search:** 30 min/day, applications + follow-ups
+- **Zero days allowed:** 0. Bronze day (1 problem) beats zero day.
+- **Check email daily:** Run gmail tracker, respond to callbacks within 24 hrs
 
 ---
 

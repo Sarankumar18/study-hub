@@ -15,6 +15,10 @@ system-design/index.html
 operating-systems/index.html
 dsa-patterns/index.html
 
+# Secrets — NEVER commit
+.secrets/
+token.json
+
 # IDE and build artifacts
 .idea/
 *.iml
