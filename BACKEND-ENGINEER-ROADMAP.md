@@ -16,13 +16,27 @@
 - [Track 2 — Java & Backend (30%)](#track-2--java--backend-30)
 - [Track 3 — Distributed Systems & System Design (20%)](#track-3--distributed-systems--system-design-20)
 - [Track 4 — Kafka & Redis](#track-4--kafka--redis)
-- [Track 5 — Cloud, Containers & Platform Engineering](#track-5--cloud-containers--platform-engineering)
+- [Track 6 — Hands-On Interview Coding (Picnic)](#track-6--hands-on-interview-coding-picnic)
 - [Engineering Blogs](#engineering-blogs-read-weekly)
 - [Books To Finish](#books-to-finish)
 - [Success Criteria](#success-criteria--interview-ready)
 - [Weekly Review](#weekly-review)
 - [Aligned Weekly Plan](#aligned-weekly-plan-8-weeks--july-10-to-august-31-2026)
 - [AI Mentor Instructions](#ai-mentor-instructions)
+
+---
+
+## Current Mission — Picnic Active (August 24, 2026)
+
+**Picnic screening passed.** Next: 4 technical rounds (deep-dive → bug fix → pair programming → closing).
+
+**Immediate priority shift:**
+1. **Hands-on coding** — 45 min/day, write Java without IDE (bug fix + pair prog)
+2. **DSA** — maintain 2 problems/day (not 3) until Picnic rounds complete
+3. **System Design** — maintain 30 min/day
+4. **R1 prep** — project deep-dives (Harbor, Vodafone)
+
+Full plan: [`career/PICNIC-INTERVIEW-PREP.md`](career/PICNIC-INTERVIEW-PREP.md)
 
 ---
 
@@ -46,12 +60,30 @@ Everything I study must improve one of these:
 
 ### Non-Negotiable Daily Commitments
 
-- **DSA:** 3 problems/day, every day, no exceptions
-- **Java:** 30 min/day, paired with DSA pattern
-- **System Design:** 30 min/day, DDIA + HLD
+- **Hands-on coding (Picnic):** 45 min/day — bug fix + pair programming practice, **no IDE autocomplete**
+- **DSA:** 2 problems/day while Picnic rounds are active (back to 3/day after)
+- **Java:** 30 min/day, paired with hands-on exercises
+- **System Design:** 30 min/day — AlgoMaster concepts + Hello Interview designs
 - **Job search:** 30 min/day, applications + follow-ups
-- **Zero days allowed:** 0. Bronze day (1 problem) beats zero day.
+- **Zero days allowed:** 0. Bronze day (1 exercise) beats zero day.
 - **Check email daily:** Run gmail tracker, respond to callbacks within 24 hrs
+
+### System Design Resources (Updated Aug 12)
+
+| Resource | Purpose | When |
+|---|---|---|
+| AlgoMaster (algomaster.io) | Concept building — 177 building blocks | Daily 30 min |
+| Hello Interview (hellointerview.com) | End-to-end design practice — Bad → Good → Great | Weekday 45 min + Weekend HLD |
+| DDIA (Chapters 1–9) | Deep understanding of distributed systems WHY | Reference when concept is unclear |
+| Alex Xu Vol 1 | Structured design walkthroughs | Weekend practice |
+
+### Amazon Strategy (Updated Aug 12)
+
+- **Status:** Recruiter reached out. NOT scheduling interview yet.
+- **Reply sent:** Yes, with resume. Keep pipeline warm.
+- **DO NOT schedule interview until:** System Design + DSA both feel solid (~Sep 15–Oct 1)
+- **When recruiter asks for availability:** Say "I'd prefer scheduling for late September / early October to align with my availability."
+- **Prep needed before scheduling:** 10 HLD designs practiced out loud + 80+ DSA problems solved + Java internals solid
 
 ---
 
@@ -70,10 +102,10 @@ Everything I study must improve one of these:
 
 | Track | Weight | Hours/Week | Goal |
 |-------|--------|-----------|------|
-| DSA | 40% | 15–16 hrs | Pattern mastery + interview readiness |
-| Java Backend | 30% | 11–12 hrs | Backend depth + Java interviews |
-| Distributed Systems & System Design | 20% | 7–8 hrs | DDIA + HLD |
-| Career Preparation | 10% | 3–4 hrs | Resume, LinkedIn, applications |
+| DSA | 35% | 12–13 hrs | Pattern mastery (2/day while Picnic active) |
+| Java Backend + Hands-On Coding | 35% | 12–13 hrs | Bug fix, pair prog, Java without IDE |
+| Distributed Systems & System Design | 20% | 7–8 hrs | AlgoMaster + Hello Interview + DDIA |
+| Career Preparation | 10% | 3–4 hrs | Applications, Picnic round scheduling, follow-ups |
 
 ---
 
@@ -534,6 +566,45 @@ For **every** design, document:
 
 ---
 
+## Track 6 — Hands-On Interview Coding (Picnic)
+
+> **Active while Picnic rounds are pending.** Full tracker: [`career/PICNIC-INTERVIEW-PREP.md`](career/PICNIC-INTERVIEW-PREP.md)  
+> **Study guides:** [`PICNIC-STUDY-GUIDE.md`](career/interview-prep/PICNIC-STUDY-GUIDE.md) | [`JAVA-SPRING-REVISION.md`](career/interview-prep/JAVA-SPRING-REVISION.md)
+
+### Goal
+- Write Java **without IDE autocomplete** under time pressure
+- Fix bugs in unfamiliar code in **under 20 minutes**
+- Pair-program small features while **thinking out loud**
+- Build speed through daily repetition — not one cram session
+
+### Daily Block (45 min)
+| Phase | Time | What |
+|-------|------|------|
+| Warm-up | 10 min | 1 small method by hand |
+| Main | 25 min | 1 bug-fix OR 1 pair-programming exercise |
+| Review | 10 min | Explain solution + log in prep file |
+
+### Exercise Types (rotate)
+1. **Bug fix** — off-by-one, NPE, wrong Optional usage, boundary errors (Round 2)
+2. **Logic fix** — wrong comparison, missing null/empty checks (Round 2)
+3. **Extend feature** — add validation, filter method, small service method (Round 3)
+4. **Trace code** — explain flow through 3 classes without running it (Round 1 & 2)
+
+### Speed Targets
+| Week | Target |
+|------|--------|
+| Week 1 | Complete bug-fix exercises (accuracy over speed) |
+| Week 2 | Bug fix in **< 25 min** |
+| Week 3 | Bug fix in **< 20 min** + 1 pair mock |
+
+### Mentor Commands
+- `Picnic prep` — today's exercise + talking points
+- `Bug fix` — new Round 2 exercise
+- `Pair mock` — Round 3 simulation
+- `Done` — critique + update exercise log
+
+---
+
 ## Engineering Blogs (Read Weekly)
 
 **Goal:** Read 2–3 articles per week. Focus on architecture, scalability, reliability, and production incidents.
@@ -587,6 +658,8 @@ The goal is not "X problems solved" or "Y books finished." The goal is:
 - [ ] Can identify the correct pattern within 30 seconds of reading any problem
 - [ ] Can explain brute force → optimal → complexity for every solution
 - [ ] Can code clean, bug-free Java under pressure
+- [ ] **Can fix a buggy Java service method in under 20 minutes without IDE**
+- [ ] **Can pair-program a small Spring-style feature while explaining out loud**
 
 ### Java & Backend Interviews
 - [ ] Can explain Java internals (HashMap, JVM, GC, concurrency) at depth
@@ -635,10 +708,17 @@ Every Sunday, review and plan:
 - DDIA chapters completed
 
 ### Career
+- Applications sent and follow-ups completed
+- Picnic round dates scheduled and prep logged in [`PICNIC-INTERVIEW-PREP.md`](career/PICNIC-INTERVIEW-PREP.md)
 - Resume updates made
 - LinkedIn updates / posts
-- Applications sent
 - Networking connections made
+
+### Hands-On Coding (Picnic)
+- Exercises completed this week (bug fix / pair prog)
+- Average time per bug-fix exercise
+- Weak areas (loops, Optional, null checks, Spring patterns)
+- Next week's exercise targets
 
 **Plan the following week based on weaknesses, not strengths.**
 
