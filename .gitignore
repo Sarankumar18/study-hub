@@ -9,6 +9,19 @@ projects/
 *.pdf
 Form13.pdf
 
+# Identity and financial documents. This repo is PUBLIC — these were previously
+# covered only by the *.pdf glob, so any non-PDF added here would be published.
+IBM/
+Pay And Tax Documents/
+*.aspx
+Linkedin_Saran.jpeg
+
+# Job-search material: private while a search is active
+career/gmail_job_updates.md
+career/application_tracker.xlsx
+career/job_tracker.xlsx
+*.xlsx
+
 # Per-topic reader UIs (use root index.html for GitHub Pages instead)
 java/index.html
 system-design/index.html
@@ -18,6 +31,9 @@ dsa-patterns/index.html
 # Secrets — NEVER commit
 .secrets/
 token.json
+
+# Separate git repo — machine coding LLD practice
+machine-coding-lld/
 
 # IDE and build artifacts
 .idea/
@@ -29,3 +45,9 @@ out/
 # OS generated
 .DS_Store
 Thumbs.db
+
+# Career material now lives in the private repo sarankumarbaskar/career-vault
+career/
+profile-readme-worktree/
+__pycache__/
+*.pyc

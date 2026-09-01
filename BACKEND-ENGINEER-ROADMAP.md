@@ -16,7 +16,7 @@
 - [Track 2 — Java & Backend (30%)](#track-2--java--backend-30)
 - [Track 3 — Distributed Systems & System Design (20%)](#track-3--distributed-systems--system-design-20)
 - [Track 4 — Kafka & Redis](#track-4--kafka--redis)
-- [Track 6 — Hands-On Interview Coding (Picnic)](#track-6--hands-on-interview-coding-picnic)
+- [Track 6 — Machine Coding Daily (1 hr)](#track-6--machine-coding-daily-1-hr)
 - [Engineering Blogs](#engineering-blogs-read-weekly)
 - [Books To Finish](#books-to-finish)
 - [Success Criteria](#success-criteria--interview-ready)
@@ -26,17 +26,21 @@
 
 ---
 
-## Current Mission — Picnic Active (August 24, 2026)
+## Current Mission — Machine Coding + Stripe (August 26, 2026)
 
-**Picnic screening passed.** Next: 4 technical rounds (deep-dive → bug fix → pair programming → closing).
+**Picnic:** rejected after screening. **Stripe:** HackerRank submitted — prep for phone + onsite.
 
-**Immediate priority shift:**
-1. **Hands-on coding** — 45 min/day, write Java without IDE (bug fix + pair prog)
-2. **DSA** — maintain 2 problems/day (not 3) until Picnic rounds complete
-3. **System Design** — maintain 30 min/day
-4. **R1 prep** — project deep-dives (Harbor, Vodafone)
+### Current Mission — September Stripe Sprint (from Sep 1, 2026)
 
-Full plan: [`career/PICNIC-INTERVIEW-PREP.md`](career/PICNIC-INTERVIEW-PREP.md)
+**Stripe Dublin interview:** Sep 29. **Dual track:** roadmap continues + Stripe prep. **Wake 4 AM**, ~6.5h weekday study.
+
+See [`career/SEPTEMBER-STRIPE-SPRINT.md`](career/SEPTEMBER-STRIPE-SPRINT.md) for daily schedule.
+
+**Immediate priority (both tracks):**
+1. **DSA** — close Phase 1 (LC #4 + Bit Manip), then Stack
+2. **Stripe MC** — 60 min/day — router, wallet, bug squash, mocks
+3. **SD** — payments-only designs (ledger, idempotency, webhooks)
+4. **Java** — 60 min/evening — Spring + internals
 
 ---
 
@@ -60,8 +64,8 @@ Everything I study must improve one of these:
 
 ### Non-Negotiable Daily Commitments
 
-- **Hands-on coding (Picnic):** 45 min/day — bug fix + pair programming practice, **no IDE autocomplete**
-- **DSA:** 2 problems/day while Picnic rounds are active (back to 3/day after)
+- **Machine coding:** 60 min/day — product use cases, build + debug + extend — **no AI during timed blocks**
+- **DSA:** 2 problems/day while Stripe / active interviews (back to 3/day when pipeline is quiet)
 - **Java:** 30 min/day, paired with hands-on exercises
 - **System Design:** 30 min/day — AlgoMaster concepts + Hello Interview designs
 - **Job search:** 30 min/day, applications + follow-ups
@@ -566,41 +570,32 @@ For **every** design, document:
 
 ---
 
-## Track 6 — Hands-On Interview Coding (Picnic)
+## Track 6 — Machine Coding Daily (1 hr)
 
-> **Active while Picnic rounds are pending.** Full tracker: [`career/PICNIC-INTERVIEW-PREP.md`](career/PICNIC-INTERVIEW-PREP.md)  
-> **Study guides:** [`PICNIC-STUDY-GUIDE.md`](career/interview-prep/PICNIC-STUDY-GUIDE.md) | [`JAVA-SPRING-REVISION.md`](career/interview-prep/JAVA-SPRING-REVISION.md)
+> **Full plan:** [`career/interview-prep/MACHINE-CODING-DAILY.md`](career/interview-prep/MACHINE-CODING-DAILY.md)  
+> **Bug-fix drills:** [`career/PICNIC-INTERVIEW-PREP.md`](career/PICNIC-INTERVIEW-PREP.md)  
+> **Java revision:** [`career/interview-prep/JAVA-SPRING-REVISION.md`](career/interview-prep/JAVA-SPRING-REVISION.md)
 
 ### Goal
-- Write Java **without IDE autocomplete** under time pressure
-- Fix bugs in unfamiliar code in **under 20 minutes**
-- Pair-program small features while **thinking out loud**
-- Build speed through daily repetition — not one cram session
+- **Write code every day** — product-style machine coding, not just LeetCode
+- Stripe-style **multi-part CLI** + **in-memory systems** (rate limiter, wallet, LRU)
+- Fix bugs in unfamiliar code in **under 25 minutes** (Bug Squash prep)
+- Build speed through **weekly timed mocks** — 8 in 8 weeks
 
-### Daily Block (45 min)
+### Daily Block (60 min)
 | Phase | Time | What |
 |-------|------|------|
-| Warm-up | 10 min | 1 small method by hand |
-| Main | 25 min | 1 bug-fix OR 1 pair-programming exercise |
-| Review | 10 min | Explain solution + log in prep file |
+| Warm-up | 10 min | 1 small method by hand (no autocomplete) |
+| Main | 45 min | Current week’s machine-coding problem (see daily plan) |
+| Log | 5 min | Exercise log + one-line reflection |
 
-### Exercise Types (rotate)
-1. **Bug fix** — off-by-one, NPE, wrong Optional usage, boundary errors (Round 2)
-2. **Logic fix** — wrong comparison, missing null/empty checks (Round 2)
-3. **Extend feature** — add validation, filter method, small service method (Round 3)
-4. **Trace code** — explain flow through 3 classes without running it (Round 1 & 2)
-
-### Speed Targets
-| Week | Target |
-|------|--------|
-| Week 1 | Complete bug-fix exercises (accuracy over speed) |
-| Week 2 | Bug fix in **< 25 min** |
-| Week 3 | Bug fix in **< 20 min** + 1 pair mock |
+### 12-Week Rotation (summary)
+Rate Limiter → LRU Cache → Proximity Router (cold) → Wallet → Parking Lot → Splitwise → BookMyShow → URL Shortener → Order/Inventory → Notifications → Scheduler → Full mock
 
 ### Mentor Commands
-- `Picnic prep` — today's exercise + talking points
-- `Bug fix` — new Round 2 exercise
-- `Pair mock` — Round 3 simulation
+- `Machine coding today` — today’s task from current week
+- `Bug fix` — Round 2 style exercise
+- `Mock 60` — timed simulation
 - `Done` — critique + update exercise log
 
 ---

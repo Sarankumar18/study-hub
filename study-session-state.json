@@ -1,0 +1,315 @@
+{
+  "updated_at": "2026-09-01T04:20:27.770057+00:00",
+  "source": "scripts/pull_study_state.py",
+  "user_id": "sbaskar",
+  "dsa": {
+    "solved_count": 32,
+    "total": 142,
+    "solved_row_ids": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25",
+      "26",
+      "27",
+      "28",
+      "30",
+      "135",
+      "136",
+      "137"
+    ],
+    "solved_labels": [
+      "LC #1 Two Sum",
+      "LC #49 Group Anagrams",
+      "LC #238 Product Except Self",
+      "LC #128 Longest Consecutive",
+      "LC #347 Top K Frequent",
+      "LC #11 Container With Most Water",
+      "LC #15 3Sum",
+      "LC #75 Sort Colors",
+      "LC #287 Find Duplicate",
+      "LC #5 Longest Palindrome",
+      "LC #3 Longest Substring",
+      "LC #424 Repeating Char Replacement",
+      "LC #567 Permutation in String",
+      "LC #438 Find All Anagrams",
+      "LC #76 Min Window Substring",
+      "LC #904 Fruit Into Baskets",
+      "LC #1004 Max Consecutive Ones III",
+      "LC #713 Subarray Product < K",
+      "LC #1838 Freq Most Frequent",
+      "LC #239 Sliding Window Maximum",
+      "LC #33 Search Rotated Sorted Array",
+      "LC #153 Find Min Rotated",
+      "LC #162 Find Peak Element",
+      "LC #875 Koko Eating Bananas",
+      "LC #1011 Capacity Ship Packages",
+      "LC #1482 Min Days Bouquets",
+      "LC #410 Split Array Largest Sum",
+      "LC #34 First Last Position",
+      "LC #378 Kth Smallest Matrix",
+      "LC #48 Rotate Image",
+      "LC #54 Spiral Matrix",
+      "LC #121 Best Time Buy Sell Stock"
+    ],
+    "current_pattern": "Binary Search",
+    "pattern_progress": {
+      "Arrays & Hashing": {
+        "solved": 7,
+        "total": 7,
+        "complete": true
+      },
+      "Two Pointers": {
+        "solved": 5,
+        "total": 5,
+        "complete": true
+      },
+      "Sliding Window": {
+        "solved": 11,
+        "total": 11,
+        "complete": true
+      },
+      "Binary Search": {
+        "solved": 9,
+        "total": 10,
+        "complete": false
+      },
+      "Bit Manipulation": {
+        "solved": 0,
+        "total": 4,
+        "complete": false
+      }
+    },
+    "next_problems": [
+      {
+        "row_id": "29",
+        "label": "LC #4 Median of Two Sorted Arrays"
+      }
+    ]
+  },
+  "daily_plan": {
+    "latest_date": "2026-09-01",
+    "tasks": [
+      {
+        "title": "HttpClient syntax drill (15 min)",
+        "track": "Stripe MC",
+        "status": "pending",
+        "priority": "high",
+        "plan_date": "2026-09-01",
+        "description": "Write POST with Idempotency-Key from memory. Integration round prep.",
+        "source_date": "2026-09-01",
+        "estimated_min": 15,
+        "resource_link": "",
+        "task_id": "httpclient-drill"
+      },
+      {
+        "title": "Email Ingrid \u2014 confirm Sep 29 loop format",
+        "track": "Career",
+        "status": "pending",
+        "priority": "high",
+        "plan_date": "2026-09-01",
+        "description": "5 questions from STRIPE-MASTER-PREP.md Section 9. AI round? Full onsite? Java?",
+        "source_date": "2026-09-01",
+        "estimated_min": 15,
+        "resource_link": "",
+        "task_id": "stripe-ingrid"
+      },
+      {
+        "title": "Spring: DI + bean lifecycle (60 min)",
+        "track": "Java",
+        "status": "pending",
+        "priority": "high",
+        "plan_date": "2026-09-01",
+        "description": "JAVA-SPRING-REVISION.md. @Component vs @Bean, singleton, constructor injection. Carried from Aug 28.",
+        "source_date": "2026-09-01",
+        "estimated_min": 60,
+        "resource_link": "",
+        "task_id": "spring-di"
+      },
+      {
+        "title": "Payment API + idempotency sketch (30 min)",
+        "track": "Stripe SD",
+        "status": "pending",
+        "priority": "high",
+        "plan_date": "2026-09-01",
+        "description": "Draw: POST /charges + Idempotency-Key header + 24h cache. Read stripe.com/docs/api/idempotent_requests",
+        "source_date": "2026-09-01",
+        "estimated_min": 30,
+        "resource_link": "https://stripe.com/docs/api/idempotent_requests",
+        "task_id": "stripe-sd-idempotency"
+      },
+      {
+        "title": "Proximity router cold rebuild (45 min timer)",
+        "track": "Stripe MC",
+        "status": "pending",
+        "priority": "high",
+        "plan_date": "2026-09-01",
+        "description": "STRIPE-MASTER-PREP.md. REGISTER/DISTANCE/ROUTE from blank. NO AI. 45m hard stop.",
+        "source_date": "2026-09-01",
+        "estimated_min": 45,
+        "resource_link": "",
+        "task_id": "stripe-router-cold"
+      },
+      {
+        "title": "LC #136 Single Number",
+        "track": "DSA",
+        "status": "pending",
+        "priority": "high",
+        "plan_date": "2026-09-01",
+        "description": "Bit Manipulation #1 \u2014 XOR study block done. Template: ans ^= x.",
+        "source_date": "2026-09-01",
+        "estimated_min": 25,
+        "resource_link": "https://leetcode.com/problems/single-number/",
+        "task_id": "lc-136"
+      },
+      {
+        "title": "LC #4 Median of Two Sorted Arrays",
+        "track": "DSA",
+        "status": "pending",
+        "priority": "high",
+        "plan_date": "2026-09-01",
+        "description": "BS capstone \u2014 closes Binary Search 10/10. Hard; budget 50m morning.",
+        "source_date": "2026-09-01",
+        "estimated_min": 50,
+        "resource_link": "https://leetcode.com/problems/median-of-two-sorted-arrays/",
+        "task_id": "lc-4"
+      },
+      {
+        "title": "Revision: #378 + answer-space trio (20 min)",
+        "track": "DSA Revision",
+        "status": "pending",
+        "priority": "high",
+        "plan_date": "2026-09-01",
+        "description": "Day 1: #378 countLessOrEqual + j pointer. Day 3: #875,#1011,#1482,#410 pseudocode.",
+        "source_date": "2026-09-01",
+        "estimated_min": 20,
+        "resource_link": "high",
+        "task_id": "revision-carry"
+      }
+    ]
+  },
+  "career": {
+    "machine_coding_daily": {
+      "started": "2026-08-26",
+      "daily_minutes": 60,
+      "current_week": 1,
+      "current_problem": "Rate Limiter",
+      "current_problem_id": "001",
+      "current_day": 4,
+      "parts_completed": [
+        "001-part1-fixed-window",
+        "001-part2a-sliding-window",
+        "001-part2-configurable",
+        "001-part3-token-bucket"
+      ],
+      "parts_pending": [
+        "001-part2b-per-user-cleanup",
+        "001-q1-per-api-limits",
+        "timed-mock-60min"
+      ],
+      "exercises_completed": 4,
+      "last_practice_date": "2026-08-28",
+      "coding_streak_days": 0,
+      "guide_mode": true,
+      "target_timed_mocks": 8,
+      "timed_mocks_completed": 0,
+      "weak_areas": [
+        "proximity-router-cold-rebuild",
+        "bug-squash-unfamiliar-code",
+        "api-integration-round",
+        "payment-ledger-sd",
+        "dsa-2-per-day"
+      ],
+      "stripe_priority": true
+    },
+    "picnic_interview_prep": {
+      "role": "Software Engineer - Store",
+      "company": "Picnic",
+      "location": "Amsterdam, Netherlands",
+      "status": "rejected",
+      "rejected_date": "2026-08-25"
+    },
+    "stripe_interview_prep": {
+      "role": "Backend Engineer/API, Payments and Risk",
+      "company": "Stripe",
+      "location": "Dublin, Ireland",
+      "recruiter": "Ingrid Sousa",
+      "recruiter_email": "ingridsousa@stripe.com",
+      "job_url": "https://stripe.com/jobs/listing/backend-engineer-api-payments-and-risk/4921361",
+      "hackerrank_submitted": "2026-08-25",
+      "oa_problem": "proximity-request-router",
+      "interview_date": "2026-09-29",
+      "days_until_interview": 29,
+      "status": "interview_scheduled_sep_29",
+      "prep_doc": "career/STRIPE-MASTER-PREP.md",
+      "prep_docs": [
+        "career/STRIPE-MASTER-PREP.md",
+        "career/STRIPE-DUBLIN-COMPLETE-ANALYSIS.md",
+        "career/SEPTEMBER-STRIPE-SPRINT.md"
+      ],
+      "cold_rebuild_target_min": 60,
+      "cold_rebuild_done": false,
+      "expected_loop": [
+        "recruiter_screen",
+        "technical_phone_screen",
+        "virtual_onsite_coding",
+        "virtual_onsite_bug_squash",
+        "virtual_onsite_integration",
+        "virtual_onsite_system_design",
+        "behavioral_hm"
+      ],
+      "prep_focus": [
+        "machine_coding_product_java",
+        "bug_squash_unfamiliar_repo",
+        "api_integration_open_book",
+        "payment_ledger_idempotency_sd",
+        "behavioral_stripe_values"
+      ]
+    },
+    "sd_progress": {
+      "breadth_concepts_done": 30,
+      "breadth_source": "ashish-30-concepts",
+      "designs_completed": 0,
+      "weekly_design_target": 1,
+      "stripe_designs_required": [
+        "payment_api_idempotency",
+        "ledger_service",
+        "webhook_delivery"
+      ]
+    },
+    "sprint": {
+      "name": "September Stripe Sprint",
+      "start": "2026-09-01",
+      "wake_time": "04:00",
+      "weekday_hours": 6.5,
+      "weekend_hours": 9,
+      "dual_track": true,
+      "schedule_doc": "career/SEPTEMBER-STRIPE-SPRINT.md"
+    },
+    "applications": {
+      "youtrip_applied": "2026-08-27"
+    }
+  },
+  "agent_instructions": "Read this file at the start of every session and before launching subagents. After marking work done, run: python3 scripts/pull_study_state.py"
+}

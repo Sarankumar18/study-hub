@@ -1,21 +1,102 @@
 {
+  "machine_coding_daily": {
+    "started": "2026-08-26",
+    "daily_minutes": 60,
+    "current_week": 1,
+    "current_problem": "Rate Limiter",
+    "current_problem_id": "001",
+    "current_day": 4,
+    "parts_completed": [
+      "001-part1-fixed-window",
+      "001-part2a-sliding-window",
+      "001-part2-configurable",
+      "001-part3-token-bucket"
+    ],
+    "parts_pending": [
+      "001-part2b-per-user-cleanup",
+      "001-q1-per-api-limits",
+      "timed-mock-60min"
+    ],
+    "exercises_completed": 4,
+    "last_practice_date": "2026-08-28",
+    "coding_streak_days": 0,
+    "guide_mode": true,
+    "target_timed_mocks": 8,
+    "timed_mocks_completed": 0,
+    "weak_areas": [
+      "proximity-router-cold-rebuild",
+      "bug-squash-unfamiliar-code",
+      "api-integration-round",
+      "payment-ledger-sd",
+      "dsa-2-per-day"
+    ],
+    "stripe_priority": true
+  },
   "picnic_interview_prep": {
     "role": "Software Engineer - Store",
     "company": "Picnic",
     "location": "Amsterdam, Netherlands",
-    "screening_passed": "2026-08-24",
-    "rounds": [
-      { "id": 1, "name": "Technical deep-dive", "format": "1 developer", "status": "pending" },
-      { "id": 2, "name": "Live bug fix", "format": "2 developers", "status": "pending" },
-      { "id": 3, "name": "Peer programming", "format": "pair coding", "status": "pending" },
-      { "id": 4, "name": "Closing", "format": "culture / offer", "status": "pending" }
+    "status": "rejected",
+    "rejected_date": "2026-08-25"
+  },
+  "stripe_interview_prep": {
+    "role": "Backend Engineer/API, Payments and Risk",
+    "company": "Stripe",
+    "location": "Dublin, Ireland",
+    "recruiter": "Ingrid Sousa",
+    "recruiter_email": "ingridsousa@stripe.com",
+    "job_url": "https://stripe.com/jobs/listing/backend-engineer-api-payments-and-risk/4921361",
+    "hackerrank_submitted": "2026-08-25",
+    "oa_problem": "proximity-request-router",
+    "interview_date": "2026-09-29",
+    "days_until_interview": 29,
+    "status": "interview_scheduled_sep_29",
+    "prep_doc": "career/STRIPE-MASTER-PREP.md",
+    "prep_docs": [
+      "career/STRIPE-MASTER-PREP.md",
+      "career/STRIPE-DUBLIN-COMPLETE-ANALYSIS.md",
+      "career/SEPTEMBER-STRIPE-SPRINT.md"
     ],
-    "hands_on_coding": {
-      "daily_minutes": 45,
-      "current_exercise": 2,
-      "exercises_completed": 1,
-      "target_bug_fix_minutes": 20,
-      "last_practice_date": "2026-08-24"
-    }
+    "cold_rebuild_target_min": 60,
+    "cold_rebuild_done": false,
+    "expected_loop": [
+      "recruiter_screen",
+      "technical_phone_screen",
+      "virtual_onsite_coding",
+      "virtual_onsite_bug_squash",
+      "virtual_onsite_integration",
+      "virtual_onsite_system_design",
+      "behavioral_hm"
+    ],
+    "prep_focus": [
+      "machine_coding_product_java",
+      "bug_squash_unfamiliar_repo",
+      "api_integration_open_book",
+      "payment_ledger_idempotency_sd",
+      "behavioral_stripe_values"
+    ]
+  },
+  "sd_progress": {
+    "breadth_concepts_done": 30,
+    "breadth_source": "ashish-30-concepts",
+    "designs_completed": 0,
+    "weekly_design_target": 1,
+    "stripe_designs_required": [
+      "payment_api_idempotency",
+      "ledger_service",
+      "webhook_delivery"
+    ]
+  },
+  "sprint": {
+    "name": "September Stripe Sprint",
+    "start": "2026-09-01",
+    "wake_time": "04:00",
+    "weekday_hours": 6.5,
+    "weekend_hours": 9,
+    "dual_track": true,
+    "schedule_doc": "career/SEPTEMBER-STRIPE-SPRINT.md"
+  },
+  "applications": {
+    "youtrip_applied": "2026-08-27"
   }
 }

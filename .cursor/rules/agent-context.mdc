@@ -1,0 +1,51 @@
+---
+description: Agent-to-agent context handoff. Ensures every new chat and subagent reads shared session state before acting.
+alwaysApply: true
+---
+
+# Agent Context Protocol
+
+New chats and Task subagents **do not** inherit conversation history. Use the shared state files below.
+
+## Mandatory reads (start of session)
+
+Before `Today`, `Done`, `Progress`, `Plan`, `Stuck`, or launching a **Task subagent**:
+
+1. Read `study-session-state.json` — DSA progress, daily plan, career status (from Supabase)
+2. Read `tracker-data.json` — interview prep, machine coding, application notes
+3. Read `career/interview-prep/PROGRESS.md` — machine coding parts, weak areas, weekly scorecard
+
+If `study-session-state.json` is older than 24h or missing, run:
+
+```bash
+python3 scripts/pull_study_state.py
+```
+
+Then read the file again.
+
+## After completing work
+
+When the user says `done` or you sync DSA/career progress:
+
+1. Upsert to Supabase (`scripts/sync_supabase.py` or direct REST)
+2. Refresh local state: `python3 scripts/pull_study_state.py`
+3. Update `tracker-data.json` if career/interview status changed
+
+## Before launching a Task subagent
+
+Include in the subagent prompt:
+
+- Path to repo: `/Users/sbaskar/Personal`
+- Instruction to read `study-session-state.json` first
+- Relevant slice: current pattern, solved count, next problems, daily plan tasks
+
+Never assume the subagent knows prior chat turns.
+
+## Source of truth
+
+| Data | Source |
+|------|--------|
+| DSA solved / confidence / daily plan | Supabase `study_progress` |
+| Interview prep / machine coding | `tracker-data.json` |
+| Week scorecard / weak areas / MC parts | `career/interview-prep/PROGRESS.md` |
+| Agent handoff snapshot | `study-session-state.json` (generated) |
